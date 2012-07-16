@@ -106,7 +106,7 @@ abstract class Token {
 	private function assert_attribute_valid($attribute, $value)
 	{
 		$method_name = 'validate_'.$attribute;
-		if (method_exists($this, $method_name) AND ! $this->$method_name())
+		if (method_exists($this, $method_name) AND ! $this->$method_name($value))
 		{
 			throw new \InvalidArgumentException('Invalid value for '.$this->token().'.'.$attribute);
 		}

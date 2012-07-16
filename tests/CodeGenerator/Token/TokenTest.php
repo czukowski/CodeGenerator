@@ -107,15 +107,13 @@ class TokenTest extends Testcase
 		);
 	}
 
-	protected function setup_with_attributes($values, $validation = array())
+	protected function setup_with_attributes($attributes, $validation = array())
 	{
 		$options = $validation ? array('validate_methods' => $validation) : array();
-		$this->setup_mock($options);
-		$this->get_attributes()
-			->setValue($this->object, $values);
+		parent::setup_with_attributes($attributes, $options);
 	}
 
-	protected function setup_mock($options = array())
+	protected function setup_object($options = array())
 	{
 		if (array_key_exists('validate_methods', $options))
 		{
@@ -133,13 +131,6 @@ class TokenTest extends Testcase
 					->will($this->returnValue($return_value));
 			}
 		}
-	}
-
-	private function get_attributes()
-	{
-		$attributes = new \ReflectionProperty($this->object, 'attributes');
-		$attributes->setAccessible(TRUE);
-		return $attributes;
 	}
 
 	private function get_attribute_value($key)

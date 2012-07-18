@@ -12,6 +12,15 @@ namespace CodeGenerator\Token;
 
 class Testcase extends \CodeGenerator\Framework\Testcase
 {
+	/**
+	 * @var  \CodeGenerator\Format
+	 */
+	protected $format;
+
+	/**
+	 * @param  array  $attributes
+	 * @param  array  $options
+	 */
 	protected function setup_with_attributes($attributes, $options = array())
 	{
 		$this->setup_object($options);
@@ -21,8 +30,12 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 		}
 	}
 
+	/**
+	 * @return  array
+	 */
 	protected function _class_constructor_arguments()
 	{
-		return array(new \CodeGenerator\Format);
+		$this->format = new \CodeGenerator\Format;
+		return array($this->format);
 	}
 }

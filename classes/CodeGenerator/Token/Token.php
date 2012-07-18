@@ -9,9 +9,8 @@
  * @license    MIT License
  */
 namespace CodeGenerator\Token;
-use CodeGenerator\Object;
 
-abstract class Token extends Object
+abstract class Token extends \CodeGenerator\Object
 {
 	/**
 	 * @var  integer  Token base indentation

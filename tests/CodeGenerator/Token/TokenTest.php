@@ -111,7 +111,7 @@ class TokenTest extends Testcase
 	{
 		$options = $validation ? array('validate_methods' => $validation) : array();
 		$this->setup_mock($options);
-		$this->get_attributes()
+		$this->_object_property($this->object, 'attributes')
 			->setValue($this->object, $attributes);
 	}
 
@@ -135,16 +135,9 @@ class TokenTest extends Testcase
 		}
 	}
 
-	private function get_attributes()
-	{
-		$attributes = new \ReflectionProperty($this->object, 'attributes');
-		$attributes->setAccessible(TRUE);
-		return $attributes;
-	}
-
 	private function get_attribute_value($key)
 	{
-		$attributes = $this->get_attributes()
+		$attributes = $this->_object_property($this->object, 'attributes')
 			->getValue($this->object);
 		$this->assertArrayHasKey($key, $attributes);
 		return $attributes[$key];

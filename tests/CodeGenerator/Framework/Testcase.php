@@ -63,4 +63,18 @@ abstract class Testcase extends \PHPUnit_Framework_TestCase {
 	{
 		return new \ReflectionClass($classname);
 	}
+
+	protected function _object_method($object, $name)
+	{
+		$method = new \ReflectionMethod($object, $name);
+		$method->setAccessible(TRUE);
+		return $method;
+	}
+
+	protected function _object_property($object, $name)
+	{
+		$property = new \ReflectionProperty($object, $name);
+		$property->setAccessible(TRUE);
+		return $property;
+	}
 }

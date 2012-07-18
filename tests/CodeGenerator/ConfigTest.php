@@ -1,6 +1,6 @@
 <?php
 /**
- * Code Format config class
+ * CodeGenerator config class
  * 
  * @package    CodeGenerator
  * @author     Korney Czukowski
@@ -9,7 +9,7 @@
  */
 namespace CodeGenerator;
 
-class FormatTest extends \CodeGenerator\Framework\Testcase
+class ConfigTest extends \CodeGenerator\Framework\Testcase
 {
 	/**
 	 * @dataProvider  provide_helper

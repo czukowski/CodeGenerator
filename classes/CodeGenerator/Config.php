@@ -9,7 +9,7 @@
  */
 namespace CodeGenerator;
 
-class Format
+class Config
 {
 	/**
 	 * @var  array  Default config values

@@ -13,9 +13,9 @@ namespace CodeGenerator\Token;
 class Testcase extends \CodeGenerator\Framework\Testcase
 {
 	/**
-	 * @var  \CodeGenerator\Format
+	 * @var  \CodeGenerator\Config
 	 */
-	protected $format;
+	protected $config;
 
 	/**
 	 * @param  array  $attributes
@@ -35,7 +35,7 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 	 */
 	protected function _class_constructor_arguments()
 	{
-		$this->format = new \CodeGenerator\Format;
-		return array($this->format);
+		$this->config = new \CodeGenerator\Config;
+		return array($this->config);
 	}
 }

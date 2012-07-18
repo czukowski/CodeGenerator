@@ -9,7 +9,7 @@
  * @license    MIT License
  */
 namespace CodeGenerator\Token;
-use CodeGenerator\String;
+use CodeGenerator\Helper\String;
 
 abstract class Columns extends Token
 {
@@ -140,7 +140,7 @@ abstract class Columns extends Token
 		{
 			return '';
 		}
-		$pad_string = $this->format->format('column_delimiter');
+		$pad_string = $this->config->format('column_delimiter');
 		foreach ($columns as $i => &$column)
 		{
 			$column = String::str_pad($column, $this->_width($i), $pad_string, $this->_padding_mode($i));
@@ -149,7 +149,7 @@ abstract class Columns extends Token
 		{
 			$columns[count($columns) - 1] = String::rtrim($columns[count($columns) - 1], $pad_string);
 		}
-		return implode(str_repeat($pad_string, $this->format->options('column_min_space')), $columns);
+		return implode(str_repeat($pad_string, $this->config->options('column_min_space')), $columns);
 	}
 
 	/**

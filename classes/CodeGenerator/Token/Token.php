@@ -9,14 +9,14 @@
  * @license    MIT License
  */
 namespace CodeGenerator\Token;
-use CodeGenerator\Format;
+use CodeGenerator\Config;
 
 abstract class Token
 {
 	/**
-	 * @var  Format
+	 * @var  Config
 	 */
-	protected $format;
+	protected $config;
 	/**
 	 * @var  integer  Token base indentation
 	 */
@@ -29,11 +29,11 @@ abstract class Token
 	/**
 	 * Class constructor
 	 * 
-	 * @param  Format  $format
+	 * @param  Config  $config
 	 */
-	public function __construct(Format $format)
+	public function __construct(Config $config)
 	{
-		$this->format = $format;
+		$this->config = $config;
 	}
 
 	/**

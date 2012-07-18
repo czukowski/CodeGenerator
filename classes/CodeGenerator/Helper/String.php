@@ -15,20 +15,18 @@
  */
 namespace CodeGenerator\Helper;
 
-class String
+class String extends \CodeGenerator\Object
 {	
-	public static $charset = 'utf-8';
-
 	/**
 	 * Tests whether a string contains only 7-bit ASCII bytes. This is used to
 	 * determine when to use native functions or UTF-8 functions.
 	 * 
-	 *     $ascii = String::is_ascii($str);
+	 *     $ascii = $string->is_ascii($str);
 	 * 
 	 * @param   mixed    String or array of strings to check
 	 * @return  boolean
 	 */
-	public static function is_ascii($str)
+	public function is_ascii($str)
 	{
 		if (is_array($str))
 		{
@@ -45,16 +43,16 @@ class String
 	 * @param   string   $str
 	 * @return  integer
 	 */
-	public static function strlen($str)
+	public function strlen($str)
 	{
-		return mb_strlen($str, self::$charset);
+		return mb_strlen($str, $this->config->options('charset'));
 	}
 
 	/**
 	 * Pads a UTF-8 string to a certain length with another string. This is a
 	 * UTF8-aware version of [str_pad](http://php.net/str_pad).
 	 * 
-	 *     $str = String::str_pad($str, $length);
+	 *     $str = $string->str_pad($str, $length);
 	 * 
 	 * @author  Harry Fuecks <hfuecks@gmail.com>
 	 * @param   string   Input string
@@ -63,33 +61,33 @@ class String
 	 * @param   string   Padding type: STR_PAD_RIGHT, STR_PAD_LEFT, or STR_PAD_BOTH
 	 * @return  string
 	 */
-	public static function str_pad($str, $final_str_length, $pad_str = ' ', $pad_type = STR_PAD_RIGHT)
+	public function str_pad($str, $final_str_length, $pad_str = ' ', $pad_type = STR_PAD_RIGHT)
 	{
-		if (self::is_ascii($str) AND self::is_ascii($pad_str))
+		if ($this->is_ascii($str) AND $this->is_ascii($pad_str))
 		{
 			return str_pad($str, $final_str_length, $pad_str, $pad_type);
 		}
 
-		$str_length = self::strlen($str);
+		$str_length = $this->strlen($str);
 
 		if ($final_str_length <= 0 OR $final_str_length <= $str_length)
 		{
 			return $str;
 		}
 
-		$pad_str_length = self::strlen($pad_str);
+		$pad_str_length = $this->strlen($pad_str);
 		$pad_length = $final_str_length - $str_length;
 
 		if ($pad_type == STR_PAD_RIGHT)
 		{
 			$repeat = ceil($pad_length / $pad_str_length);
-			return self::substr($str.str_repeat($pad_str, $repeat), 0, $final_str_length);
+			return $this->substr($str.str_repeat($pad_str, $repeat), 0, $final_str_length);
 		}
 
 		if ($pad_type == STR_PAD_LEFT)
 		{
 			$repeat = ceil($pad_length / $pad_str_length);
-			return self::substr(str_repeat($pad_str, $repeat), 0, floor($pad_length)).$str;
+			return $this->substr(str_repeat($pad_str, $repeat), 0, floor($pad_length)).$str;
 		}
 
 		if ($pad_type == STR_PAD_BOTH)
@@ -100,19 +98,19 @@ class String
 			$repeat_left = ceil($pad_length_left / $pad_str_length);
 			$repeat_right = ceil($pad_length_right / $pad_str_length);
 
-			$pad_left = self::substr(str_repeat($pad_str, $repeat_left), 0, $pad_length_left);
-			$pad_right = self::substr(str_repeat($pad_str, $repeat_right), 0, $pad_length_right);
+			$pad_left = $this->substr(str_repeat($pad_str, $repeat_left), 0, $pad_length_left);
+			$pad_right = $this->substr(str_repeat($pad_str, $repeat_right), 0, $pad_length_right);
 			return $pad_left.$str.$pad_right;
 		}
 
-		trigger_error('String::str_pad: Unknown padding type ('.$pad_type.')', E_USER_ERROR);
+		trigger_error('String.str_pad(): Unknown padding type ('.$pad_type.')', E_USER_ERROR);
 	}
 
 	/**
 	 * Returns part of a UTF-8 string. This is a UTF8-aware version
 	 * of [substr](http://php.net/substr).
 	 * 
-	 *     $sub = String::substr($str, $offset);
+	 *     $sub = $string->substr($str, $offset);
 	 * 
 	 * @author  Chris Smith <chris@jalakai.co.uk>
 	 * @param   string   Input string
@@ -120,52 +118,52 @@ class String
 	 * @param   integer  Length limit
 	 * @return  string
 	 */
-	public static function substr($str, $offset, $length = NULL)
+	public function substr($str, $offset, $length = NULL)
 	{
 		return ($length === NULL)
-			? mb_substr($str, $offset, mb_strlen($str), self::$charset)
-			: mb_substr($str, $offset, $length, self::$charset);
+			? mb_substr($str, $offset, mb_strlen($str), $this->config->options('charset'))
+			: mb_substr($str, $offset, $length, $this->config->options('charset'));
 	}
 
 	/**
 	 * Strips whitespace (or other UTF-8 characters) from the beginning and
 	 * end of a string. This is a UTF8-aware version of [trim](http://php.net/trim).
 	 *
-	 *     $str = String::trim($str);
+	 *     $str = $string->trim($str);
 	 *
 	 * @author  Andreas Gohr <andi@splitbrain.org>
 	 * @param   string  Input string
 	 * @param   string  String of characters to remove
 	 * @return  string
 	 */
-	public static function trim($str, $charlist = NULL)
+	public function trim($str, $charlist = NULL)
 	{
 		if ($charlist === NULL)
 		{
 			return trim($str);
 		}
 
-		return self::ltrim(self::rtrim($str, $charlist), $charlist);
+		return $this->ltrim($this->rtrim($str, $charlist), $charlist);
 	}
 
 	/**
 	 * Strips whitespace (or other UTF-8 characters) from the beginning of
 	 * a string. This is a UTF8-aware version of [ltrim](http://php.net/ltrim).
 	 *
-	 *     $str = String::ltrim($str);
+	 *     $str = $string->ltrim($str);
 	 *
 	 * @author  Andreas Gohr <andi@splitbrain.org>
 	 * @param   string  Input string
 	 * @param   string  String of characters to remove
 	 * @return  string
 	 */
-	public static function ltrim($str, $charlist = NULL)
+	public function ltrim($str, $charlist = NULL)
 	{
 		if ($charlist === NULL)
 		{
 			return ltrim($str);
 		}
-		if (self::is_ascii($charlist))
+		if ($this->is_ascii($charlist))
 		{
 			return ltrim($str, $charlist);
 		}
@@ -179,20 +177,20 @@ class String
 	 * Strips whitespace (or other UTF-8 characters) from the end of a string.
 	 * This is a UTF8-aware version of [rtrim](http://php.net/rtrim).
 	 *
-	 *     $str = String::rtrim($str);
+	 *     $str = $string->rtrim($str);
 	 *
 	 * @author  Andreas Gohr <andi@splitbrain.org>
 	 * @param   string  Input string
 	 * @param   string  String of characters to remove
 	 * @return  string
 	 */
-	public static function rtrim($str, $charlist = NULL)
+	public function rtrim($str, $charlist = NULL)
 	{
 		if ($charlist === NULL)
 		{
 			return rtrim($str);
 		}
-		if (self::is_ascii($charlist))
+		if ($this->is_ascii($charlist))
 		{
 			return rtrim($str, $charlist);
 		}

@@ -13,14 +13,14 @@
  */
 namespace CodeGenerator\Helper;
 
-class StringTest extends \CodeGenerator\Framework\Testcase
+class StringTest extends Testcase
 {
 	/**
 	 * @dataProvider  provide_is_ascii
 	 */
 	public function test_is_ascii($input, $expected)
 	{
-		$this->assertSame($expected, String::is_ascii($input));
+		$this->assertSame($expected, $this->object->is_ascii($input));
 	}
 
 	public function provide_is_ascii()
@@ -39,7 +39,7 @@ class StringTest extends \CodeGenerator\Framework\Testcase
 	 */
 	public function test_strlen($input, $expected)
 	{
-		$this->assertSame($expected, String::strlen($input));
+		$this->assertSame($expected, $this->object->strlen($input));
 	}
 
 	public function provide_strlen()
@@ -55,7 +55,7 @@ class StringTest extends \CodeGenerator\Framework\Testcase
 	 */
 	public function test_substr($input, $offset, $length, $expected)
 	{
-		$this->assertSame($expected, String::substr($input, $offset, $length));
+		$this->assertSame($expected, $this->object->substr($input, $offset, $length));
 	}
 
 	public function provide_substr()
@@ -74,7 +74,7 @@ class StringTest extends \CodeGenerator\Framework\Testcase
 	public function test_str_pad($input, $length, $pad, $type, $expected)
 	{
 		$this->setExpectedExceptionFromArgument($expected);
-		$this->assertSame($expected, String::str_pad($input, $length, $pad, $type));
+		$this->assertSame($expected, $this->object->str_pad($input, $length, $pad, $type));
 	}
 
 	public function provide_str_pad()
@@ -85,7 +85,7 @@ class StringTest extends \CodeGenerator\Framework\Testcase
 			array('Cocoñùт', 10, 'š', STR_PAD_BOTH,  'šCocoñùтšš'),
 			array('Coconut', 10, '-', STR_PAD_RIGHT, 'Coconut---'),
 			array('Cocoñùт', 1, '-', STR_PAD_RIGHT, 'Cocoñùт'),
-			array('Cocoñùт', 10, '-', 777, new \PHPUnit_Framework_Error('String::str_pad', 256, NULL, NULL, array())),
+			array('Cocoñùт', 10, '-', 777, new \PHPUnit_Framework_Error('String.str_pad', 256, NULL, NULL, array())),
 		);
 	}
 
@@ -94,7 +94,7 @@ class StringTest extends \CodeGenerator\Framework\Testcase
 	 */
 	public function test_trim($input, $input2, $expected)
 	{
-		$this->assertSame($expected, String::trim($input, $input2));
+		$this->assertSame($expected, $this->object->trim($input, $input2));
 	}
 
 	public function provide_trim()
@@ -111,7 +111,7 @@ class StringTest extends \CodeGenerator\Framework\Testcase
 	 */
 	public function test_ltrim($input, $charlist, $expected)
 	{
-		$this->assertSame($expected, String::ltrim($input, $charlist));
+		$this->assertSame($expected, $this->object->ltrim($input, $charlist));
 	}
 
 	public function provide_ltrim()
@@ -129,7 +129,7 @@ class StringTest extends \CodeGenerator\Framework\Testcase
 	 */
 	public function test_rtrim($input, $input2, $expected)
 	{
-		$this->assertSame($expected, String::rtrim($input, $input2));
+		$this->assertSame($expected, $this->object->rtrim($input, $input2));
 	}
 
 	public function provide_rtrim()

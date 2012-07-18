@@ -20,6 +20,7 @@ class Config
 			'indent' => "\t",
 		),
 		'options' => array(
+			'charset' => 'utf-8',
 			'column_min_space' => 2,
 			'line_width' => 100,
 			'wrap_comment_text' => TRUE,

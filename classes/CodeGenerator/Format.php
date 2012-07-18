@@ -12,25 +12,53 @@ namespace CodeGenerator;
 class Format
 {
 	private $config = array(
-		'indent' => "\t",
+		'format' => array(
+			'column_delimiter' => ' ',
+			'indent' => "\t",
+		),
+		'options' => array(
+			'column_min_space' => 2,
+			'line_width' => 100,
+			'wrap_comment_text' => TRUE,
+		),
 	);
 
 	public function __construct($config = array())
 	{
-		$this->config += $config;
+		$this->config = array_merge_recursive($this->config, $config);
 	}
 
-	public function __get($key)
+	public function format()
 	{
-		if (array_key_exists($key, $this->config))
+		return $this->_get_set('format', func_get_args());
+	}
+
+	public function options()
+	{
+		return $this->_get_set('options', func_get_args());
+	}
+
+	private function _get_set($item, array $arguments)
+	{
+		$count = count($arguments);
+		if ($count === 0)
 		{
-			return $this->config[$key];
+			return $this->config[$item];
 		}
-		throw new \OutOfBoundsException('"'.$key.'" not found');
+		elseif ($count === 1 AND array_key_exists($arguments[0], $this->config[$item]))
+		{
+			return $this->config[$item][$arguments[0]];
+		}
+		elseif ($count === 2 AND array_key_exists($arguments[0], $this->config[$item]))
+		{
+			$this->config[$item][$arguments[0]] = $arguments[1];
+			return $this;
+		}
+		elseif ($count > 2)
+		{
+			throw new \InvalidArgumentException('Format.'.ucfirst($item).'() takes one or two arguments.');
+		}
+		throw new \InvalidArgumentException('Format.'.$item.'.'.$arguments[0].' does not exist');
 	}
 
-	public function __set($key, $value)
-	{
-		$this->config[$key] = $value;
-	}
 }

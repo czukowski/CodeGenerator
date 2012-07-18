@@ -12,6 +12,27 @@ namespace CodeGenerator;
 class FormatTest extends \CodeGenerator\Framework\Testcase
 {
 	/**
+	 * @dataProvider  provide_helper
+	 */
+	public function test_helper($name, $expected)
+	{
+		$this->setup_object();
+		$this->setExpectedExceptionFromArgument($expected);
+		$actual1 = $this->object->helper($name);
+		$actual2 = $this->object->helper($name);
+		$this->assertInstanceOf($expected, $actual1);
+		$this->assertSame($actual1, $actual2);
+	}
+
+	public function provide_helper()
+	{
+		return array(
+			array('string', '\CodeGenerator\Helper\String'),
+			array('columns', '\CodeGenerator\Helper\Columns'),
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_get
 	 */
 	public function test_format_get($config, $arguments, $expected)

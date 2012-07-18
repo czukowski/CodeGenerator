@@ -11,10 +11,19 @@
 namespace CodeGenerator\Token;
 use CodeGenerator\Format;
 
-abstract class Token {
-
+abstract class Token
+{
+	/**
+	 * @var  Format
+	 */
 	protected $format;
+	/**
+	 * @var  integer  Token base indentation
+	 */
 	protected $indent = 0;
+	/**
+	 * @var  array  Token attributes list with default values
+	 */
 	protected $attributes = array();
 
 	/**
@@ -144,7 +153,7 @@ abstract class Token {
 	}
 
 	/**
-	 * Token render method
+	 * Token render method. Used by `__toString()`, therefore must not throw exceptions.
 	 * 
 	 * @return  string
 	 */

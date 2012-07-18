@@ -13,7 +13,7 @@
  * @copyright  (c) 2012 Korney Czukowski
  * @license    MIT License
  */
-namespace CodeGenerator;
+namespace CodeGenerator\Helper;
 
 class String
 {	

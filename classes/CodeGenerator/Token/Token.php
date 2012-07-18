@@ -9,14 +9,10 @@
  * @license    MIT License
  */
 namespace CodeGenerator\Token;
-use CodeGenerator\Config;
+use CodeGenerator\Object;
 
-abstract class Token
+abstract class Token extends Object
 {
-	/**
-	 * @var  Config
-	 */
-	protected $config;
 	/**
 	 * @var  integer  Token base indentation
 	 */
@@ -25,16 +21,6 @@ abstract class Token
 	 * @var  array  Token attributes list with default values
 	 */
 	protected $attributes = array();
-
-	/**
-	 * Class constructor
-	 * 
-	 * @param  Config  $config
-	 */
-	public function __construct(Config $config)
-	{
-		$this->config = $config;
-	}
 
 	/**
 	 * Add a value to array token attribute

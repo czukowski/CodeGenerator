@@ -27,6 +27,13 @@ abstract class Columns extends Token
 	protected $alignments = array();
 
 	/**
+	 * Returns all columns
+	 * 
+	 * @reutrn  array
+	 */
+	abstract public function columns();
+
+	/**
 	 * Gets or sets column widths. See below for description and usage.
 	 * 
 	 * @return  mixed
@@ -56,7 +63,7 @@ abstract class Columns extends Token
 	 * 
 	 * @param   string  $property
 	 * @param   array   $arguments
-	 * @return  \CodeGenerator\Token\Columns
+	 * @return  mixed
 	 * @throws  \OutOfRangeException
 	 * @throws  \InvalidArgumentException
 	 */

@@ -29,6 +29,7 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 		return array(
 			array('string', '\CodeGenerator\Helper\String'),
 			array('columns', '\CodeGenerator\Helper\Columns'),
+			array('fake', new \InvalidArgumentException),
 		);
 	}
 

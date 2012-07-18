@@ -88,4 +88,57 @@ class StringTest extends \CodeGenerator\Framework\Testcase
 			array('Cocoñùт', 10, '-', 777, new \PHPUnit_Framework_Error('String::str_pad', 256, NULL, NULL, array())),
 		);
 	}
+
+	/**
+	 * @dataProvider  provide_trim
+	 */
+	public function test_trim($input, $input2, $expected)
+	{
+		$this->assertSame($expected, String::trim($input, $input2));
+	}
+
+	public function provide_trim()
+	{
+		return array(
+			array(' bar ', NULL, 'bar'),
+			array('bar',   'b',  'ar'),
+			array('barb',  'b',  'ar'),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_ltrim
+	 */
+	public function test_ltrim($input, $charlist, $expected)
+	{
+		$this->assertSame($expected, String::ltrim($input, $charlist));
+	}
+
+	public function provide_ltrim()
+	{
+		return array(
+			array(' bar ', NULL, 'bar '),
+			array('bar',   'b',  'ar'),
+			array('barb',  'b',  'arb'),
+			array('ñùт',   'ñ',  'ùт'),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_rtrim
+	 */
+	public function test_rtrim($input, $input2, $expected)
+	{
+		$this->assertSame($expected, String::rtrim($input, $input2));
+	}
+
+	public function provide_rtrim()
+	{
+		return array(
+			array(' bar ', NULL, ' bar'),
+			array('bar',   'b',  'bar'),
+			array('barb',  'b',  'bar'),
+			array('Cocoñùт',  'т',  'Cocoñù'),
+		);
+	}
 }

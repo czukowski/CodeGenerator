@@ -115,9 +115,9 @@ class String
 	 *     $sub = String::substr($str, $offset);
 	 * 
 	 * @author  Chris Smith <chris@jalakai.co.uk>
-	 * @param   string   input string
-	 * @param   integer  offset
-	 * @param   integer  length limit
+	 * @param   string   Input string
+	 * @param   integer  Offset
+	 * @param   integer  Length limit
 	 * @return  string
 	 */
 	public static function substr($str, $offset, $length = NULL)
@@ -125,5 +125,80 @@ class String
 		return ($length === NULL)
 			? mb_substr($str, $offset, mb_strlen($str), self::$charset)
 			: mb_substr($str, $offset, $length, self::$charset);
+	}
+
+	/**
+	 * Strips whitespace (or other UTF-8 characters) from the beginning and
+	 * end of a string. This is a UTF8-aware version of [trim](http://php.net/trim).
+	 *
+	 *     $str = String::trim($str);
+	 *
+	 * @author  Andreas Gohr <andi@splitbrain.org>
+	 * @param   string  Input string
+	 * @param   string  String of characters to remove
+	 * @return  string
+	 */
+	public static function trim($str, $charlist = NULL)
+	{
+		if ($charlist === NULL)
+		{
+			return trim($str);
+		}
+
+		return self::ltrim(self::rtrim($str, $charlist), $charlist);
+	}
+
+	/**
+	 * Strips whitespace (or other UTF-8 characters) from the beginning of
+	 * a string. This is a UTF8-aware version of [ltrim](http://php.net/ltrim).
+	 *
+	 *     $str = String::ltrim($str);
+	 *
+	 * @author  Andreas Gohr <andi@splitbrain.org>
+	 * @param   string  Input string
+	 * @param   string  String of characters to remove
+	 * @return  string
+	 */
+	public static function ltrim($str, $charlist = NULL)
+	{
+		if ($charlist === NULL)
+		{
+			return ltrim($str);
+		}
+		if (self::is_ascii($charlist))
+		{
+			return ltrim($str, $charlist);
+		}
+
+		$charlist = preg_replace('#[-\[\]:\\\\^/]#', '\\\\$0', $charlist);
+
+		return preg_replace('/^['.$charlist.']+/u', '', $str);
+	}
+
+	/**
+	 * Strips whitespace (or other UTF-8 characters) from the end of a string.
+	 * This is a UTF8-aware version of [rtrim](http://php.net/rtrim).
+	 *
+	 *     $str = String::rtrim($str);
+	 *
+	 * @author  Andreas Gohr <andi@splitbrain.org>
+	 * @param   string  Input string
+	 * @param   string  String of characters to remove
+	 * @return  string
+	 */
+	public static function rtrim($str, $charlist = NULL)
+	{
+		if ($charlist === NULL)
+		{
+			return rtrim($str);
+		}
+		if (self::is_ascii($charlist))
+		{
+			return rtrim($str, $charlist);
+		}
+
+		$charlist = preg_replace('#[-\[\]:\\\\^/]#', '\\\\$0', $charlist);
+
+		return preg_replace('/['.$charlist.']++$/uD', '', $str);
 	}
 }

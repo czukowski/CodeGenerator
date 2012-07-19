@@ -10,11 +10,15 @@
  */
 namespace CodeGenerator\Framework;
 
-abstract class Testcase extends \PHPUnit_Framework_TestCase {
-
+abstract class Testcase extends \PHPUnit_Framework_TestCase
+{
+	/**
+	 * @var  object  Tested object instance
+	 */
 	protected $object;
 
-	protected function setExpectedExceptionFromArgument($object) {
+	protected function setExpectedExceptionFromArgument($object)
+	{
 		if ($object instanceof \Exception)
 		{
 			$this->setExpectedException(get_class($object));
@@ -22,20 +26,30 @@ abstract class Testcase extends \PHPUnit_Framework_TestCase {
 	}
 
 	protected function setup_object($options = array())
-	{        
-		$classname = isset($options['classname']) ? $options['classname'] : $this->_class_name();
-		$arguments = isset($options['arguments']) ? $options['arguments'] : $this->_class_constructor_arguments();
-		$class = $this->_class_reflection($classname);
-        $this->object = $class->newInstanceArgs($arguments);
+	{
+		$options = $this->_get_setup_options($options);
+		$class = $this->_class_reflection($options['classname']);
+        $this->object = $class->newInstanceArgs($options['arguments']);
 	}
 
 	protected function setup_mock($options = array())
 	{
-		$classname = isset($options['classname']) ? $options['classname'] : $this->_class_name();
-		$methods = isset($options['methods']) ? $options['methods'] : $this->_class_abstract_methods($classname);
-		$arguments = isset($options['arguments']) ? $options['arguments'] : $this->_class_constructor_arguments();
-		$mock_classname = isset($options['mock_classname']) ? $options['mock_classname'] : '';
-		$this->object = $this->getMock($classname, $methods, $arguments, $mock_classname);
+		$this->object = $this->get_mock($options);
+	}
+
+	protected function get_mock($options = array())
+	{
+		$options = $this->_get_setup_options($options);
+		return $this->getMock($options['classname'], $options['methods'], $options['arguments'], $options['mock_classname']);
+	}
+
+	private function _get_setup_options($options = array())
+	{
+		$options['classname'] = isset($options['classname']) ? $options['classname'] : $this->_class_name();
+		$options['methods'] = isset($options['methods']) ? $options['methods'] : $this->_class_abstract_methods($options['classname']);
+		$options['arguments'] = isset($options['arguments']) ? $options['arguments'] : $this->_class_constructor_arguments();
+		$options['mock_classname'] = isset($options['mock_classname']) ? $options['mock_classname'] : '';
+		return $options;
 	}
 
 	protected function _class_abstract_methods($classname)

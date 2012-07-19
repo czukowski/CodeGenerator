@@ -20,6 +20,9 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 		$this->setup_object();
 	}
 
+	/**
+	 * Use default Config as constructor arguments
+	 */
 	protected function _class_constructor_arguments()
 	{
 		return array(new Config);

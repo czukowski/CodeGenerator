@@ -143,11 +143,13 @@ abstract class Columns extends Token
 		$pad_string = $this->config->format('column_delimiter');
 		foreach ($columns as $i => &$column)
 		{
-			$column = String::str_pad($column, $this->_width($i), $pad_string, $this->_padding_mode($i));
+			$column = $this->config->helper('string')
+				->str_pad($column, $this->_width($i), $pad_string, $this->_padding_mode($i));
 		}
 		if ($this->_padding_mode(count($columns) - 1) === STR_PAD_RIGHT)
 		{
-			$columns[count($columns) - 1] = String::rtrim($columns[count($columns) - 1], $pad_string);
+			$columns[count($columns) - 1] = $this->config->helper('string')
+				->rtrim($columns[count($columns) - 1], $pad_string);
 		}
 		return implode(str_repeat($pad_string, $this->config->options('column_min_space')), $columns);
 	}

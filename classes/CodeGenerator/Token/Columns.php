@@ -9,7 +9,6 @@
  * @license    MIT License
  */
 namespace CodeGenerator\Token;
-use CodeGenerator\Helper\String;
 
 abstract class Columns extends Token
 {

@@ -224,12 +224,12 @@ class Matrix
 	 */
 	public function transpose()
 	{
-		$transponed = array();
+		$transposed = array();
 		for ($i = 0; $i < $this->_dimensions[1]; $i++)
 		{
-			$transponed[] = $this->get_column($i);
+			$transposed[] = $this->get_column($i);
 		}
-		$this->_setup_matrix($transponed);
+		$this->_setup_matrix($transposed);
 		return $this;
 	}
 }

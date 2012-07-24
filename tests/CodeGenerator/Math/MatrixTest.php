@@ -40,6 +40,11 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 		'invalid' => array(
 			1, 2, 3,
 		),
+		'eye' => array(
+			array(1, 0, 0),
+			array(0, 1, 0),
+			array(0, 0, 1),
+		),
 	);
 
 	/**
@@ -148,6 +153,7 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 	{
 		return array(
 			array($this->testMatrices['square'], $this->testMatrices['transponed']),
+			array($this->testMatrices['eye'], $this->testMatrices['eye']),
 		);
 	}
 }

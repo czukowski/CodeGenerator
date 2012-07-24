@@ -140,16 +140,16 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 	}
 
 	/**
-	 * @dataProvider  provide_transpone
+	 * @dataProvider  provide_transpose
 	 */
-	public function test_transpone($matrix, $expected)
+	public function test_transpose($matrix, $expected)
 	{
 		$this->setup_object(array('arguments' => array($matrix)));
-		$actual = $this->object->transpone();
+		$actual = $this->object->transpose();
 		$this->assertSame($expected, $actual->get());
 	}
 
-	public function provide_transpone()
+	public function provide_transpose()
 	{
 		return array(
 			array($this->testMatrices['square'], $this->testMatrices['transponed']),

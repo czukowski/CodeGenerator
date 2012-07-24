@@ -218,11 +218,11 @@ class Matrix
 	}
 
 	/**
-	 * Returns transponed matrix
+	 * Returns transposed matrix
 	 * 
 	 * @reutrn  Matrix
 	 */
-	public function transpone()
+	public function transpose()
 	{
 		$transponed = array();
 		for ($i = 0; $i < $this->_dimensions[1]; $i++)

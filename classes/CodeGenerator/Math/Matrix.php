@@ -27,9 +27,9 @@ class Matrix
 	{
 		$this->_matrix = array();
 		$this->_setup_dimensions($matrix);
-		for ($j = 0; $j < $this->_dimensions[1]; $j++)
+		for ($j = 0; $j < $this->_dimensions[0]; $j++)
 		{
-			for ($i = 0; $i < $this->_dimensions[0]; $i++)
+			for ($i = 0; $i < $this->_dimensions[1]; $i++)
 			{
 				$this->_matrix[$i][$j] = isset($matrix[$i][$j]) ? $matrix[$i][$j] : NULL;
 			}

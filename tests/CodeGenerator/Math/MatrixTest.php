@@ -64,6 +64,7 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 		return array(
 			array($this->testMatrices['square'], $this->testMatrices['square']),
 			array($this->testMatrices['jagged'], $this->testMatrices['fixed']),
+			array($this->testMatrices['rectangle'], $this->testMatrices['rectangle']),
 			array($this->testMatrices['invalid'], new \InvalidArgumentException),
 		);
 	}

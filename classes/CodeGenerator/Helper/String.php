@@ -15,7 +15,7 @@
  */
 namespace CodeGenerator\Helper;
 
-class String extends \CodeGenerator\Object
+class String extends \CodeGenerator\Singleton
 {	
 	/**
 	 * Tests whether a string contains only 7-bit ASCII bytes. This is used to

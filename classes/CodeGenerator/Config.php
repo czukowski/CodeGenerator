@@ -51,14 +51,23 @@ class Config
 	{
 		if ( ! isset($this->helpers[$name]))
 		{
-			$classname = __NAMESPACE__.'\\Helper\\'.ucfirst($name);
-			if ( !class_exists($classname))
-			{
-				throw new \InvalidArgumentException('There\'s no '.ucfirst($name).' helper');
-			}
-			$this->helpers[$name] = new $classname($this);
+			$this->helpers[$name] = $this->_helper_instance($name);
+		}
+		elseif ( ! $this->helpers[$name] instanceof Singleton)
+		{
+			return $this->_helper_instance($name);
 		}
 		return $this->helpers[$name];
+	}
+
+	private function _helper_instance($name)
+	{
+		$classname = __NAMESPACE__.'\\Helper\\'.ucfirst($name);
+		if ( ! class_exists($classname))
+		{
+			throw new \InvalidArgumentException('There\'s no '.ucfirst($name).' helper');
+		}
+		return new $classname($this);
 	}
 
 	/**

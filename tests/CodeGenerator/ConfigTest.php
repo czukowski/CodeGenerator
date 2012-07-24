@@ -14,22 +14,29 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 	/**
 	 * @dataProvider  provide_helper
 	 */
-	public function test_helper($name, $expected)
+	public function test_helper($name, $expected, $is_singleton)
 	{
 		$this->setup_object();
 		$this->setExpectedExceptionFromArgument($expected);
 		$actual1 = $this->object->helper($name);
 		$actual2 = $this->object->helper($name);
 		$this->assertInstanceOf($expected, $actual1);
-		$this->assertSame($actual1, $actual2);
+		if ($is_singleton === TRUE)
+		{
+			$this->assertSame($actual1, $actual2);
+		}
+		else
+		{
+			$this->assertNotSame($actual1, $actual2);
+		}
 	}
 
 	public function provide_helper()
 	{
 		return array(
-			array('string', '\CodeGenerator\Helper\String'),
-			array('columns', '\CodeGenerator\Helper\Columns'),
-			array('fake', new \InvalidArgumentException),
+			array('string', '\CodeGenerator\Helper\String', TRUE),
+			array('columnsOptimizer', '\CodeGenerator\Helper\ColumnsOptimizer', FALSE),
+			array('fake', new \InvalidArgumentException, NULL),
 		);
 	}
 

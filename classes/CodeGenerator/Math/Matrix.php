@@ -229,6 +229,7 @@ class Matrix
 		{
 			$transponed[] = $this->get_column($i);
 		}
-		return new Matrix($transponed);
+		$this->_setup_matrix($transponed);
+		return $this;
 	}
 }

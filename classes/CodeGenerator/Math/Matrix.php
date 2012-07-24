@@ -12,8 +12,14 @@ namespace CodeGenerator\Math;
 
 class Matrix
 {
-	private $_matrix = array();
-	private $_dimensions = array(0, 0);
+	/**
+	 * @var  array  Matrix
+	 */
+	private $_matrix;
+	/**
+	 * @var  array  Matrix dimensions (cols, rows)
+	 */
+	private $_dimensions;
 
 	/**
 	 * @param  array  $matrix  Array of arrays
@@ -23,8 +29,12 @@ class Matrix
 		$this->_setup_matrix($matrix);
 	}
 
+	/**
+	 * @param  array  $matrix
+	 */
 	private function _setup_matrix(array $matrix)
 	{
+		// Reset matrix
 		$this->_matrix = array();
 		$this->_setup_dimensions($matrix);
 		for ($j = 0; $j < $this->_dimensions[0]; $j++)
@@ -36,8 +46,15 @@ class Matrix
 		}
 	}
 
+	/**
+	 * @param   array  $matrix
+	 * @throws  \InvalidArgumentException
+	 */
 	private function _setup_dimensions(array $matrix)
 	{
+		// Reset dimensions
+		$this->_dimensions = array(0, 0);
+		// Set rows count
 		$this->_dimensions[1] = count($matrix);
 		for ($i = 0; $i < $this->_dimensions[1]; $i++)
 		{
@@ -45,6 +62,7 @@ class Matrix
 			{
 				throw new \InvalidArgumentException('Argument must be array of arrays');
 			}
+			// Set cols count
 			$this->_dimensions[0] = max($this->_dimensions[0], count($matrix[$i]));
 		}
 	}
@@ -225,7 +243,7 @@ class Matrix
 	public function transpose()
 	{
 		$transposed = array();
-		for ($i = 0; $i < $this->_dimensions[1]; $i++)
+		for ($i = 0; $i < $this->_dimensions[0]; $i++)
 		{
 			$transposed[] = $this->get_column($i);
 		}

@@ -37,6 +37,13 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 			array(0, 1, 0, 0, 0),
 			array(0, 0, 1, 0, 0),
 		),
+		'rectangle_t' => array(
+			array(1, 0, 0),
+			array(0, 1, 0),
+			array(0, 0, 1),
+			array(0, 0, 0),
+			array(0, 0, 0),
+		),
 		'invalid' => array(
 			1, 2, 3,
 		),
@@ -155,6 +162,7 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 		return array(
 			array($this->testMatrices['square'], $this->testMatrices['transponed']),
 			array($this->testMatrices['eye'], $this->testMatrices['eye']),
+			array($this->testMatrices['rectangle'], $this->testMatrices['rectangle_t']),
 		);
 	}
 }

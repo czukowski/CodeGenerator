@@ -17,26 +17,13 @@ class ColumnsOptimizerTest extends Testcase
 	public function test_align($tokens, $expected)
 	{
 		$this->setExpectedExceptionFromArgument($expected);
-		$this->object->tokens($tokens);
-		$actual = $this->object->align();
-		$this->assertSame($this->object, $actual);
+		$this->object->align($tokens);
 		$tokens = $this->_object_property($this->object, '_column_tokens')
 			->getValue($this->object);
 		foreach ($tokens as $token)
 		{
 			$this->assertEquals($expected, $token->widths());
 		}
-	}
-
-	/**
-	 * @dataProvider  provide_tokens
-	 */
-	public function test_tokens($tokens, $expected)
-	{
-		$this->setExpectedExceptionFromArgument($expected);
-		$actual = $this->object->tokens($tokens);
-		$this->assertSame($this->object, $actual);
-		$this->assertSame($tokens, $this->object->tokens());
 	}
 
 	public function provide_tokens()

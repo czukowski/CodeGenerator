@@ -28,44 +28,37 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	private $_column_tokens = array();
 
 	/**
-	 * Token objects getter/setter
+	 * Align token column widths
 	 * 
-	 * @return  mixed
+	 * @param  array  Array of tokens to align
 	 */
-	public function tokens()
+	public function align($tokens)
 	{
-		if (func_num_args() === 0)
+		$this->_setup_tokens($tokens);
+		for ($i = 0; $i < $this->_widths->get_dimension(0); $i++)
 		{
-			return $this->_all_tokens;
+			$params = $this->_get_column_parameters($i);
+			$solver = new Optimizer(array($this, 'evaluate_parameters'), $params);
+			$solution = $solver->execute();
+			$best_params = reset($solution);
+			foreach ($this->_column_tokens as $token)
+			{
+				$token->widths($i, $best_params['width']);
+			}
 		}
-		elseif (is_array(func_get_arg(0)))
-		{
-			$this->_all_tokens = func_get_arg(0);
-			$this->_column_tokens = $this->_filter_column_tokens($this->_all_tokens);
-			$this->_setup_tokens();
-			return $this;
-		}
-		throw new \InvalidArgumentException('Columns.tokens() takes an array as argument');
-	}
-
-	/**
-	 * Filters column-type tokens
-	 * 
-	 * @param   array  $tokens
-	 * @return  array
-	 */
-	private function _filter_column_tokens($tokens)
-	{
-		return array_filter($tokens, function($token) {
-			return $token instanceof Token\Columns;
-		});
 	}
 
 	/**
 	 * Determine and setup the actual column widths for all tokens as a pre-requisite for the alignment
 	 */
-	private function _setup_tokens()
+	private function _setup_tokens($tokens)
 	{
+		if ( ! is_array($tokens))
+		{
+			throw new \InvalidArgumentException('Columns.tokens() takes an array as argument');
+		}
+		$this->_all_tokens = func_get_arg(0);
+		$this->_column_tokens = $this->_filter_column_tokens($this->_all_tokens);
 		$matrix = array();
 		foreach ($this->_column_tokens as $token)
 		{
@@ -81,24 +74,13 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	}
 
 	/**
-	 * Align token column widths
-	 * 
-	 * @return  Columns
+	 * Filters column-type tokens
 	 */
-	public function align()
+	private function _filter_column_tokens($tokens)
 	{
-		for ($i = 0; $i < $this->_widths->get_dimension(0); $i++)
-		{
-			$params = $this->_get_column_parameters($i);
-			$solver = new Optimizer(array($this, 'evaluate_parameters'), $params);
-			$solution = $solver->execute();
-			$best_params = reset($solution);
-			foreach ($this->_column_tokens as $token)
-			{
-				$token->widths($i, $best_params['width']);
-			}
-		}
-		return $this;
+		return array_filter($tokens, function($token) {
+			return $token instanceof Token\Columns;
+		});
 	}
 
 	/**

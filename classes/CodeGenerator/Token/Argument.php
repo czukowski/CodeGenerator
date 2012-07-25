@@ -18,6 +18,7 @@ class Argument extends Token
 		'constraint' => NULL,
 		'default' => NULL,
 		'name' => NULL,
+		'comment' => NULL,
 	);
 
 	public function render()

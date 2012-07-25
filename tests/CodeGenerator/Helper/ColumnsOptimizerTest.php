@@ -18,7 +18,7 @@ class ColumnsOptimizerTest extends Testcase
 	{
 		$this->setExpectedExceptionFromArgument($expected);
 		$this->object->align($tokens);
-		$tokens = $this->_object_property($this->object, '_column_tokens')
+		$tokens = $this->_object_property($this->object, '_tokens')
 			->getValue($this->object);
 		foreach ($tokens as $token)
 		{

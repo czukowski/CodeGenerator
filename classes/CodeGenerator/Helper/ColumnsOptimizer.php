@@ -19,13 +19,9 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	 */
 	private $_widths = array();
 	/**
-	 * @var  array  All tokens passed to the object
-	 */
-	private $_all_tokens = array();
-	/**
 	 * @var  array  Column-type tokens that will be aligned, other will be ignored
 	 */
-	private $_column_tokens = array();
+	private $_tokens = array();
 
 	/**
 	 * Align token column widths
@@ -34,14 +30,14 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	 */
 	public function align($tokens)
 	{
-		$this->_setup_tokens($tokens);
+		$this->_setup_alignment($tokens);
 		for ($i = 0; $i < $this->_widths->get_dimension(0); $i++)
 		{
 			$params = $this->_get_column_parameters($i);
 			$solver = new Optimizer(array($this, 'evaluate_parameters'), $params);
 			$solution = $solver->execute();
 			$best_params = reset($solution);
-			foreach ($this->_column_tokens as $token)
+			foreach ($this->_tokens as $token)
 			{
 				$token->widths($i, $best_params['width']);
 			}
@@ -51,26 +47,14 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	/**
 	 * Determine and setup the actual column widths for all tokens as a pre-requisite for the alignment
 	 */
-	private function _setup_tokens($tokens)
+	private function _setup_alignment($tokens)
 	{
 		if ( ! is_array($tokens))
 		{
 			throw new \InvalidArgumentException('Columns.tokens() takes an array as argument');
 		}
-		$this->_all_tokens = func_get_arg(0);
-		$this->_column_tokens = $this->_filter_column_tokens($this->_all_tokens);
-		$matrix = array();
-		foreach ($this->_column_tokens as $token)
-		{
-			$widths = array();
-			foreach ($token->columns() as $column)
-			{
-				$widths[] = $this->config->helper('string')
-					->strlen($column);
-			}
-			$matrix[] = $widths;
-		}
-		$this->_widths = new Matrix($matrix);
+		$this->_tokens = $this->_filter_column_tokens($tokens);
+		$this->_widths = $this->_create_widths_matrix($this->_tokens);
 	}
 
 	/**
@@ -81,6 +65,50 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		return array_filter($tokens, function($token) {
 			return $token instanceof Token\Columns;
 		});
+	}
+
+	/**
+	 * Creates actual widths matrix
+	 */
+	private function _create_widths_matrix($tokens)
+	{
+		$matrix = array();
+		foreach ($tokens as $token)
+		{
+			$widths = array();
+			foreach ($token->columns() as $column)
+			{
+				$widths[] = $this->config->helper('string')
+					->strlen($column);
+			}
+			$matrix[] = $widths;
+		}
+		return new Matrix($matrix);
+	}
+
+	/**
+	 * Get possible solutions for column widths
+	 */
+	private function _get_column_parameters($column)
+	{
+		$actual_values = $this->_widths->get_column($column);
+		$parameters = array();
+		$possible_widths = array_unique(array_filter($actual_values, function($item) {
+			return (bool) $item;
+		}));
+		if ($column === $this->_widths->get_dimension(1) - 1)
+		{
+			// Use max width for the last column
+			$possible_widths = array(max($possible_widths));
+		}
+		foreach ($possible_widths as $possible_width)
+		{
+			$parameters[] = array(
+				'column' => $column,
+				'width' => $possible_width,
+			);
+		}
+		return $parameters;
 	}
 
 	/**
@@ -125,30 +153,5 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		{
 			return min($y1, max($y2, $value));
 		}
-	}
-
-	/**
-	 * Get possible solutions for column widths
-	 */
-	private function _get_column_parameters($column)
-	{
-		$actual_values = $this->_widths->get_column($column);
-		$parameters = array();
-		$possible_widths = array_unique(array_filter($actual_values, function($item) {
-			return (bool) $item;
-		}));
-		if ($column === $this->_widths->get_dimension(1) - 1)
-		{
-			// Use max width for the last column
-			$possible_widths = array(max($possible_widths));
-		}
-		foreach ($possible_widths as $possible_width)
-		{
-			$parameters[] = array(
-				'column' => $column,
-				'width' => $possible_width,
-			);
-		}
-		return $parameters;
 	}
 }

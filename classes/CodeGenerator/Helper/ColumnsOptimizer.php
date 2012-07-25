@@ -110,15 +110,44 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	 */
 	public function evaluate_parameters($column, $width)
 	{
-		$sum = 0;
-		$actual_values = $this->_widths->get_column($column);
-		for ($i = 0; $i < count($actual_values); $i++)
+		$pad = $truncate = 0;
+		$widths = array_filter($this->_widths->get_column($column));
+		$count = count($widths);
+		for ($i = 0; $i < $count; $i++)
 		{
-			$sum += abs($actual_values[$i] - $width);
+			$delta = $widths[$i] - $width;
+			if ($delta > 0)
+			{
+				$pad += $delta;
+			}
+			if ($delta < 0)
+			{
+				$truncate -= $delta;
+			}
 		}
-		return $sum;
+		return $this->_sigma($pad, $count, $count + $truncate + $pad + 1, 1, 0) * $pad
+			+ $this->_sigma($truncate, $count, $count + $truncate + $pad + 1, 0, 1) * $truncate;
 	}
 
+	/**
+	 * Sigma function _/¯
+	 */
+	private function _sigma($argument, $x1, $x2, $y1, $y2)
+	{
+		$value = ($y2 - $y1) / ($x2 - $x1) * ($argument - $x1) + $y1;
+		if ($y2 > $y1)
+		{
+			return max($y1, min($y2, $value));
+		}
+		else
+		{
+			return min($y1, max($y2, $value));
+		}
+	}
+
+	/**
+	 * Get possible solutions for column widths
+	 */
 	private function _get_column_parameters($column)
 	{
 		$actual_values = $this->_widths->get_column($column);
@@ -126,7 +155,11 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		$possible_widths = array_unique(array_filter($actual_values, function($item) {
 			return (bool) $item;
 		}));
-		rsort($possible_widths, SORT_NUMERIC);
+		if ($column === $this->_widths->get_dimension(1) - 1)
+		{
+			// Use max width for the last column
+			$possible_widths = array(max($possible_widths));
+		}
 		foreach ($possible_widths as $possible_width)
 		{
 			$parameters[] = array(

@@ -1,6 +1,6 @@
 <?php
 /**
- * AnnotationTest
+ * ColumnsTest
  * 
  * @package    CodeGenerator
  * @category   Tokens

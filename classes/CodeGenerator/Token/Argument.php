@@ -12,13 +12,15 @@ namespace CodeGenerator\Token;
 
 class Argument extends Token
 {
-	const NAME_PATTERN = '[A-Za-z_][A-Za-z0-9_]+?';
-
 	protected $attributes = array(
 		'constraint' => NULL,
 		'default' => NULL,
 		'name' => NULL,
 		'comment' => NULL,
+	);
+	protected $validation = array(
+		'constraint' => 'constraint',
+		'name' => 'name',
 	);
 
 	public function render()
@@ -30,15 +32,5 @@ class Argument extends Token
 		return ($this->attributes['constraint'] ? $this->attributes['constraint'].' ' : '')
 			.'$'.$this->attributes['name']
 			.($this->attributes['default'] ? ' = '.$this->attributes['default'] : '');
-	}
-
-	public function validate_name($value)
-	{
-		return is_string($value) AND preg_match('#^'.self::NAME_PATTERN.'$#', $value);
-	}
-
-	public function validate_constraint($value)
-	{
-		return is_string($value) AND preg_match('#^(?:\\\\?'.self::NAME_PATTERN.')+$#', $value);
 	}
 }

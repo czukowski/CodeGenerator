@@ -20,6 +20,10 @@ abstract class Token extends \CodeGenerator\Object
 	 * @var  array  Token attributes list with default values
 	 */
 	protected $attributes = array();
+	/**
+	 * @var  array  Token attributes to validation mapping
+	 */
+	protected $validation = array();
 
 	/**
 	 * Add a value to array token attribute
@@ -99,8 +103,13 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	private function assert_attribute_valid($attribute, $value)
 	{
-		$method_name = 'validate_'.$attribute;
-		if (method_exists($this, $method_name) AND ! $this->$method_name($value))
+		if ( ! isset($this->validation[$attribute]))
+		{
+			return;
+		}
+		$validator = $this->config->helper('validator');
+		$method_name = 'validate_'.$this->validation[$attribute];
+		if (is_callable(array($validator, $method_name)) AND ! $validator->$method_name($value))
 		{
 			throw new \InvalidArgumentException('Invalid value for '.$this->token().'.'.$attribute);
 		}

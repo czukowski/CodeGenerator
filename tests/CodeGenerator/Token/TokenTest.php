@@ -40,10 +40,10 @@ class TokenTest extends Testcase
 				array(), array('me' => 'foo'), 'me', 'fubar', new \InvalidArgumentException,
 			),
 			array(
-				array('validate_me' => TRUE), array('me' => array('foo')), 'me', 'bar', array('foo', 'bar'),
+				array('me' => TRUE), array('me' => array('foo')), 'me', 'bar', array('foo', 'bar'),
 			),
 			array(
-				array('validate_me' => FALSE), array('me' => array('foo')), 'me', 'bar', new \InvalidArgumentException,
+				array('me' => FALSE), array('me' => array('foo')), 'me', 'bar', new \InvalidArgumentException,
 			),
 		);
 	}
@@ -99,40 +99,43 @@ class TokenTest extends Testcase
 				array(), array('foo' => 'bar'), 'boo', 'bar', new \InvalidArgumentException,
 			),
 			array(
-				array('validate_foo' => TRUE), array('foo' => NULL), 'foo', 'bar', 'bar',
+				array('foo' => TRUE), array('foo' => NULL), 'foo', 'bar', 'bar',
 			),
 			array(
-				array('validate_foo' => FALSE), array('foo' => NULL), 'foo', 'bar', new \InvalidArgumentException,
+				array('foo' => FALSE), array('foo' => NULL), 'foo', 'bar', new \InvalidArgumentException,
 			),
 		);
 	}
 
 	protected function setup_with_attributes($attributes, $validation = array())
 	{
-		$options = $validation ? array('validate_methods' => $validation) : array();
-		$this->setup_mock($options);
+		$this->setup_mock();
+		if ($validation)
+		{
+			$this->setup_validator($validation);
+			$this->_object_property($this->object, 'validation')
+				->setValue($this->object, array_combine(array_keys($validation), array_keys($validation)));
+		}
 		$this->_object_property($this->object, 'attributes')
 			->setValue($this->object, $attributes);
 	}
 
-	protected function setup_mock($options = array())
+	protected function setup_validator($validation)
 	{
-		if (array_key_exists('validate_methods', $options))
+		$validator = $this->get_mock(array(
+			'classname' => '\CodeGenerator\Helper\Validator',
+			'methods' => array_map(function($name) {
+				return 'validate_'.$name;
+			}, array_keys($validation)),
+			'arguments' => array($this->config),
+		));
+		foreach ($validation as $method => $return_value)
 		{
-			$classname = isset($options['classname']) ? $options['classname'] : $this->_class_name();
-			$methods = isset($options['methods']) ? $options['methods'] : $this->_class_abstract_methods($classname);
-			$options['methods'] = array_merge($methods, array_keys($options['validate_methods']));
+			$validator->expects($this->any())
+				->method('validate_'.$method)
+				->will($this->returnValue($return_value));
 		}
-		parent::setup_mock($options);
-		if (array_key_exists('validate_methods', $options))
-		{
-			foreach ($options['validate_methods'] as $method => $return_value)
-			{
-				$this->object->expects($this->any())
-					->method($method)
-					->will($this->returnValue($return_value));
-			}
-		}
+		$this->_replace_helper('validator', $validator);
 	}
 
 	private function get_attribute_value($key)

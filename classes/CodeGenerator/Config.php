@@ -38,7 +38,8 @@ class Config
 	 */
 	public function __construct($config = array())
 	{
-		$this->config = array_merge_recursive($this->config, $config);
+		$this->config = $this->helper('arrays')
+			->merge($this->config, $config);
 	}
 
 	/**

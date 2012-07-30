@@ -17,11 +17,11 @@ abstract class Testcase extends \PHPUnit_Framework_TestCase
 	 */
 	protected $object;
 
-	protected function setExpectedExceptionFromArgument($object)
+	protected function setExpectedExceptionFromArgument($expected)
 	{
-		if ($object instanceof \Exception)
+		if ($expected instanceof \Exception)
 		{
-			$this->setExpectedException(get_class($object));
+			$this->setExpectedException(get_class($expected));
 		}
 	}
 

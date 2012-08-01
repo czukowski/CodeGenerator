@@ -17,6 +17,12 @@ class Whitespace extends Token
 	);
 	private $_width = 1;
 
+	public function __construct(\CodeGenerator\Config $config)
+	{
+		$this->config = $config;
+		$this->attributes['char'] = $this->config->format('column_delimiter');
+	}
+
 	public function render()
 	{
 		return str_repeat($this->attributes['char'], $this->width());

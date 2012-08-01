@@ -27,6 +27,9 @@ class WhitespaceTest extends Testcase
 	{
 		return array(
 			array(
+				array(), 3, '   ',
+			),
+			array(
 				array('char' => ' '), 3, '   ',
 			),
 			array(

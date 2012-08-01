@@ -14,7 +14,7 @@ class ColumnsOptimizerTest extends Testcase
 	/**
 	 * @dataProvider  provide_auto_width
 	 */
-	public function _test_auto_width($tokens, $expected)
+	public function test_auto_width($tokens, $expected)
 	{
 		$this->setExpectedExceptionFromArgument($expected);
 		$this->object->auto_width($tokens);
@@ -107,7 +107,7 @@ class ColumnsOptimizerTest extends Testcase
 	 * 
 	 * @dataProvider  provide_sigma
 	 */
-	public function _test_sigma($argument, $x1, $x2, $y1, $y2, $expected)
+	public function test_sigma($argument, $x1, $x2, $y1, $y2, $expected)
 	{
 		$actual = $this->_object_method($this->object, '_sigma')
 			->invoke($this->object, $argument, $x1, $x2, $y1, $y2);

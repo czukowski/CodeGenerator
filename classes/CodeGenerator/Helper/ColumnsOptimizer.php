@@ -24,7 +24,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	 */
 	private $_tokens = array();
 	/**
-	 * @var  array  Actual columns content widths
+	 * @var  array  Actual columns content widths (align)
 	 */
 	private $_actual_widths;
 	/**

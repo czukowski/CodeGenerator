@@ -1,6 +1,7 @@
 <?php
 /**
- * Helper class for column tokens that allows to auto-align them (set column widths automatically).
+ * Helper class for column tokens that allows to auto-align them (set column widths automatically)
+ * and distribute the columns according to fixed column widths.
  * 
  * @package    CodeGenerator
  * @author     Korney Czukowski
@@ -15,22 +16,42 @@ use CodeGenerator\Token,
 class ColumnsOptimizer extends \CodeGenerator\Object
 {
 	/**
-	 * @var  Matrix  Actual column widths for each token
+	 * @var  Matrix  Actual column widths for each token (auto width)
 	 */
 	private $_widths = array();
 	/**
-	 * @var  array  Column-type tokens that will be aligned, other will be ignored
+	 * @var  array  Column-type tokens that will be aligned, other will be ignored (auto width)
 	 */
 	private $_tokens = array();
+	/**
+	 * @var  array  Actual columns content widths
+	 */
+	private $_actual_widths;
+	/**
+	 * @var  array  Set column widths (align)
+	 */
+	private $_fixed_widths;
+	/**
+	 * @var  array  Token columns (align)
+	 */
+	private $_columns;
+	/**
+	 * @var  integer  Current columns count (align)
+	 */
+	private $_columns_count;
+	/**
+	 * @var  integer  Current cursor (align)
+	 */
+	private $_cursor;
 
 	/**
-	 * Align token column widths
+	 * Compute the optimal column widths for the array of tokens
 	 * 
 	 * @param  array  Array of tokens to align
 	 */
-	public function align($tokens)
+	public function auto_width($tokens)
 	{
-		$this->_setup_alignment($tokens);
+		$this->_setup_auto_width($tokens);
 		for ($i = 0; $i < $this->_widths->get_dimension(0); $i++)
 		{
 			$params = $this->_get_column_parameters($i);
@@ -47,7 +68,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	/**
 	 * Determine and setup the actual column widths for all tokens as a pre-requisite for the alignment
 	 */
-	private function _setup_alignment($tokens)
+	private function _setup_auto_width($tokens)
 	{
 		if ( ! is_array($tokens))
 		{
@@ -75,15 +96,23 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		$matrix = array();
 		foreach ($tokens as $token)
 		{
-			$widths = array();
-			foreach ($token->columns() as $column)
-			{
-				$widths[] = $this->config->helper('string')
-					->strlen($column);
-			}
-			$matrix[] = $widths;
+			$matrix[] = $this->_get_actual_widths($token->columns());
 		}
 		return new Matrix($matrix);
+	}
+
+	/**
+	 * Return columns actual widths
+	 */
+	private function _get_actual_widths($columns)
+	{
+		$strings = $this->config->helper('string');
+		$widths = array();
+		foreach ($columns as $column)
+		{
+			$widths[] = $strings->strlen($column);
+		}
+		return $widths;
 	}
 
 	/**
@@ -153,5 +182,67 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		{
 			return min($y1, max($y2, $value));
 		}
+	}
+
+	/**
+	 * Aligns token columns according to its set widths
+	 * 
+	 * @param   Token\Columns  $token
+	 * @return  array
+	 */
+	public function align(Token\Columns $token)
+	{
+		$buffer = array();
+		$column_space = $this->config->options('column_min_space');
+		$this->_setup_alignment($token);
+		for ($i = 0; $i < count($this->_columns); $i++)
+		{
+			$buffer[] = $this->_columns[$i];
+			$overflow = $this->_actual_widths[$i] - $this->_fixed_widths[$this->_cursor];
+			// Overflow
+			$this->_cursor++;
+			while ($overflow > 0)
+			{
+				$this->_increment_count($overflow);
+				$overflow -= $this->_fixed_widths[$this->_cursor] + $column_space;
+				$this->_cursor++;
+				$this->_increment_count($overflow);
+			}
+			// Underflow
+			$buffer[] = $this->_create_whitespace(-1 * $overflow + $column_space);
+		}
+		array_pop($buffer);
+		return $buffer;
+	}
+
+	private function _setup_alignment(Token\Columns $token)
+	{
+		$this->_columns = $token->columns();
+		$this->_columns_count = count($this->_columns);
+		$this->_actual_widths = $this->_get_actual_widths($this->_columns);
+		$this->_fixed_widths = $token->widths();
+		$this->_cursor = 0;
+	}
+
+	/**
+	 * Increments columns count if the cursor has reached the end
+	 */
+	private function _increment_count($overflow)
+	{
+		if ($this->_cursor === $this->_columns_count)
+		{
+			$this->_columns_count++;
+			$this->_fixed_widths[] = $overflow - $this->config->options('column_min_space');
+		}
+	}
+
+	/**
+	 * Creates Whitespace token of the specified width
+	 */
+	private function _create_whitespace($width)
+	{
+		$whitespace = new Token\Whitespace($this->config);
+		$whitespace->width($width);
+		return $whitespace;
 	}
 }

@@ -19,7 +19,7 @@ class Whitespace extends Token
 
 	public function __construct(\CodeGenerator\Config $config)
 	{
-		$this->config = $config;
+		parent::__construct($config);
 		$this->attributes['char'] = $this->config->format('column_delimiter');
 	}
 

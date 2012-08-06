@@ -37,7 +37,7 @@ class ColumnsOptimizerTest extends Testcase
 				),
 				array(7, 7, 4, 12),
 			),
-			// Adday of mixed tokens
+			// Array of mixed tokens
 			array(
 				array(
 					'Test description',

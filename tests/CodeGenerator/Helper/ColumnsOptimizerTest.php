@@ -18,7 +18,7 @@ class ColumnsOptimizerTest extends Testcase
 	{
 		$this->setExpectedExceptionFromArgument($expected);
 		$this->object->auto_width($tokens);
-		$tokens = $this->_object_property($this->object, '_tokens')
+		$tokens = $this->_object_property($this->object, '_column_tokens')
 			->getValue($this->object);
 		foreach ($tokens as $token)
 		{
@@ -66,6 +66,13 @@ class ColumnsOptimizerTest extends Testcase
 				),
 				array(7, 7, 8, 12),
 			),
+			// No column tokens
+			array(
+				array(
+					'Test description',
+				),
+				array(),
+			),
 			// Not array
 			array(
 				$this->_create_token(array('@param', 'string', '$str', 'Input string')),
@@ -93,61 +100,6 @@ class ColumnsOptimizerTest extends Testcase
 	}
 
 	/**
-	 * How sigma function works:
-	 * 
-	 * y = a * x + b
-	 * y1 = a * x1 + b
-	 * y2 = a * x2 + b
-	 * b = y1 - a * x1
-	 * y2 = a * x2 + y1 - a * x1
-	 * y2 - y1 = a * (x2 - x1)
-	 * a = (y2 - y1) / (x2 - x1)
-	 * 
-	 * The result is bounded by y1 and y2
-	 * 
-	 * @dataProvider  provide_sigma
-	 */
-	public function test_sigma($argument, $x1, $x2, $y1, $y2, $expected)
-	{
-		$actual = $this->_object_method($this->object, '_sigma')
-			->invoke($this->object, $argument, $x1, $x2, $y1, $y2);
-		$this->assertEquals($expected, $actual, '', 0.0001);
-	}
-
-	public function provide_sigma()
-	{
-		// [argument, x1, x2, y1, y2, expected]
-		return array(
-			// Non-decreasing
-			array(0, 0, 1, 0, 1, 0),
-			array(1, 0, 1, 0, 1, 1),
-			array(0.5, 0, 1, 0, 1, 0.5),
-			array(0.9, 0, 1, 0, 1, 0.9),
-			array(-1, -1, 3, 0, 1, 0),
-			array(0, -1, 3, 0, 1, 0.25),
-			array(3, -1, 3, 0, 1, 1),
-			// Truncated
-			array(-1, 0, 1, 0, 1, 0),
-			array(3, 0, 1, 0, 1, 1),
-			array(-7, -1, 3, 0, 1, 0),
-			array(9, -1, 3, 0, 1, 1),
-			// Non-increasing
-			array(0, 0, 1, 1, 0, 1),
-			array(0.5, 0, 1, 1, 0, 0.5),
-			array(0.9, 0, 1, 1, 0, 0.1),
-			array(1, 0, 1, 1, 0, 0),
-			array(-1, -1, 3, 1, 0, 1),
-			array(0, -1, 3, 1, 0, 0.75),
-			array(3, -1, 3, 1, 0, 0),
-			// Truncated
-			array(-1, 0, 1, 1, 0, 1),
-			array(3, 0, 1, 1, 0, 0),
-			array(-7, -1, 3, 1, 0, 1),
-			array(9, -1, 3, 1, 0, 0),
-		);
-	}
-
-	/**
 	 * @dataProvider  provide_align
 	 */
 	public function test_align($token, $widths, $expected)
@@ -163,6 +115,27 @@ class ColumnsOptimizerTest extends Testcase
 		$return = $this->_create_token(array('@return', 'integer', 'Function result'));
 		$return_short = $this->_create_token(array('@return', 'integer'));
 		return array(
+			// '1' - odd number of fixed widths
+			// '@param  string  $str  Input string'
+			array($param, array(1), '@param  string  $str  Input string'),			
+			// '1  1' - odd number of fixed widths
+			// '@param   string  $str  Input string'
+			array($param, array(1, 1), '@param  string  $str  Input string'),			
+			// '1  1  1' - odd number of fixed widths
+			// '@param   string  $str  Input string'
+			array($param, array(1, 1, 1), '@param   string  $str  Input string'),			
+			// '1  1  1  1  1' - odd number of fixed widths
+			// '@param   string  $str  Input string'
+			array($param, array(1, 1, 1, 1, 1), '@param   string  $str  Input string'),			
+			// '1  1  1  1  1  1' - odd number of fixed widths
+			// '@param   string  $str  Input string'
+			array($param, array(1, 1, 1, 1, 1, 1), '@param   string  $str  Input string'),			
+			// '1  1  1  1  1  1  1' - odd number of fixed widths
+			// '@param   string  $str  Input string'
+			array($param, array(1, 1, 1, 1, 1, 1, 1), '@param   string  $str  Input string'),			
+			// '1  1  1  1  55555  1  1' - odd number of fixed widths
+			// '@param   string    $str  Input string'
+			array($param, array(1, 1, 1, 1, 5, 1, 1), '@param   string  $str  Input string'),			
 			// '1  1  1  1'
 			// '@param   string  $str  Input string'
 			array($param, array(1, 1, 1, 1), '@param   string  $str  Input string'),

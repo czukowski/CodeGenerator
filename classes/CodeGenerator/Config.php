@@ -16,6 +16,8 @@ class Config
 	 */
 	private $config = array(
 		'format' => array(
+			'brace_close' => '}',
+			'brace_open' => "\n{",
 			'column_delimiter' => ' ',
 			'indent' => "\t",
 		),

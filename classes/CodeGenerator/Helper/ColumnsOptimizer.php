@@ -156,7 +156,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		for ($i = 0; $i < count($this->_columns); $i++)
 		{
 			$buffer[] = $this->_columns[$i];
-			$overflow = $this->_actual_widths[$i];// - $this->_fixed_widths[$this->_cursor];
+			$overflow = $this->_actual_widths[$i];
 			if (isset($this->_fixed_widths[$this->_cursor]))
 			{
 				$overflow -= $this->_fixed_widths[$this->_cursor];
@@ -191,10 +191,6 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		$this->_columns_count = count($this->_columns);
 		$this->_actual_widths = $this->_get_actual_widths($this->_columns);
 		$this->_fixed_widths = $token->widths();
-//		for ($i = count($this->_fixed_widths); $i < count($this->_actual_widths); $i++)
-//		{
-//			$this->_fixed_widths[$i] = 0;
-//		}
 		$this->_cursor = 0;
 	}
 

@@ -24,7 +24,7 @@ class DocComment extends Token
 			return '';
 		}
 		$this->config->helper('columnsOptimizer')
-			->align($this->attributes['annotations']);
+			->auto_width($this->attributes['annotations']);
 		$lines = array('/**');
 		if ($this->attributes['text'])
 		{

@@ -13,7 +13,7 @@ class ObjectTest extends \CodeGenerator\Helper\Testcase
 {
 	public function test_constructor()
 	{
-		$actual = $this->_object_property($this->object, 'config')
+		$actual = $this->get_object_property($this->object, 'config')
 			->getValue($this->object);
 		$this->assertInstanceOf('\CodeGenerator\Config', $actual);
 	}

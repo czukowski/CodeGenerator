@@ -50,7 +50,7 @@ class WhitespaceTest extends Testcase
 	public function test_get_width($width, $expected)
 	{
 		$this->setup_object();
-		$this->_object_width()->setValue($this->object, $width);
+		$this->get_object_width()->setValue($this->object, $width);
 		$actual = $this->object->width();
 		$this->assertEquals($expected, $actual);
 	}
@@ -69,10 +69,10 @@ class WhitespaceTest extends Testcase
 	public function test_set_width($width, $expected)
 	{
 		$this->setup_object();
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$actual = $this->object->width($width);
 		$this->assertSame($this->object, $actual);
-		$this->assertEquals($width, $this->_object_width()->getValue($this->object));
+		$this->assertEquals($width, $this->get_object_width()->getValue($this->object));
 	}
 
 	public function provide_set_width()
@@ -86,8 +86,8 @@ class WhitespaceTest extends Testcase
 		);
 	}
 
-	private function _object_width()
+	private function get_object_width()
 	{
-		return $this->_object_property($this->object, '_width');
+		return $this->get_object_property($this->object, '_width');
 	}
 }

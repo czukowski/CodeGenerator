@@ -18,7 +18,7 @@ class ColumnsTest extends Testcase
 	public function test_alignments($alignments, $arguments, $expected_return, $expected_alignments)
 	{
 		$this->setup_column_object(array(), $alignments);
-		$this->setExpectedExceptionFromArgument($expected_return);
+		$this->set_expected_exception_from_argument($expected_return);
 		$this->assert_object_values('alignments', $arguments, $expected_return, $expected_alignments);
 	}
 
@@ -79,7 +79,7 @@ class ColumnsTest extends Testcase
 	public function test_widths($widths, $arguments, $expected_return, $expected_widths)
 	{
 		$this->setup_column_object($widths);
-		$this->setExpectedExceptionFromArgument($expected_return);
+		$this->set_expected_exception_from_argument($expected_return);
 		$this->assert_object_values('widths', $arguments, $expected_return, $expected_widths);
 	}
 
@@ -136,7 +136,7 @@ class ColumnsTest extends Testcase
 
 	protected function assert_object_values($method, $arguments, $expected_return, $expected_values)
 	{
-		$actual = $this->_object_method($this->object, $method)
+		$actual = $this->get_object_method($this->object, $method)
 			->invokeArgs($this->object, $arguments);
 		if ($expected_return === NULL)
 		{
@@ -156,7 +156,7 @@ class ColumnsTest extends Testcase
 	{
 		$this->setup_column_object($widths, $alignments);
 		$this->config->format('column_delimiter', '-');
-		$actual = $this->_object_method($this->object, 'render_columns')
+		$actual = $this->get_object_method($this->object, 'render_columns')
 			->invokeArgs($this->object, array($columns));
 		$this->assertEquals($expected, $actual);
 	}
@@ -204,9 +204,9 @@ class ColumnsTest extends Testcase
 	protected function setup_column_object($widths = array(), $alignments = array())
 	{
 		$this->setup_mock();
-		$this->_object_property($this->object, 'widths')
+		$this->get_object_property($this->object, 'widths')
 			->setValue($this->object, $widths);	
-		$this->_object_property($this->object, 'alignments')
+		$this->get_object_property($this->object, 'alignments')
 			->setValue($this->object, $alignments);	
 	}
 }

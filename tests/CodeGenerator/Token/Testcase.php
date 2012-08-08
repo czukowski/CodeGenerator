@@ -37,7 +37,7 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 	/**
 	 * @return  array
 	 */
-	protected function _class_constructor_arguments()
+	protected function get_class_constructor_arguments()
 	{
 		$this->config = new \CodeGenerator\Config;
 		return array($this->config);
@@ -47,34 +47,34 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 	 * @param  string  $helper
 	 * @param  object  $object
 	 */
-	protected function _replace_helper($helper, $object)
+	protected function replace_helper($helper, $object)
 	{
 		if ( ! array_key_exists($helper, $this->_backup_helpers))
 		{
-			$current_helpers = $this->_object_property($this->config, 'helpers')
+			$current_helpers = $this->get_object_property($this->config, 'helpers')
 				->getValue($this->config);
 			$this->_backup_helpers[$helper] = isset($current_helpers[$helper]) ? $current_helpers[$helper] : NULL;
 			$current_helpers[$helper] = $object;
-			$this->_object_property($this->config, 'helpers')
+			$this->get_object_property($this->config, 'helpers')
 				->setValue($this->config, $current_helpers);
 		}
 	}
 
-	protected function _restore_helpers()
+	protected function restore_helpers()
 	{
-		$current_helpers = $this->_object_property($this->config, 'helpers')
+		$current_helpers = $this->get_object_property($this->config, 'helpers')
 			->getValue($this->config);
 		foreach ($this->_backup_helpers as $helper => $object)
 		{
 			$current_helpers[$helper] = $object;
 		}
-		$this->_object_property($this->config, 'helpers')
+		$this->get_object_property($this->config, 'helpers')
 			->setValue($this->config, $current_helpers);
 	}
 
 	protected function tearDown()
 	{
-		$this->_restore_helpers();
+		$this->restore_helpers();
 		parent::tearDown();
 	}
 }

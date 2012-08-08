@@ -59,9 +59,9 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 	 */
 	public function test_construct($matrix, $expected)
 	{
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$this->setup_object(array('arguments' => array($matrix)));
-		$actual = $this->_object_property($this->object, '_matrix')
+		$actual = $this->get_object_property($this->object, '_matrix')
 			->getValue($this->object);
 		$this->assertSame($expected, $actual);
 	}
@@ -81,9 +81,9 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 	 */
 	public function test_get_dimension($matrix, $arguments, $expected)
 	{
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$this->setup_object(array('arguments' => array($matrix)));
-		$actual = $this->_object_method($this->object, 'get_dimension')
+		$actual = $this->get_object_method($this->object, 'get_dimension')
 			->invokeArgs($this->object, $arguments);
 		$this->assertSame($expected, $actual);
 	}
@@ -107,7 +107,7 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 	public function test_get($matrix, $i, $j, $expected)
 	{
 		$this->setup_object(array('arguments' => array($matrix)));
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$actual = $this->object->get($i, $j);
 		$this->assertSame($expected, $actual);
 	}
@@ -131,7 +131,7 @@ class MatrixTest extends \CodeGenerator\Framework\Testcase
 	public function test_set($matrix, $i, $j, $value, $expected)
 	{
 		$this->setup_object(array('arguments' => array($matrix)));
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$this->object->set($i, $j, $value);
 		$actual = $this->object->get();
 		$this->assertSame($expected, $actual);

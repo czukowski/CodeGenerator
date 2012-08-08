@@ -73,7 +73,7 @@ class StringTest extends Testcase
 	 */
 	public function test_str_pad($input, $length, $pad, $type, $expected)
 	{
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$this->assertSame($expected, $this->object->str_pad($input, $length, $pad, $type));
 	}
 

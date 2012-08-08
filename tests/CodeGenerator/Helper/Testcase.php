@@ -23,7 +23,7 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 	/**
 	 * Use default Config as constructor arguments
 	 */
-	protected function _class_constructor_arguments()
+	protected function get_class_constructor_arguments()
 	{
 		return array(new Config);
 	}

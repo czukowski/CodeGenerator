@@ -18,7 +18,7 @@ class TokenTest extends Testcase
 	public function test_add($validation, $attributes, $add_key, $add_value, $expected)
 	{
 		$this->setup_with_validator_helper($attributes, $validation);
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$this->assertSame($this->object, $this->object->add($add_key, $add_value));
 		$this->assertEquals($expected, $this->get_attribute_value($add_key));
 	}
@@ -54,7 +54,7 @@ class TokenTest extends Testcase
 	public function test_get($attributes, $get_key, $expected)
 	{
 		$this->setup_with_validator_helper($attributes);
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$this->assertEquals($expected, $this->object->get($get_key));
 	}
 
@@ -80,7 +80,7 @@ class TokenTest extends Testcase
 	public function test_set($validation, $attributes, $set_key, $set_value, $expected)
 	{
 		$this->setup_with_validator_methods($attributes, $validation);
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$this->assertSame($this->object, $this->object->set($set_key, $set_value));
 		$this->assertEquals($expected, $this->get_attribute_value($set_key));
 	}
@@ -110,7 +110,7 @@ class TokenTest extends Testcase
 	protected function setup_with_validator_methods($attributes, $validation_methods = array())
 	{
 		$this->setup_mock(array(
-			'methods' => array_merge($this->_class_abstract_methods($this->_class_name()), $this->get_validation_methods($validation_methods)),
+			'methods' => array_merge($this->get_class_abstract_methods($this->get_class_name()), $this->get_validation_methods($validation_methods)),
 		));
 		$this->setup_validator($this->object, $validation_methods);
 		$this->setup_properties($attributes, $validation_methods);
@@ -140,11 +140,11 @@ class TokenTest extends Testcase
 
 	protected function setup_properties($attributes, $validations)
 	{
-		$this->_object_property($this->object, 'attributes')
+		$this->get_object_property($this->object, 'attributes')
 			->setValue($this->object, $attributes);
 		if ($validations)
 		{
-			$this->_object_property($this->object, 'validation')
+			$this->get_object_property($this->object, 'validation')
 				->setValue($this->object, array_combine(array_keys($validations), array_keys($validations)));
 		}
 	}
@@ -157,12 +157,12 @@ class TokenTest extends Testcase
 				->method('validate_'.$method)
 				->will($this->returnValue($return_value));
 		}
-		$this->_replace_helper('validator', $validator);
+		$this->replace_helper('validator', $validator);
 	}
 
 	private function get_attribute_value($key)
 	{
-		$attributes = $this->_object_property($this->object, 'attributes')
+		$attributes = $this->get_object_property($this->object, 'attributes')
 			->getValue($this->object);
 		$this->assertArrayHasKey($key, $attributes);
 		return $attributes[$key];
@@ -175,7 +175,7 @@ class TokenTest extends Testcase
 	{
 		$this->setup_mock();
 		$this->assertEquals(0, $this->object->indent());
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$this->assertSame($this->object, $this->object->indent($set_value));
 		$this->assertEquals($expected, $this->object->indent());
 	}
@@ -215,7 +215,7 @@ class TokenTest extends Testcase
 		$this->setup_mock();
 		$this->object->expects($this->any())
 			->method('render')
-			->will($this->returnValue($this->_class_name()));
-		$this->assertEquals($this->_class_name(), (string) $this->object);
+			->will($this->returnValue($this->get_class_name()));
+		$this->assertEquals($this->get_class_name(), (string) $this->object);
 	}
 }

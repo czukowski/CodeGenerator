@@ -17,7 +17,7 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 	public function test_helper($name, $expected, $is_singleton)
 	{
 		$this->setup_object();
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$actual1 = $this->object->helper($name);
 		$actual2 = $this->object->helper($name);
 		$this->assertInstanceOf($expected, $actual1);
@@ -104,7 +104,7 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 		$this->setup_object(array(
 			'arguments' => array(array($method_name => $config)),
 		));
-		$this->setExpectedExceptionFromArgument($expected);
+		$this->set_expected_exception_from_argument($expected);
 		$method = new \ReflectionMethod($this->object, $method_name);
 		return $method->invokeArgs($this->object, $arguments);
 	}

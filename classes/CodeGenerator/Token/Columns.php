@@ -54,13 +54,13 @@ abstract class Columns extends Token
 	{
 		if ( ! is_array($values))
 		{
-			throw new \InvalidArgumentException($this->token().'.widths() takes an array as argument');
+			throw new \InvalidArgumentException($this->token().'.set_widths() takes an array as argument');
 		}
 		foreach ($values as $value)
 		{
 			if ( ! is_int($value))
 			{
-				throw new \InvalidArgumentException($this->token().'.widths() argument must be array of integers');
+				throw new \InvalidArgumentException($this->token().'.set_widths() argument must be array of integers');
 			}
 		}
 	}

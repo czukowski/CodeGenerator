@@ -155,7 +155,6 @@ class ColumnsTest extends Testcase
 	public function test_render_columns($widths, $alignments, $columns, $expected)
 	{
 		$this->setup_column_object($widths, $alignments);
-		$this->config->format('column_delimiter', '-');
 		$actual = $this->get_object_method($this->object, 'render_columns')
 			->invokeArgs($this->object, array($columns));
 		$this->assertEquals($expected, $actual);
@@ -208,5 +207,15 @@ class ColumnsTest extends Testcase
 			->setValue($this->object, $widths);	
 		$this->get_object_property($this->object, 'alignments')
 			->setValue($this->object, $alignments);	
+	}
+
+	protected function get_class_constructor_arguments()
+	{
+		$this->config = new \CodeGenerator\Config(array(
+			'format' => array(
+				'column_delimiter' => '-',
+			),
+		));
+		return array($this->config);
 	}
 }

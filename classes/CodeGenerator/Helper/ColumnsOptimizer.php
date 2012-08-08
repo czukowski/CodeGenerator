@@ -151,7 +151,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	public function align(Token\Columns $token)
 	{
 		$buffer = array();
-		$column_space = $this->config->options('column_min_space');
+		$column_space = $this->config->get_options('column_min_space');
 		$this->_setup_alignment($token);
 		for ($i = 0; $i < count($this->_columns); $i++)
 		{
@@ -202,7 +202,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		if ($this->_cursor === $this->_columns_count)
 		{
 			$this->_columns_count++;
-			$this->_fixed_widths[$this->_cursor] = $overflow - $this->config->options('column_min_space');
+			$this->_fixed_widths[$this->_cursor] = $overflow - $this->config->get_options('column_min_space');
 		}
 	}
 

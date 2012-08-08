@@ -45,7 +45,7 @@ class String extends \CodeGenerator\Singleton
 	 */
 	public function strlen($str)
 	{
-		return mb_strlen($str, $this->config->options('charset'));
+		return mb_strlen($str, $this->config->get_options('charset'));
 	}
 
 	/**
@@ -121,8 +121,8 @@ class String extends \CodeGenerator\Singleton
 	public function substr($str, $offset, $length = NULL)
 	{
 		return ($length === NULL)
-			? mb_substr($str, $offset, mb_strlen($str), $this->config->options('charset'))
-			: mb_substr($str, $offset, $length, $this->config->options('charset'));
+			? mb_substr($str, $offset, mb_strlen($str), $this->config->get_options('charset'))
+			: mb_substr($str, $offset, $length, $this->config->get_options('charset'));
 	}
 
 	/**

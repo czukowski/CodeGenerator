@@ -43,90 +43,92 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 	/**
 	 * @dataProvider  provide_get
 	 */
-	public function test_format_get($config, $arguments, $expected)
-	{
-		$this->_test_get('format', $config, $arguments, $expected);
-	}
-
-	/**
-	 * @dataProvider  provide_get
-	 */
-	public function test_option_get($config, $arguments, $expected)
-	{
-		$this->_test_get('options', $config, $arguments, $expected);
-	}
-
-	private function _test_get($method, $config, array $arguments, $expected)
-	{
-		$actual = $this->_test_accessor_method($method, $config, $arguments, $expected);
-		if (is_array($expected))
-		{
-			foreach ($expected as $key => $value)
-			{
-				$this->assertEquals($value, $actual[$key]);
-			}
-		}
-		else
-		{
-			$this->assertEquals($expected, $actual);
-		}
-	}
-
-	/**
-	 * @dataProvider  provide_set
-	 */
-	public function test_format_set($config, $arguments, $expected)
-	{
-		$this->_test_set('format', $config, $arguments, $expected);
-	}
-
-	/**
-	 * @dataProvider  provide_set
-	 */
-	public function test_option_set($config, $arguments, $expected)
-	{
-		$this->_test_set('options', $config, $arguments, $expected);
-	}
-
-	private function _test_set($method, $config, array $arguments, $expected)
-	{
-		$instance = $this->_test_accessor_method($method, $config, $arguments, $expected);
-		$this->assertSame($this->object, $instance);
-		$actual = $this->object->$method();
-		foreach ($expected as $key => $value)
-		{
-			$this->assertEquals($value, $actual[$key]);
-		}
-	}
-
-	private function _test_accessor_method($method_name, $config, array $arguments, $expected)
+	public function test_get($config, $path, $default, $expected)
 	{
 		$this->setup_object(array(
-			'arguments' => array(array($method_name => $config)),
+			'arguments' => array($config),
 		));
-		$this->set_expected_exception_from_argument($expected);
-		$method = new \ReflectionMethod($this->object, $method_name);
-		return $method->invokeArgs($this->object, $arguments);
-	}
-
-	public function provide_set()
-	{
-		// [config, arguments, expected]
-		return array(
-			array(array(), array('key1', 'value1'), new \InvalidArgumentException),
-			array(array('key1' => 'VALUE1'), array('key1', 'value1'), array('key1' => 'value1')),
-		);
+		$actual = $this->object->get($path, $default);
+		$this->assertEquals($expected, $actual);
 	}
 
 	public function provide_get()
 	{
-		// [config, arguments, expected]
+		$config = $this->get_config();
+		$default = array();
 		return array(
-			array(array(), array('key1'), new \InvalidArgumentException),
-			array(array(), array('key1', 'value1', 'something else'), new \InvalidArgumentException),
-			array(array(), array(), array()),
-			array(array('key1' => 'VALUE1'), array(), array('key1' => 'VALUE1')),
-			array(array('key1' => 'VALUE1'), array('key1'), 'VALUE1'),
+			array($default, 'format.brace_close', NULL, '}'),
+			array($config, 'format.brace_close', '}', ' } '),
+			array($default, 'options.column_min_space', NULL, 2),
+			array($config, 'options.column_min_space', 2, 1),
+			array($default, 'format.some.thing', '+=+', '+=+'),
+			array($config, 'options.some.thing', '+=+', '+=+'),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_get_format
+	 */
+	public function test_get_format($config, $path, $default, $expected)
+	{
+		$this->setup_object(array(
+			'arguments' => array($config),
+		));
+		$actual = $this->object->get_format($path, $default);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function provide_get_format()
+	{
+		$config = $this->get_config();
+		$default = array();
+		return array(
+			array($default, 'brace_close', NULL, '}'),
+			array($config, 'brace_close', '}', ' } '),
+			array($default, 'some.format', '+=+', '+=+'),
+			array($config, 'some.format', '+=+', '+=+'),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_get_options
+	 */
+	public function test_get_options($config, $path, $default, $expected)
+	{
+		$this->setup_object(array(
+			'arguments' => array($config),
+		));
+		$actual = $this->object->get_options($path, $default);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function provide_get_options()
+	{
+		$config = $this->get_config();
+		$default = array();
+		return array(
+			array($default, 'column_min_space', NULL, 2),
+			array($config, 'column_min_space', 2, 1),
+			array($default, 'some.option', '+=+', '+=+'),
+			array($config, 'some.option', '+=+', '+=+'),
+		);
+	}
+
+	private function get_config()
+	{
+		return array(
+			'format' => array(
+				'brace_close' => ' } ',
+				'brace_open' => ' {',
+				'column_delimiter' => '+',
+				'indent' => '    ',
+			),
+			'options' => array(
+				'charset' => 'utf-8',
+				'column_min_space' => 1,
+				'line_width' => 100,
+				'wrap_comment_text' => TRUE,
+			),
 		);
 	}
 }

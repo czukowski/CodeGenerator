@@ -54,16 +54,23 @@ class Config
 	{
 		if ( ! isset($this->helpers[$name]))
 		{
-			$this->helpers[$name] = $this->_helper_instance($name);
+			$this->helpers[$name] = $this->create_helper_instance($name);
 		}
 		elseif ( ! $this->helpers[$name] instanceof Singleton)
 		{
-			return $this->_helper_instance($name);
+			return $this->create_helper_instance($name);
 		}
 		return $this->helpers[$name];
 	}
 
-	private function _helper_instance($name)
+	/**
+	 * Creates helper instance
+	 * 
+	 * @param   string  $name
+	 * @return  \CodeGenerator\Helper\*
+	 * @throws  \InvalidArgumentException
+	 */
+	private function create_helper_instance($name)
 	{
 		$classname = __NAMESPACE__.'\\Helper\\'.ucfirst($name);
 		if ( ! class_exists($classname))
@@ -74,23 +81,40 @@ class Config
 	}
 
 	/**
-	 * Format config getter/setter. See below for description and usage examples.
+	 * Gets config value(s)
 	 * 
+	 * @param   string  $path     Config path
+	 * @param   mixed   $default  Default value
 	 * @return  mixed
 	 */
-	public function format()
+	public function get($path, $default = NULL)
 	{
-		return $this->_get_set('format', func_get_args());
+		return $this->helper('arrays')
+			->path($this->config, $path, $default);
 	}
 
 	/**
-	 * Options config getter/setter. See below for description and usage examples.
+	 * Format config getter
 	 * 
+	 * @param   string  $path     Config path
+	 * @param   mixed   $default  Default value
 	 * @return  mixed
 	 */
-	public function options()
+	public function get_format($path, $default = NULL)
 	{
-		return $this->_get_set('options', func_get_args());
+		return $this->get('format.'.$path, $default);
+	}
+
+	/**
+	 * Options config getter
+	 * 
+	 * @param   string  $path     Config path
+	 * @param   mixed   $default  Default value
+	 * @return  mixed
+	 */
+	public function get_options($path, $default = NULL)
+	{
+		return $this->get('options.'.$path, $default);
 	}
 
 	/**

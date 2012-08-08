@@ -139,7 +139,7 @@ abstract class Columns extends Token
 		{
 			return '';
 		}
-		$pad_string = $this->config->format('column_delimiter');
+		$pad_string = $this->config->get_format('column_delimiter');
 		foreach ($columns as $i => &$column)
 		{
 			$column = $this->config->helper('string')
@@ -150,7 +150,7 @@ abstract class Columns extends Token
 			$columns[count($columns) - 1] = $this->config->helper('string')
 				->rtrim($columns[count($columns) - 1], $pad_string);
 		}
-		return implode(str_repeat($pad_string, $this->config->options('column_min_space')), $columns);
+		return implode(str_repeat($pad_string, $this->config->get_options('column_min_space')), $columns);
 	}
 
 	/**

@@ -17,28 +17,38 @@ class Whitespace extends Token
 	);
 	private $_width = 1;
 
-	public function __construct(\CodeGenerator\Config $config)
+	public function __construct(\CodeGenerator\Config $config, $width = 1)
 	{
 		parent::__construct($config);
+		$this->set_width($width);
 		$this->attributes['char'] = $this->config->get_format('column_delimiter');
 	}
 
 	public function render()
 	{
-		return str_repeat($this->attributes['char'], $this->width());
+		return str_repeat($this->attributes['char'], $this->get_width());
 	}
 
-	public function width($argument = NULL)
+	/**
+	 * @return  integer
+	 */
+	public function get_width()
 	{
-		if ($argument === NULL)
+		return $this->_width;
+	}
+
+	/**
+	 * @param   integer  $value
+	 * @return  \CodeGenerator\Token\Whitespace
+	 * @throws  \InvalidArgumentException
+	 */
+	public function set_width($value)
+	{
+		if (is_int($value))
 		{
-			return $this->_width;
-		}
-		elseif (is_int($argument))
-		{
-			$this->_width = $argument;
+			$this->_width = $value;
 			return $this;
 		}
-		throw new \InvalidArgumentException($this->token().'.width() takes integer argument');
+		throw new \InvalidArgumentException($this->token().'.set_width() takes integer argument');
 	}
 }

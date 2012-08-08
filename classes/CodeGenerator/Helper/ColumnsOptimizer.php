@@ -209,9 +209,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	 */
 	private function create_whitespace($width)
 	{
-		$whitespace = new Token\Whitespace($this->config);
-		$whitespace->width($width);
-		return $whitespace;
+		return new Token\Whitespace($this->config, $width);
 	}
 
 	/**

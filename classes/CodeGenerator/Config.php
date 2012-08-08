@@ -116,40 +116,4 @@ class Config
 	{
 		return $this->get('options.'.$path, $default);
 	}
-
-	/**
-	 * Universal getter and setter method for `format()` and `options()` methods. Takes 0 to 2 arguments.
-	 * 
-	 *     $format = $config->format();                   // Gets all 'format' options
-	 *     $line_width = $config->options('line_width');  // Gets line width option
-	 *     $config->format('indent', "\t"));              // Sets 'indent' format
-	 * 
-	 * @param   string  $property
-	 * @param   array   $arguments
-	 * @return  mixed
-	 * @throws  \InvalidArgumentException
-	 */
-	private function _get_set($item, array $arguments)
-	{
-		$count = count($arguments);
-		if ($count === 0)
-		{
-			return $this->config[$item];
-		}
-		elseif ($count === 1 AND array_key_exists($arguments[0], $this->config[$item]))
-		{
-			return $this->config[$item][$arguments[0]];
-		}
-		elseif ($count === 2 AND array_key_exists($arguments[0], $this->config[$item]))
-		{
-			$this->config[$item][$arguments[0]] = $arguments[1];
-			return $this;
-		}
-		elseif ($count > 2)
-		{
-			throw new \InvalidArgumentException('Format.'.ucfirst($item).'() takes one or two arguments.');
-		}
-		throw new \InvalidArgumentException('Format.'.$item.'.'.$arguments[0].' does not exist');
-	}
-
 }

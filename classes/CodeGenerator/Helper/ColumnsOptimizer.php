@@ -74,9 +74,9 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		{
 			throw new \InvalidArgumentException('Columns.tokens() takes an array as argument');
 		}
-		$this->_column_tokens = array_filter($tokens, function($token) {
+		$this->_column_tokens = array_values(array_filter($tokens, function($token) {
 			return $token instanceof Token\Columns;
-		});
+		}));
 		$this->_setup_solutions_space();
 	}
 
@@ -85,16 +85,28 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	 */
 	private function _setup_solutions_space()
 	{
-		$widths_matrix = $this->_create_widths_matrix($this->_column_tokens);
-		$this->_solutions_space = array();
-		for ($i = 0; $i < $widths_matrix->get_dimension(0); $i++)
+		$columns = array();
+		for ($i = 0; $i < count($this->_column_tokens); $i++)
 		{
-			$actual_values = $widths_matrix->get_column($i);
+			$widths = $this->_get_actual_widths($this->_column_tokens[$i]->columns());
+			for ($j = 0; $j < count($widths); $j++)
+			{
+				if ( ! isset($columns[$j])) {
+					$columns[$j] = array();
+				}
+				$columns[$j][] = $widths[$j];
+			}
+		}
+
+		$this->_solutions_space = array();
+		for ($i = 0; $i < count($columns); $i++)
+		{
+			$actual_values = $columns[$i];
 			$this->_solutions_space[$i] = array();
 			$possible_widths = array_unique(array_filter($actual_values, function($item) {
 				return (bool) $item;
 			}));
-			if ($i === $widths_matrix->get_dimension(1) - 1)
+			if ($i === count($this->_column_tokens) - 1)
 			{
 				// Use max width for the last column
 				$possible_widths = array(max($possible_widths));
@@ -104,19 +116,6 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 				$this->_solutions_space[$i][] = $possible_width;
 			}
 		}
-	}
-
-	/**
-	 * Creates actual widths matrix
-	 */
-	private function _create_widths_matrix($tokens)
-	{
-		$matrix = array();
-		foreach ($tokens as $token)
-		{
-			$matrix[] = $this->_get_actual_widths($token->columns());
-		}
-		return new Matrix($matrix);
 	}
 
 	/**

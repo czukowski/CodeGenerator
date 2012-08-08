@@ -16,6 +16,40 @@ namespace CodeGenerator\Helper;
 class Arrays extends \CodeGenerator\Singleton
 {
 	/**
+	 * @var  string  default delimiter for path()
+	 */
+	private $delimiter = '.';
+
+	/**
+	 * Test if a value is an array with an additional check for array-like objects.
+	 * 
+	 *     // Returns TRUE
+	 *     $arrays->is_array(array());
+	 *     $arrays->is_array(new ArrayObject);
+	 *
+	 *     // Returns FALSE
+	 *     $arrays->is_array(FALSE);
+	 *     $arrays->is_array('not an array!');
+	 *     $arrays->is_array(Database::instance());
+	 * 
+	 * @param   mixed   $value  value to check
+	 * @return  boolean
+	 */
+	public function is_array($value)
+	{
+		if (is_array($value))
+		{
+			// Definitely an array
+			return TRUE;
+		}
+		else
+		{
+			// Possibly a Traversable object, functionally the same as an array
+			return (is_object($value) AND $value instanceof \Traversable);
+		}
+	}
+
+	/**
 	 * Tests if an array is associative or not.
 	 *
 	 *     // Returns TRUE
@@ -109,5 +143,129 @@ class Arrays extends \CodeGenerator\Singleton
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Gets a value from an array using a dot separated path.
+	 *
+	 *     // Get the value of $array['foo']['bar']
+	 *     $value = $arrays->path($array, 'foo.bar');
+	 *
+	 * Using a wildcard "*" will search intermediate arrays and return an array.
+	 *
+	 *     // Get the values of "color" in theme
+	 *     $colors = $arrays->path($array, 'theme.*.color');
+	 *
+	 *     // Using an array of keys
+	 *     $colors = $arrays->path($array, array('theme', '*', 'color'));
+	 *
+	 * @param   array   $array      array to search
+	 * @param   mixed   $path       key path string (delimiter separated) or array of keys
+	 * @param   mixed   $default    default value if the path is not set
+	 * @param   string  $delimiter  key path delimiter
+	 * @return  mixed
+	 */
+	public function path($array, $path, $default = NULL, $delimiter = NULL)
+	{
+		if ( ! $this->is_array($array))
+		{
+			// This is not an array!
+			return $default;
+		}
+
+		if (is_array($path))
+		{
+			// The path has already been separated into keys
+			$keys = $path;
+		}
+		else
+		{
+			if (array_key_exists($path, $array))
+			{
+				// No need to do extra processing
+				return $array[$path];
+			}
+
+			if ($delimiter === NULL)
+			{
+				// Use the default delimiter
+				$delimiter = $this->delimiter;
+			}
+
+			// Remove starting delimiters and spaces
+			$path = ltrim($path, "{$delimiter} ");
+
+			// Remove ending delimiters, spaces, and wildcards
+			$path = rtrim($path, "{$delimiter} *");
+
+			// Split the keys by delimiter
+			$keys = explode($delimiter, $path);
+		}
+
+		do
+		{
+			$key = array_shift($keys);
+
+			if (ctype_digit($key))
+			{
+				// Make the key an integer
+				$key = (int) $key;
+			}
+
+			if (isset($array[$key]))
+			{
+				if ($keys)
+				{
+					if ($this->is_array($array[$key]))
+					{
+						// Dig down into the next part of the path
+						$array = $array[$key];
+					}
+					else
+					{
+						// Unable to dig deeper
+						break;
+					}
+				}
+				else
+				{
+					// Found the path requested
+					return $array[$key];
+				}
+			}
+			elseif ($key === '*')
+			{
+				// Handle wildcards
+
+				$values = array();
+				foreach ($array as $arr)
+				{
+					if (($value = $this->path($arr, implode('.', $keys))))
+					{
+						$values[] = $value;
+					}
+				}
+
+				if ($values)
+				{
+					// Found the values requested
+					return $values;
+				}
+				else
+				{
+					// Unable to dig deeper
+					break;
+				}
+			}
+			else
+			{
+				// Unable to dig deeper
+				break;
+			}
+		}
+		while ($keys);
+
+		// Unable to find the value requested
+		return $default;
 	}
 }

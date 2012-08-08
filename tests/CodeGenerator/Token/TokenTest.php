@@ -17,7 +17,7 @@ class TokenTest extends Testcase
 	 */
 	public function test_add($validation, $attributes, $add_key, $add_value, $expected)
 	{
-		$this->setup_with_attributes($attributes, $validation);
+		$this->setup_with_validator_helper($attributes, $validation);
 		$this->setExpectedExceptionFromArgument($expected);
 		$this->assertSame($this->object, $this->object->add($add_key, $add_value));
 		$this->assertEquals($expected, $this->get_attribute_value($add_key));
@@ -53,7 +53,7 @@ class TokenTest extends Testcase
 	 */
 	public function test_get($attributes, $get_key, $expected)
 	{
-		$this->setup_with_attributes($attributes);
+		$this->setup_with_validator_helper($attributes);
 		$this->setExpectedExceptionFromArgument($expected);
 		$this->assertEquals($expected, $this->object->get($get_key));
 	}
@@ -79,7 +79,7 @@ class TokenTest extends Testcase
 	 */
 	public function test_set($validation, $attributes, $set_key, $set_value, $expected)
 	{
-		$this->setup_with_attributes($attributes, $validation);
+		$this->setup_with_validator_methods($attributes, $validation);
 		$this->setExpectedExceptionFromArgument($expected);
 		$this->assertSame($this->object, $this->object->set($set_key, $set_value));
 		$this->assertEquals($expected, $this->get_attribute_value($set_key));
@@ -107,29 +107,51 @@ class TokenTest extends Testcase
 		);
 	}
 
-	protected function setup_with_attributes($attributes, $validation = array())
+	protected function setup_with_validator_methods($attributes, $validation_methods = array())
 	{
-		$this->setup_mock();
-		if ($validation)
-		{
-			$this->setup_validator($validation);
-			$this->_object_property($this->object, 'validation')
-				->setValue($this->object, array_combine(array_keys($validation), array_keys($validation)));
-		}
-		$this->_object_property($this->object, 'attributes')
-			->setValue($this->object, $attributes);
+		$this->setup_mock(array(
+			'methods' => array_merge($this->_class_abstract_methods($this->_class_name()), $this->get_validation_methods($validation_methods)),
+		));
+		$this->setup_validator($this->object, $validation_methods);
+		$this->setup_properties($attributes, $validation_methods);
 	}
 
-	protected function setup_validator($validation)
+	protected function setup_with_validator_helper($attributes, $validation_methods = array())
 	{
-		$validator = $this->get_mock(array(
-			'classname' => '\CodeGenerator\Helper\Validator',
-			'methods' => array_map(function($name) {
-				return 'validate_'.$name;
-			}, array_keys($validation)),
-			'arguments' => array($this->config),
-		));
-		foreach ($validation as $method => $return_value)
+		$this->setup_mock();
+		if ($validation_methods)
+		{
+			$validator = $this->get_mock(array(
+				'classname' => '\CodeGenerator\Helper\Validator',
+				'methods' => $this->get_validation_methods($validation_methods),
+				'arguments' => array($this->config),
+			));
+			$this->setup_validator($validator, $validation_methods);
+		}
+		$this->setup_properties($attributes, $validation_methods);
+	}
+
+	private function get_validation_methods($validations)
+	{
+		return array_map(function($name) {
+			return 'validate_'.$name;
+		}, array_keys($validations));
+	}
+
+	protected function setup_properties($attributes, $validations)
+	{
+		$this->_object_property($this->object, 'attributes')
+			->setValue($this->object, $attributes);
+		if ($validations)
+		{
+			$this->_object_property($this->object, 'validation')
+				->setValue($this->object, array_combine(array_keys($validations), array_keys($validations)));
+		}
+	}
+
+	protected function setup_validator($validator, $validation_methods)
+	{
+		foreach ($validation_methods as $method => $return_value)
 		{
 			$validator->expects($this->any())
 				->method('validate_'.$method)

@@ -107,9 +107,16 @@ abstract class Token extends \CodeGenerator\Object
 		{
 			return;
 		}
-		$validator = $this->config->helper('validator');
 		$method_name = 'validate_'.$this->validation[$attribute];
-		if (is_callable(array($validator, $method_name)) AND ! $validator->$method_name($value))
+		if (is_callable(array($this, $method_name)))
+		{
+			$validator = $this;
+		}
+		elseif (is_callable(array($this->config->helper('validator'), $method_name)))
+		{
+			$validator = $this->config->helper('validator');
+		}
+		if (isset($validator) AND ! $validator->$method_name($value))
 		{
 			throw new \InvalidArgumentException('Invalid value for '.$this->token().'.'.$attribute);
 		}

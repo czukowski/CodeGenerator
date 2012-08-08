@@ -26,7 +26,7 @@ class Arrays extends \CodeGenerator\Singleton
 	 *     // Returns TRUE
 	 *     $arrays->is_array(array());
 	 *     $arrays->is_array(new ArrayObject);
-	 *
+	 * 
 	 *     // Returns FALSE
 	 *     $arrays->is_array(FALSE);
 	 *     $arrays->is_array('not an array!');
@@ -51,13 +51,13 @@ class Arrays extends \CodeGenerator\Singleton
 
 	/**
 	 * Tests if an array is associative or not.
-	 *
+	 * 
 	 *     // Returns TRUE
 	 *     $arrays->is_assoc(array('username' => 'john.doe'));
-	 *
+	 * 
 	 *     // Returns FALSE
 	 *     $arrays->is_assoc('foo', 'bar');
-	 *
+	 * 
 	 * @param   array   array to check
 	 * @return  boolean
 	 */
@@ -74,16 +74,16 @@ class Arrays extends \CodeGenerator\Singleton
 	/**
 	 * Merges one or more arrays recursively and preserves all keys.
 	 * Note that this does not work the same as [array_merge_recursive](http://php.net/array_merge_recursive)!
-	 *
+	 * 
 	 *     $john = array('name' => 'john', 'children' => array('fred', 'paul', 'sally', 'jane'));
 	 *     $mary = array('name' => 'mary', 'children' => array('jane'));
-	 *
+	 * 
 	 *     // John and Mary are married, merge them together
 	 *     $john = $arrays->merge($john, $mary);
-	 *
+	 * 
 	 *     // The output of $john will now be:
 	 *     array('name' => 'mary', 'children' => array('fred', 'paul', 'sally', 'jane'))
-	 *
+	 * 
 	 * @param   array  initial array
 	 * @param   array  array to merge
 	 * @param   array  ...
@@ -147,18 +147,18 @@ class Arrays extends \CodeGenerator\Singleton
 
 	/**
 	 * Gets a value from an array using a dot separated path.
-	 *
+	 * 
 	 *     // Get the value of $array['foo']['bar']
 	 *     $value = $arrays->path($array, 'foo.bar');
-	 *
+	 * 
 	 * Using a wildcard "*" will search intermediate arrays and return an array.
-	 *
+	 * 
 	 *     // Get the values of "color" in theme
 	 *     $colors = $arrays->path($array, 'theme.*.color');
-	 *
+	 * 
 	 *     // Using an array of keys
 	 *     $colors = $arrays->path($array, array('theme', '*', 'color'));
-	 *
+	 * 
 	 * @param   array   $array      array to search
 	 * @param   mixed   $path       key path string (delimiter separated) or array of keys
 	 * @param   mixed   $default    default value if the path is not set
@@ -236,7 +236,6 @@ class Arrays extends \CodeGenerator\Singleton
 			elseif ($key === '*')
 			{
 				// Handle wildcards
-
 				$values = array();
 				foreach ($array as $arr)
 				{

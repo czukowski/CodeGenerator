@@ -32,8 +32,8 @@ class ColumnsOptimizerTest extends Testcase
 			// Array of column tokens
 			array(
 				array(
-					$this->_create_token(array('@param', 'string', '$str', 'Input string')),
-					$this->_create_token(array('@return', 'integer', 'Function result')),
+					$this->create_token(array('@param', 'string', '$str', 'Input string')),
+					$this->create_token(array('@return', 'integer', 'Function result')),
 				),
 				array(7, 7, 4, 12),
 			),
@@ -42,27 +42,27 @@ class ColumnsOptimizerTest extends Testcase
 				array(
 					'Test description',
 					'',
-					$this->_create_token(array('@param', 'string', '$str', 'Input string')),
-					$this->_create_token(array('@return', 'integer', 'Function result')),
+					$this->create_token(array('@param', 'string', '$str', 'Input string')),
+					$this->create_token(array('@return', 'integer', 'Function result')),
 				),
 				array(7, 7, 4, 12),
 			),
 			// Array of column tokens
 			array(
 				array(
-					$this->_create_token(array('@param', 'string', '$input', 'Input string')),
-					$this->_create_token(array('@param', 'integer', '&$output', 'Error code')),
-					$this->_create_token(array('@param', 'bool', '$flag', 'Flags')),
-					$this->_create_token(array('@return', 'integer')),
+					$this->create_token(array('@param', 'string', '$input', 'Input string')),
+					$this->create_token(array('@param', 'integer', '&$output', 'Error code')),
+					$this->create_token(array('@param', 'bool', '$flag', 'Flags')),
+					$this->create_token(array('@return', 'integer')),
 				),
 				array(7, 7, 8, 12),
 			),
 			// Array of column tokens
 			array(
 				array(
-					$this->_create_token(array('@param', 'string', '$input', 'Input string')),
-					$this->_create_token(array('@param', 'integer', '&$output', 'Error code')),
-					$this->_create_token(array('@throws', '\InvalidArgumentException')),
+					$this->create_token(array('@param', 'string', '$input', 'Input string')),
+					$this->create_token(array('@param', 'integer', '&$output', 'Error code')),
+					$this->create_token(array('@throws', '\InvalidArgumentException')),
 				),
 				array(7, 7, 8, 12),
 			),
@@ -75,7 +75,7 @@ class ColumnsOptimizerTest extends Testcase
 			),
 			// Not array
 			array(
-				$this->_create_token(array('@param', 'string', '$str', 'Input string')),
+				$this->create_token(array('@param', 'string', '$str', 'Input string')),
 				new \InvalidArgumentException,
 			),
 		);
@@ -85,7 +85,7 @@ class ColumnsOptimizerTest extends Testcase
 	 * @param   array  $columns
 	 * @return  \CodeGenerator\Token\Columns
 	 */
-	private function _create_token($columns)
+	private function create_token($columns)
 	{
 		$token = $this->get_mock(array(
 			'classname' => '\CodeGenerator\Token\Columns',
@@ -111,9 +111,9 @@ class ColumnsOptimizerTest extends Testcase
 
 	public function provide_align()
 	{
-		$param = $this->_create_token(array('@param', 'string', '$str', 'Input string'));
-		$return = $this->_create_token(array('@return', 'integer', 'Function result'));
-		$return_short = $this->_create_token(array('@return', 'integer'));
+		$param = $this->create_token(array('@param', 'string', '$str', 'Input string'));
+		$return = $this->create_token(array('@return', 'integer', 'Function result'));
+		$return_short = $this->create_token(array('@return', 'integer'));
 		return array(
 			// '1' - odd number of fixed widths
 			// '@param  string  $str  Input string'

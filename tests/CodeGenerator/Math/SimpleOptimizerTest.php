@@ -18,10 +18,10 @@ class SimpleOptimizerTest extends \CodeGenerator\Framework\Testcase
 	{
 		$this->set_expected_exception_from_argument($expected);
 		$this->setup_object(array('arguments' => $arguments));
-		$actual_function = $this->get_object_property($this->object, '_function')
+		$actual_function = $this->get_object_property($this->object, 'function')
 			->getValue($this->object);
 		$this->assertSame($arguments[0], $actual_function);
-		$actual_parameters = $this->get_object_property($this->object, '_solutions_space')
+		$actual_parameters = $this->get_object_property($this->object, 'solutions_space')
 			->getValue($this->object);
 		$this->assertSame($arguments[1], $actual_parameters);
 	}
@@ -190,10 +190,10 @@ class SimpleOptimizerTest extends \CodeGenerator\Framework\Testcase
 		));
 		foreach ($cursors as $i => $expected_cursors)
 		{
-			$actual_cursors = $this->get_object_property($this->object, '_cursors')
+			$actual_cursors = $this->get_object_property($this->object, 'cursors')
 				->getValue($this->object);
 			$this->assertEquals($expected_cursors, $actual_cursors, 'Iteration '.$i);
-			$this->get_object_method($this->object, '_increment_cursor')
+			$this->get_object_method($this->object, 'increment_cursor')
 				->invoke($this->object);
 		}
 	}

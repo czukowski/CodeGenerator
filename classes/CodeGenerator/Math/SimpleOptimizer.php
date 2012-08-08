@@ -16,19 +16,19 @@ class SimpleOptimizer
 	/**
 	 * @var  callback  Evaluation function
 	 */
-	private $_function;
+	private $function;
 	/**
 	 * @var  array  Possible solutions space
 	 */
-	private $_solutions_space;
+	private $solutions_space;
 	/**
 	 * @var  array  Cursors
 	 */
-	private $_cursors = array();
+	private $cursors = array();
 	/**
 	 * @var  array  Array of the best found solutions
 	 */
-	private $_best_parameters;
+	private $best_parameters;
 
 	/**
 	 * @param   callback  $function    Callback function
@@ -52,9 +52,9 @@ class SimpleOptimizer
 				throw new \InvalidArgumentException('SimpleOptimizer.__construct() 2nd argument must be array of non-empty arrays');
 			}
 		}
-		$this->_function = $function;
-		$this->_solutions_space = $space;
-		$this->_cursors = array_fill(0, count($space), 0);
+		$this->function = $function;
+		$this->solutions_space = $space;
+		$this->cursors = array_fill(0, count($space), 0);
 	}
 
 	/**
@@ -65,35 +65,35 @@ class SimpleOptimizer
 	public function execute()
 	{
 		$best_solution = NULL;
-		$this->_best_parameters = array();
+		$this->best_parameters = array();
 		do
 		{
-			$params = $this->_next_solution();
-			$value = call_user_func_array($this->_function, $params);
+			$params = $this->get_next_solution();
+			$value = call_user_func_array($this->function, $params);
 			if ($best_solution === NULL OR $value <= $best_solution)
 			{
 				if ($value < $best_solution)
 				{
-					$this->_best_parameters = array();
+					$this->best_parameters = array();
 				}
 				$best_solution = $value;
-				$this->_best_parameters[] = $params;
+				$this->best_parameters[] = $params;
 			}
 		}
-		while ($this->_increment_cursor());
+		while ($this->increment_cursor());
 		// Return unique best parameters, do not sort
-		return array_unique($this->_best_parameters, 0);
+		return array_unique($this->best_parameters, 0);
 	}
 
 	/**
 	 * Returns next possible solution to evaluate and increments the cursors
 	 */
-	private function _next_solution()
+	private function get_next_solution()
 	{
 		$possible_solution = array();
-		foreach ($this->_cursors as $dim => $cursor)
+		foreach ($this->cursors as $dim => $cursor)
 		{
-			$possible_solution[] = $this->_solutions_space[$dim][$cursor];
+			$possible_solution[] = $this->solutions_space[$dim][$cursor];
 		}
 		return $possible_solution;
 	}
@@ -101,17 +101,17 @@ class SimpleOptimizer
 	/**
 	 * Increments cursors to eventually cover the whole solution space
 	 */
-	private function _increment_cursor()
+	private function increment_cursor()
 	{
 		$dim = 0;
-		while ($this->_more_increments($dim))
+		while ($this->has_more_increments($dim))
 		{
-			$this->_cursors[$dim] = 0;
+			$this->cursors[$dim] = 0;
 			$dim++;
 		}
-		if ($this->_more_dimensions($dim))
+		if ($this->has_more_dimensions($dim))
 		{
-			$this->_cursors[$dim]++;
+			$this->cursors[$dim]++;
 			return TRUE;
 		}
 	}
@@ -119,14 +119,14 @@ class SimpleOptimizer
 	/**
 	 * Determine if the cursor may be incremented in this dimension
 	 */
-	private function _more_increments($dim)
+	private function has_more_increments($dim)
 	{
-		return $this->_more_dimensions($dim)
-			AND $this->_cursors[$dim] === count($this->_solutions_space[$dim]) - 1;
+		return $this->has_more_dimensions($dim)
+			AND $this->cursors[$dim] === count($this->solutions_space[$dim]) - 1;
 	}
 
-	private function _more_dimensions($dim)
+	private function has_more_dimensions($dim)
 	{
-		return $dim < count($this->_solutions_space);
+		return $dim < count($this->solutions_space);
 	}
 }

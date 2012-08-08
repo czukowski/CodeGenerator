@@ -88,6 +88,6 @@ class WhitespaceTest extends Testcase
 
 	private function get_object_width()
 	{
-		return $this->get_object_property($this->object, '_width');
+		return $this->get_object_property($this->object, 'width');
 	}
 }

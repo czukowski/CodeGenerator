@@ -15,7 +15,7 @@ class Whitespace extends Token
 	protected $attributes = array(
 		'char' => NULL,
 	);
-	private $_width = 1;
+	private $width = 1;
 
 	public function __construct(\CodeGenerator\Config $config, $width = 1)
 	{
@@ -34,7 +34,7 @@ class Whitespace extends Token
 	 */
 	public function get_width()
 	{
-		return $this->_width;
+		return $this->width;
 	}
 
 	/**
@@ -46,7 +46,7 @@ class Whitespace extends Token
 	{
 		if (is_int($value))
 		{
-			$this->_width = $value;
+			$this->width = $value;
 			return $this;
 		}
 		throw new \InvalidArgumentException($this->token().'.set_width() takes integer argument');

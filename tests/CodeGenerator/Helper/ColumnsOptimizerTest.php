@@ -22,7 +22,7 @@ class ColumnsOptimizerTest extends Testcase
 			->getValue($this->object);
 		foreach ($tokens as $token)
 		{
-			$this->assertEquals($expected, $token->widths());
+			$this->assertEquals($expected, $token->get_widths());
 		}
 	}
 
@@ -91,7 +91,7 @@ class ColumnsOptimizerTest extends Testcase
 			'classname' => '\CodeGenerator\Token\Columns',
 		));
 		$token->expects($this->any())
-			->method('columns')
+			->method('get_columns')
 			->will($this->returnValue($columns));
 		$token->expects($this->any())
 			->method('render')
@@ -104,7 +104,7 @@ class ColumnsOptimizerTest extends Testcase
 	 */
 	public function test_align($token, $widths, $expected)
 	{
-		$token->widths($widths);
+		$token->set_widths($widths);
 		$actual = $this->object->align($token);
 		$this->assertEquals($expected, implode('', $actual));
 	}

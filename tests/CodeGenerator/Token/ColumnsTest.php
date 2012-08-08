@@ -13,200 +13,99 @@ namespace CodeGenerator\Token;
 class ColumnsTest extends Testcase
 {
 	/**
-	 * @dataProvider  provide_alignments
+	 * @dataProvider  provide_get_widths
 	 */
-	public function test_alignments($alignments, $arguments, $expected_return, $expected_alignments)
+	public function test_get_widths($widths)
 	{
-		$this->setup_column_object(array(), $alignments);
-		$this->set_expected_exception_from_argument($expected_return);
-		$this->assert_object_values('alignments', $arguments, $expected_return, $expected_alignments);
+		$this->setup_column_object($widths);
+		$this->assertEquals($widths, $this->object->get_widths());
 	}
 
-	public function provide_alignments()
+	public function provide_get_widths()
 	{
-		// [setup_alignments, method_arguments, expected_return, expected_alignments]
+		// [setup_widths]
 		return array(
-			// Returns empty alignments list
-			array(
-				array(), array(), array(), array(),
-			),
-			// Returns alignments list
-			array(
-				array('left', 'right'), array(), array('left', 'right'), array('left', 'right'),
-			),
-			// Gets first column alignment (not set)
-			array(
-				array(), array(0), new \OutOfRangeException, array(),
-			),
-			// Gets first column alignment
-			array(
-				array('left', 'right'), array(0), 'left', array('left', 'right'),
-			),
-			// Sets first column alignment
-			array(
-				array(), array(0, 'center'), NULL, array('center'),
-			),
-			// Sets first column alignment
-			array(
-				array('left', 'right'), array(0, 'center'), NULL, array('center', 'right'),
-			),
-			// Sets column alignments
-			array(
-				array(), array(array('center')), NULL, array('center'),
-			),
-			// Sets column alignments
-			array(
-				array('left', 'right'), array(array('center')), NULL, array('center'),
-			),
-			// Invalid usage
-			array(
-				array(), array(array(1), 'center'), new \InvalidArgumentException, array(),
-			),
-			// Invalid usage
-			array(
-				array(), array(array('bar')), new \InvalidArgumentException, array(),
-			),
-			// Invalid usage
-			array(
-				array('left', 'right'), array(1, array('center')), new \InvalidArgumentException, array(),
-			),
+			array(array(1)),
+			array(array(1, 2)),
+			array(array(1, 2, 3)),
 		);
 	}
 
 	/**
-	 * @dataProvider  provide_widths
+	 * @dataProvider  provide_set_widths
 	 */
-	public function test_widths($widths, $arguments, $expected_return, $expected_widths)
+	public function test_widths($widths, $arguments, $expected)
 	{
 		$this->setup_column_object($widths);
-		$this->set_expected_exception_from_argument($expected_return);
-		$this->assert_object_values('widths', $arguments, $expected_return, $expected_widths);
+		$this->set_expected_exception_from_argument($expected);
+		$this->assertInstanceOf(__NAMESPACE__.'\Columns', $this->object->set_widths($arguments));
+		$actual = $this->get_object_property($this->object, 'widths')
+			->getValue($this->object);
+		$this->assertEquals($actual, $expected);
 	}
 
-	public function provide_widths()
+	public function provide_set_widths()
 	{
-		// [setup_widths, method_arguments, expected_return, expected_widths]
+		// [setup_widths, arguments, expected]
 		return array(
-			// Returns empty widths list
-			array(
-				array(), array(), array(), array(),
-			),
-			// Returns widths list
-			array(
-				array(1, 2), array(), array(1, 2), array(1, 2),
-			),
-			// Gets first column width (not set)
-			array(
-				array(), array(0), new \OutOfRangeException, array(),
-			),
-			// Gets first column width
-			array(
-				array(1, 2), array(0), 1, array(1, 2),
-			),
-			// Sets first column width
-			array(
-				array(), array(0, 2), NULL, array(2),
-			),
-			// Sets first column width
-			array(
-				array(1, 2), array(0, 2), NULL, array(2, 2),
-			),
-			// Sets column widths
-			array(
-				array(), array(array(1)), NULL, array(1),
-			),
-			// Sets column widths
-			array(
-				array(1, 2), array(array(1)), NULL, array(1),
-			),
-			// Invalid usage
-			array(
-				array(), array(array(1), 1), new \InvalidArgumentException, array(),
-			),
-			// Invalid usage
-			array(
-				array(), array(array(1, 'foo')), new \InvalidArgumentException, array(),
-			),
-			// Invalid usage
-			array(
-				array(1, 2), array(1, array(1)), new \InvalidArgumentException, array(),
-			),
+			array(array(1), array(1, 2), array(1, 2)),
+			array(array(1, 2), array(1), array(1)),
+			array(array(), array(1, 5, 10), array(1, 5, 10)),
+			array(array(), array(1, NULL, 10), new \InvalidArgumentException),
+			array(array(), 'woot', new \InvalidArgumentException),
 		);
-	}
-
-	protected function assert_object_values($method, $arguments, $expected_return, $expected_values)
-	{
-		$actual = $this->get_object_method($this->object, $method)
-			->invokeArgs($this->object, $arguments);
-		if ($expected_return === NULL)
-		{
-			$this->assertSame($this->object, $actual);
-		}
-		else
-		{
-			$this->assertEquals($expected_return, $actual);
-		}
-		$this->assertEquals($expected_values, $this->object->$method());
 	}
 
 	/**
 	 * @dataProvider  provide_render_columns
 	 */
-	public function test_render_columns($widths, $alignments, $columns, $expected)
+	public function test_render_columns($widths, $columns, $expected)
 	{
-		$this->setup_column_object($widths, $alignments);
+		$this->setup_column_object($widths, $columns);
 		$actual = $this->get_object_method($this->object, 'render_columns')
-			->invokeArgs($this->object, array($columns));
+			->invoke($this->object);
 		$this->assertEquals($expected, $actual);
 	}
 
 	public function provide_render_columns()
 	{
-		// [widths, alignments, columns, expected]
+		// [widths, columns, expected]
 		return array(
 			array(
-				array(), array(), array(), '',
+				array(), array(), '',
 			),
 			array(
-				array(), array(), array('@var', 'array'), '@var--array',	
+				array(), array('@var', 'array'), '@var--array',
 			),
 			array(
-				array(1, 2), array(), array('@var', 'array'), '@var--array',	
+				array(1, 2), array('@var', 'array'), '@var---array',
 			),
 			array(
-				array(5, 2), array(), array('@var', 'array'), '@var---array',	
+				array(2, 2), array('@var', 'array'), '@var----array',
 			),
 			array(
-				array(10, 10), array(), array('@var', 'array'), '@var--------array',	
+				array(3, 2), array('@var', 'array'), '@var-----array',
 			),
 			array(
-				array(10, 10), array(NULL, 'right'), array('@var', 'array'), '@var-------------array',	
+				array(4, 2), array('@var', 'array'), '@var--array',
 			),
 			array(
-				array(10, 10), array(NULL, STR_PAD_LEFT), array('@var', 'array'), '@var-------------array',	
+				array(5, 2), array('@var', 'array'), '@var---array',
 			),
 			array(
-				array(10, 10), array('right', 'right'), array('@var', 'array'), '------@var-------array',	
-			),
-			array(
-				array(10, 10), array('right', 'left'), array('@var', 'array'), '------@var--array',	
-			),
-			array(
-				array(10, 10), array('right', 'center'), array('@var', 'array'), '------@var----array---',	
-			),
-			array(
-				array(10, 10), array(STR_PAD_LEFT, STR_PAD_BOTH), array('@var', 'array'), '------@var----array---',	
+				array(10, 10), array('@var', 'array'), '@var--------array',
 			),
 		);
 	}
 
-	protected function setup_column_object($widths = array(), $alignments = array())
+	private function setup_column_object($widths = array(), $columns = array())
 	{
 		$this->setup_mock();
+		$this->object->expects($this->any())
+			->method('get_columns')
+			->will($this->returnValue($columns));
 		$this->get_object_property($this->object, 'widths')
-			->setValue($this->object, $widths);	
-		$this->get_object_property($this->object, 'alignments')
-			->setValue($this->object, $alignments);	
+			->setValue($this->object, $widths);
 	}
 
 	protected function get_class_constructor_arguments()

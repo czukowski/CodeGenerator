@@ -87,7 +87,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		$columns = array();
 		for ($i = 0; $i < count($this->column_tokens); $i++)
 		{
-			$widths = $this->get_actual_widths($this->column_tokens[$i]->columns());
+			$widths = $this->get_actual_widths($this->column_tokens[$i]->get_columns());
 			for ($j = 0; $j < count($widths); $j++)
 			{
 				if ( ! isset($columns[$j])) {
@@ -185,10 +185,10 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 
 	private function setup_alignment(Token\Columns $token)
 	{
-		$this->columns = $token->columns();
+		$this->columns = $token->get_columns();
 		$this->columns_count = count($this->columns);
 		$this->actual_widths = $this->get_actual_widths($this->columns);
-		$this->fixed_widths = $token->widths();
+		$this->fixed_widths = $token->get_widths();
 		$this->cursor = 0;
 	}
 

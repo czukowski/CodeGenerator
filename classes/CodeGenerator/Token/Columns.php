@@ -12,178 +12,64 @@ namespace CodeGenerator\Token;
 
 abstract class Columns extends Token
 {
-	const PAD_RIGHT = 'right';
-	const PAD_LEFT = 'left';
-	const PAD_CENTER = 'center';
-
 	/**
 	 * @var  array  Column widths are stored here
 	 */
 	protected $widths = array();
-	/**
-	 * @var  array  Column alignments are stored here
-	 */
-	protected $alignments = array();
 
 	/**
 	 * Returns all columns
 	 * 
 	 * @reutrn  array
 	 */
-	abstract public function columns();
+	abstract public function get_columns();
 
 	/**
-	 * Gets or sets column widths. See below for description and usage.
+	 * Gets column widths
 	 * 
 	 * @return  mixed
 	 */
-	public function widths()
+	public function get_widths()
 	{
-		return $this->_get_set('widths', func_get_args());
+		return $this->widths;
 	}
 
 	/**
-	 * Gets or sets column alignments. See below for description and usage.
-	 * 
-	 * @return  mixed
+	 * @param   array   $widths
+	 * @return  Columns
 	 */
-	public function alignments()
+	public function set_widths($widths)
 	{
-		return $this->_get_set('alignments', func_get_args());
+		$this->assert_valid_widths($widths);
+		$this->widths = $widths;
+		return $this;
 	}
 
 	/**
-	 * Universal getter and setter method. Takes 0 to 2 arguments.
-	 * 
-	 *     $widths = $columns->widths();          // Gets column widths
-	 *     $alignment = $columns->alignments(1);  // Gets alignment of the 2nd column
-	 *     $columns->widths(array(5, 8));         // Sets column width
-	 *     $columns->alignments(0, 'right');      // Sets alignment of the 1st column
-	 * 
-	 * @param   string  $property
-	 * @param   array   $arguments
-	 * @return  mixed
-	 * @throws  \OutOfRangeException
-	 * @throws  \InvalidArgumentException
-	 */
-	private function _get_set($property, $arguments)
-	{
-		$count = count($arguments);
-		if ($count === 0)
-		{
-			return $this->{$property};
-		}
-		elseif ($count === 1 AND is_array($arguments[0]) AND $this->_validate_values($property, $arguments[0]))
-		{
-			$this->{$property} = $arguments[0];
-			return $this;
-		}
-		elseif ($count === 1 AND is_int($arguments[0]))
-		{
-			if (isset($this->{$property}[$arguments[0]]))
-			{
-				return $this->{$property}[$arguments[0]];
-			}
-			throw new \OutOfRangeException('Column.'.$property.'['.$arguments[0].'] is not set');
-		}
-		elseif ($count === 2 AND is_int($arguments[0]) AND $this->_validate_value($property, $arguments[1]))
-		{
-			$this->{$property}[$arguments[0]] = $arguments[1];
-			return $this;
-		}
-		throw new \InvalidArgumentException('Invalid arguments for '.$this->token().'.'.$property.'() method');
-	}
-
-	/**
-	 * @param   string  $property
 	 * @param   array   $values
 	 * @return  boolean
+	 * @throws  \InvalidArgumentException
 	 */
-	private function _validate_values($property, array $values)
+	private function assert_valid_widths($values)
 	{
+		if ( ! is_array($values))
+		{
+			throw new \InvalidArgumentException($this->token().'.widths() takes an array as argument');
+		}
 		foreach ($values as $value)
 		{
-			if ( ! $this->_validate_value($property, $value))
+			if ( ! is_int($value))
 			{
-				return FALSE;
+				throw new \InvalidArgumentException($this->token().'.widths() argument must be array of integers');
 			}
 		}
-		return TRUE;
 	}
 
 	/**
-	 * @param   string  $property
-	 * @param   mixed   $value
-	 * @return  boolean
-	 */
-	private function _validate_value($property, $value)
-	{
-		switch ($property) {
-			case 'widths':
-				return is_int($value);
-			case 'alignments':
-				return in_array($value, array(
-					self::PAD_RIGHT, self::PAD_LEFT, self::PAD_CENTER,
-					STR_PAD_RIGHT, STR_PAD_LEFT, STR_PAD_BOTH,
-				), TRUE);
-		}
-	}
-
-	/**
-	 * @param   array  $columns
 	 * @return  string
 	 */
-	protected function render_columns(array $columns = array())
+	protected function render_columns()
 	{
-		if ( ! $columns)
-		{
-			return '';
-		}
-		$pad_string = $this->config->get_format('column_delimiter');
-		foreach ($columns as $i => &$column)
-		{
-			$column = $this->config->helper('string')
-				->str_pad($column, $this->_width($i), $pad_string, $this->_padding_mode($i));
-		}
-		if ($this->_padding_mode(count($columns) - 1) === STR_PAD_RIGHT)
-		{
-			$columns[count($columns) - 1] = $this->config->helper('string')
-				->rtrim($columns[count($columns) - 1], $pad_string);
-		}
-		return implode(str_repeat($pad_string, $this->config->get_options('column_min_space')), $columns);
-	}
-
-	/**
-	 * @param   integer  $index
-	 * @return  integer
-	 */
-	private function _padding_mode($index)
-	{
-		if ( ! isset($this->alignments[$index]))
-		{
-			return STR_PAD_RIGHT;
-		}
-		elseif (is_string($this->alignments[$index]))
-		{
-			switch ($this->alignments[$index])
-			{
-				case self::PAD_LEFT:
-					return STR_PAD_RIGHT;
-				case self::PAD_RIGHT:
-					return STR_PAD_LEFT;
-				case self::PAD_CENTER:
-					return STR_PAD_BOTH;
-			}
-		}
-		return $this->alignments[$index];
-	}
-
-	/**
-	 * @param   integer  $index
-	 * @return  integer
-	 */
-	private function _width($index)
-	{
-		return isset($this->widths[$index]) ? $this->widths[$index] : 0;
+		return implode('', $this->config->helper('columnsOptimizer')->align($this));
 	}
 }

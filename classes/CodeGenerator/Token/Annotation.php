@@ -17,7 +17,7 @@ class Annotation extends Columns
 		'columns' => array(),
 	);
 
-	public function columns()
+	public function get_columns()
 	{
 		return array_merge(array('@'.$this->attributes['name']), $this->attributes['columns']);
 	}
@@ -28,6 +28,6 @@ class Annotation extends Columns
 		{
 			return '';
 		}
-		return $this->render_columns($this->columns());
+		return $this->render_columns();
 	}
 }

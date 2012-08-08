@@ -10,7 +10,6 @@
  */
 namespace CodeGenerator\Helper;
 use CodeGenerator\Token,
-	CodeGenerator\Math\Matrix,
 	CodeGenerator\Math\SimpleOptimizer as Optimizer;
 
 class ColumnsOptimizer extends \CodeGenerator\Object
@@ -20,7 +19,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 	 */
 	private $_column_tokens = array();
 	/**
-	 * @var  Matrix  Possible solutions space for the columns content widths (auto width)
+	 * @var  array  Possible solutions space for the columns content widths (auto width)
 	 */
 	private $_solutions_space = array();
 	/**

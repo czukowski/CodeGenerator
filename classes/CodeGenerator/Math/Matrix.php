@@ -2,6 +2,8 @@
 /**
  * Matrix class
  * 
+ * TODO: no longer used here - move elsewhere?
+ * 
  * @package    CodeGenerator
  * @category   Tokens
  * @author     Korney Czukowski

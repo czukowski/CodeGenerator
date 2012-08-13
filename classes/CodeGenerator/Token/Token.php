@@ -13,10 +13,6 @@ namespace CodeGenerator\Token;
 abstract class Token extends \CodeGenerator\Object
 {
 	/**
-	 * @var  integer  Token base indentation
-	 */
-	protected $indent = 0;
-	/**
 	 * @var  array  Token attributes list with default values
 	 */
 	protected $attributes = array();

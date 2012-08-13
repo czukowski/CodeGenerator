@@ -12,36 +12,14 @@ namespace CodeGenerator\Token;
 
 abstract class Block extends Token
 {
-	/**
-	 * @var  integer  Token base indentation
-	 */
-	protected $indent = 0;
-
-	/**
-	 * Indentation getter
-	 * 
-	 * @return  integer
-	 */
-	public function get_indentation()
+	protected function initialize()
 	{
-		return $this->indent;	
-	}
-
-	/**
-	 * Indentation setter
-	 * 
-	 * @param   integer  $level
-	 * @return  Token
-	 * @throws  \InvalidArgumentException
-	 */
-	public function set_indentation($level = NULL)
-	{
-		if (is_int($level))
-		{
-			$this->indent = $level;
-			return $this;
-		}
-		throw new \InvalidArgumentException('Indentation must be integer');
+		$this->initialize_attributes(array(
+			'indentation' => 0,
+		));
+		$this->initialize_validation(array(
+			'indentation' => 'integer',
+		));
 	}
 
 	/**
@@ -68,7 +46,7 @@ abstract class Block extends Token
 	private function render_line($line)
 	{
 		$line_end = $this->config->get_format('line_end');
-		$indentation = str_repeat($this->config->get_format('indent'), $this->get_indentation());
+		$indentation = str_repeat($this->config->get_format('indent'), $this->get('indentation'));
 		return $indentation.str_replace($line_end, $line_end.$indentation, $line);
 	}
 }

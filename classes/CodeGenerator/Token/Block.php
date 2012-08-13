@@ -32,7 +32,7 @@ abstract class Block extends Token
 	{
 		if ( ! $this->config->helper('arrays')->is_array($lines))
 		{
-			throw new \InvalidArgumentException($this->get_type().'.render_block() takes an array as argument');
+			return;
 		}
 		foreach ($lines as &$line)
 		{

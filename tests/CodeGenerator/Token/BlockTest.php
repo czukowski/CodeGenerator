@@ -18,7 +18,6 @@ class BlockTest extends Testcase
 	public function test_render_block($lines, $indent, $expected)
 	{
 		$this->setup_mock();
-		$this->set_expected_exception_from_argument($expected);
 		$this->object->set('indentation', $indent);
 		$actual = $this->get_object_method($this->object, 'render_block')
 			->invoke($this->object, $lines);
@@ -46,10 +45,10 @@ class BlockTest extends Testcase
 				"\t\$b = \$a;",
 			),
 			array(
-				'Weird argument', 0, new \InvalidArgumentException,
+				'Weird argument', 0, NULL,
 			),
 			array(
-				new \stdClass(), 10, new \InvalidArgumentException,
+				new \stdClass(), 10, NULL,
 			),
 		);
 	}

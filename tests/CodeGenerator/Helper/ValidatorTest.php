@@ -40,6 +40,29 @@ class ValidatorTest extends Testcase
 	}
 
 	/**
+	 * @dataProvider  provide_integer
+	 */
+	public function test_validate_integer($value, $expected)
+	{
+		$this->setup_object();
+		$this->assertEquals($expected, $this->object->validate_integer($value));
+	}
+
+	public function provide_integer()
+	{
+		return array(
+			array(NULL, FALSE),
+			array(TRUE, FALSE),
+			array(FALSE, FALSE),
+			array(0, TRUE),
+			array(-10, TRUE),
+			array(512, TRUE),
+			array('123', FALSE),
+			array(new \stdClass(), FALSE),
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_name
 	 */
 	public function test_validate_name($name, $expected)

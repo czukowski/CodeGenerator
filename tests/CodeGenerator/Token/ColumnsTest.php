@@ -108,13 +108,12 @@ class ColumnsTest extends Testcase
 			->setValue($this->object, $widths);
 	}
 
-	protected function get_class_constructor_arguments()
+	protected function setup_config()
 	{
 		$this->config = new \CodeGenerator\Config(array(
 			'format' => array(
 				'column_delimiter' => '-',
 			),
 		));
-		return array($this->config);
 	}
 }

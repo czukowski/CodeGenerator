@@ -13,6 +13,11 @@ namespace CodeGenerator\Token;
 abstract class Block extends Token
 {
 	/**
+	 * @var  integer  Token base indentation
+	 */
+	protected $indent = 0;
+
+	/**
 	 * Indentation getter
 	 * 
 	 * @return  integer

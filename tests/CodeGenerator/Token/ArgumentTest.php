@@ -1,6 +1,6 @@
 <?php
 /**
- * TokenTest
+ * ArgumentTest
  * 
  * @package    CodeGenerator
  * @category   Tokens

@@ -14,6 +14,7 @@ class Method extends Block
 {
 	protected function initialize()
 	{
+		parent::initialize();
 		$this->initialize_attributes(array(
 			'access' => NULL,
 			'static' => NULL,
@@ -21,12 +22,12 @@ class Method extends Block
 			'name' => NULL,
 			'arguments' => array(),
 			'body' => array(),
+			'indentation' => 1,
 		));
 		$this->initialize_validation(array(
 			'access' => 'access',
 		));
 	}
-	protected $indent = 1;
 
 	public function render()
 	{

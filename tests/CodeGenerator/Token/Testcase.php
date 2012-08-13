@@ -43,9 +43,24 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 		}
 	}
 
+	/**
+	 * Setup config
+	 */
 	protected function setup_config()
 	{
 		$this->config = new \CodeGenerator\Config;
+	}
+
+	/**
+	 * @return  \CodeGenerator\Config
+	 */
+	protected function get_config()
+	{
+		if ($this->config === NULL)
+		{
+			$this->setup_config();
+		}
+		return $this->config;
 	}
 
 	/**

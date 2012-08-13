@@ -12,10 +12,16 @@ namespace CodeGenerator\Token;
 
 abstract class Columns extends Token
 {
-	/**
-	 * @var  array  Column widths are stored here
-	 */
-	protected $widths = array();
+	protected function initialize()
+	{
+		parent::initialize();
+		$this->initialize_attributes(array(
+			'widths' => array(),
+		));
+		$this->initialize_validation(array(
+			'widths' => 'widths',
+		));
+	}
 
 	/**
 	 * Returns all columns
@@ -25,44 +31,23 @@ abstract class Columns extends Token
 	abstract public function get_columns();
 
 	/**
-	 * Gets column widths
-	 * 
-	 * @return  mixed
-	 */
-	public function get_widths()
-	{
-		return $this->widths;
-	}
-
-	/**
-	 * @param   array   $widths
-	 * @return  Columns
-	 */
-	public function set_widths($widths)
-	{
-		$this->assert_valid_widths($widths);
-		$this->widths = $widths;
-		return $this;
-	}
-
-	/**
 	 * @param   array   $values
 	 * @return  boolean
-	 * @throws  \InvalidArgumentException
 	 */
-	private function assert_valid_widths($values)
+	public function validate_widths($values)
 	{
 		if ( ! is_array($values))
 		{
-			throw new \InvalidArgumentException($this->get_type().'.set_widths() takes an array as argument');
+			return FALSE;
 		}
 		foreach ($values as $value)
 		{
 			if ( ! is_int($value))
 			{
-				throw new \InvalidArgumentException($this->get_type().'.set_widths() argument must be array of integers');
+				return FALSE;
 			}
 		}
+		return TRUE;
 	}
 
 	/**

@@ -18,7 +18,7 @@ class AnnotationTest extends Testcase
 	public function test_render($attributes, $widths, $expected)
 	{
 		$this->setup_with_attributes($attributes);
-		$this->object->set_widths($widths);
+		$this->object->set('widths', $widths);
 		$this->assertEquals($expected, $this->object->render());
 	}
 

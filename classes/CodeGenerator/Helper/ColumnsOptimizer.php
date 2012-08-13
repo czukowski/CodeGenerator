@@ -60,7 +60,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		$best_params = reset($solution);
 		foreach ($this->column_tokens as $token)
 		{
-			$token->set_widths($best_params);
+			$token->set('widths', $best_params);
 		}
 	}
 
@@ -128,7 +128,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		$widths = func_get_args();
 		foreach ($this->column_tokens as $token)
 		{
-			$token->set_widths($widths);
+			$token->set('widths', $widths);
 			foreach ($this->align($token) as $part)
 			{
 				if ($part instanceof Token\Whitespace)
@@ -189,7 +189,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 		$this->columns = $token->get_columns();
 		$this->columns_count = count($this->columns);
 		$this->actual_widths = $this->get_actual_widths($this->columns);
-		$this->fixed_widths = $token->get_widths();
+		$this->fixed_widths = $token->get('widths');
 		$this->cursor = 0;
 	}
 

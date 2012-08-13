@@ -14,6 +14,7 @@ abstract class Block extends Token
 {
 	protected function initialize()
 	{
+		parent::initialize();
 		$this->initialize_attributes(array(
 			'indentation' => 0,
 		));

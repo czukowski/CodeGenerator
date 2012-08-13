@@ -14,6 +14,7 @@ class Argument extends Token
 {
 	protected function initialize()
 	{
+		parent::initialize();
 		$this->initialize_attributes(array(
 			'constraint' => NULL,
 			'default' => NULL,

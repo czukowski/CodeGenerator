@@ -14,6 +14,7 @@ class DocComment extends Token
 {
 	protected function initialize()
 	{
+		parent::initialize();
 		$this->initialize_attributes(array(
 			'annotations' => array(),
 			'text' => NULL,

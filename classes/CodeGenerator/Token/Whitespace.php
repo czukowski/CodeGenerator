@@ -14,6 +14,7 @@ class Whitespace extends Token
 {
 	protected function initialize()
 	{
+		parent::initialize();
 		$this->initialize_attributes(array(
 			'char' => $this->config->get_format('column_delimiter'),
 			'width' => 1,

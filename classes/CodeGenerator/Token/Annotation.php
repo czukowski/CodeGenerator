@@ -14,6 +14,7 @@ class Annotation extends Columns
 {
 	public function initialize()
 	{
+		parent::initialize();
 		$this->initialize_attributes(array(
 			'name' => NULL,
 			'columns' => array(),

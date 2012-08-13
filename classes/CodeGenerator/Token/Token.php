@@ -123,19 +123,25 @@ abstract class Token extends \CodeGenerator\Object
 	}
 
 	/**
-	 * Gets or sets token base indentation
+	 * Indentation getter
+	 * 
+	 * @return  integer
+	 */
+	public function get_indentation()
+	{
+		return $this->indent;	
+	}
+
+	/**
+	 * Indentation setter
 	 * 
 	 * @param   integer  $level
 	 * @return  Token
 	 * @throws  \InvalidArgumentException
 	 */
-	public function indent($level = NULL)
+	public function set_indentation($level = NULL)
 	{
-		if (func_num_args() === 0)
-		{
-			return $this->indent;
-		}
-		elseif (is_int($level))
+		if (is_int($level))
 		{
 			$this->indent = $level;
 			return $this;

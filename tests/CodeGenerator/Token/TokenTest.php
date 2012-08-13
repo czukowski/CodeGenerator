@@ -174,10 +174,10 @@ class TokenTest extends Testcase
 	public function test_indent($set_value, $expected)
 	{
 		$this->setup_mock();
-		$this->assertEquals(0, $this->object->indent());
+		$this->assertEquals(0, $this->object->get_indentation());
 		$this->set_expected_exception_from_argument($expected);
-		$this->assertSame($this->object, $this->object->indent($set_value));
-		$this->assertEquals($expected, $this->object->indent());
+		$this->assertSame($this->object, $this->object->set_indentation($set_value));
+		$this->assertEquals($expected, $this->object->get_indentation());
 	}
 
 	public function provide_indent()

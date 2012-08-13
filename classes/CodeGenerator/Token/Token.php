@@ -15,11 +15,11 @@ abstract class Token extends \CodeGenerator\Object
 	/**
 	 * @var  array  Token attributes list with default values
 	 */
-	protected $attributes = array();
+	private $attributes = array();
 	/**
 	 * @var  array  Token attributes to validation mapping
 	 */
-	protected $validation = array();
+	private $validation = array();
 
 	/**
 	 * Add a value to array token attribute
@@ -134,6 +134,45 @@ abstract class Token extends \CodeGenerator\Object
 	 * @return  string
 	 */
 	abstract public function render();
+
+	/**
+	 * @param  \CodeGenerator\Config  $config
+	 */
+	public function __construct(\CodeGenerator\Config $config)
+	{
+		parent::__construct($config);
+		$this->initialize();
+	}
+
+	/**
+	 * Constructor calls this function for descendant classes to initialize attributes and validations
+	 */
+	protected function initialize()
+	{
+		// Nothing by default
+	}
+
+	/**
+	 * Merges the current attributes list with the supplied values; to be used in `initialize()` method
+	 */
+	protected function initialize_attributes($attributes)
+	{
+		foreach ($attributes as $name => $default_value)
+		{
+			$this->attributes[$name] = $default_value;
+		}
+	}
+
+	/**
+	 * Merges the current validation rules list with the supplied values; to be used in `initialize()` method
+	 */
+	protected function initialize_validation($validation)
+	{
+		foreach ($validation as $attribute => $rule)
+		{
+			$this->validation[$attribute] = $rule;
+		}
+	}
 
 	/**
 	 * Token string cast method

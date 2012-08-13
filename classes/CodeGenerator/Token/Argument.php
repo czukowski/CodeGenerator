@@ -12,25 +12,28 @@ namespace CodeGenerator\Token;
 
 class Argument extends Token
 {
-	protected $attributes = array(
-		'constraint' => NULL,
-		'default' => NULL,
-		'name' => NULL,
-		'comment' => NULL,
-	);
-	protected $validation = array(
-		'constraint' => 'constraint',
-		'name' => 'name',
-	);
+	protected function initialize()
+	{
+		$this->initialize_attributes(array(
+			'constraint' => NULL,
+			'default' => NULL,
+			'name' => NULL,
+			'comment' => NULL,
+		));
+		$this->initialize_validation(array(
+			'constraint' => 'constraint',
+			'name' => 'name',
+		));
+	}
 
 	public function render()
 	{
-		if ( ! $this->attributes['name'])
+		if ( ! $this->get('name'))
 		{
 			return '';
 		}
-		return ($this->attributes['constraint'] ? $this->attributes['constraint'].' ' : '')
-			.'$'.$this->attributes['name']
-			.($this->attributes['default'] ? ' = '.$this->attributes['default'] : '');
+		return ($this->get('constraint') ? $this->get('constraint').' ' : '')
+			.'$'.$this->get('name')
+			.($this->get('default') ? ' = '.$this->get('default') : '');
 	}
 }

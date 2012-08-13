@@ -12,30 +12,32 @@ namespace CodeGenerator\Token;
 
 class DocComment extends Token
 {
-	protected $attributes = array(
-		'annotations' => array(),
-		'text' => NULL,
-	);
+	protected function initialize()
+	{
+		$this->initialize_attributes(array(
+			'annotations' => array(),
+			'text' => NULL,
+		));
+	}
 
 	public function render()
 	{
-		if ( ! $this->attributes['annotations'] AND ! $this->attributes['text'])
+		if ( ! $this->get('annotations') AND ! $this->get('text'))
 		{
 			return '';
 		}
 		$this->config->helper('columnsOptimizer')
-			->auto_width($this->attributes['annotations']);
+			->auto_width($this->get('annotations'));
 		$lines = array('/**');
-		if ($this->attributes['text'])
+		if ($this->get('text'))
 		{
-			$lines[] = ' * '.$this->attributes['text'];
+			$lines[] = ' * '.$this->get('text');
 		}
-		foreach ($this->attributes['annotations'] as $annotation)
+		foreach ($this->get('annotations') as $annotation)
 		{
 			$lines[] = ' * '.$annotation;
 		}
 		$lines[] = ' */';
 		return implode($this->config->get_format('line_end'), $lines);
 	}
-
 }

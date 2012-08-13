@@ -12,19 +12,22 @@ namespace CodeGenerator\Token;
 
 class Annotation extends Columns
 {
-	protected $attributes = array(
-		'name' => NULL,
-		'columns' => array(),
-	);
+	public function initialize()
+	{
+		$this->initialize_attributes(array(
+			'name' => NULL,
+			'columns' => array(),
+		));
+	}
 
 	public function get_columns()
 	{
-		return array_merge(array('@'.$this->attributes['name']), $this->attributes['columns']);
+		return array_merge(array('@'.$this->get('name')), $this->get('columns'));
 	}
 
 	public function render()
 	{
-		if ( ! $this->attributes['name'])
+		if ( ! $this->get('name'))
 		{
 			return '';
 		}

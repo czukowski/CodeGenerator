@@ -12,22 +12,19 @@ namespace CodeGenerator\Token;
 
 class Whitespace extends Token
 {
-	protected $attributes = array(
-		'char' => NULL,
-		'width' => 1,
-	);
-	protected $validation = array(
-		'width' => 'integer',
-	);
-
-	public function __construct(\CodeGenerator\Config $config)
+	protected function initialize()
 	{
-		parent::__construct($config);
-		$this->attributes['char'] = $this->config->get_format('column_delimiter');
+		$this->initialize_attributes(array(
+			'char' => $this->config->get_format('column_delimiter'),
+			'width' => 1,
+		));
+		$this->initialize_validation(array(
+			'width' => 'integer',
+		));
 	}
 
 	public function render()
 	{
-		return str_repeat($this->attributes['char'], $this->attributes['width']);
+		return str_repeat($this->get('char'), $this->get('width'));
 	}
 }

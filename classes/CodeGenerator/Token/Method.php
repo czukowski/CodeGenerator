@@ -12,18 +12,21 @@ namespace CodeGenerator\Token;
 
 class Method extends Block
 {
-	protected $attributes = array(
-		'access' => NULL,
-		'static' => NULL,
-		'abstract' => NULL,
-		'name' => NULL,
-		'arguments' => array(),
-		'body' => array(),
-	);
+	protected function initialize()
+	{
+		$this->initialize_attributes(array(
+			'access' => NULL,
+			'static' => NULL,
+			'abstract' => NULL,
+			'name' => NULL,
+			'arguments' => array(),
+			'body' => array(),
+		));
+		$this->initialize_validation(array(
+			'access' => 'access',
+		));
+	}
 	protected $indent = 1;
-	protected $validations = array(
-		'access' => 'access',
-	);
 
 	public function render()
 	{
@@ -32,7 +35,7 @@ class Method extends Block
 			$this->render_body(),
 			$this->render_method_footing(),
 		);
-		$glue = ($this->attributes['body'] AND ! $this->attributes['abstract'])
+		$glue = ($this->get('body') AND ! $this->get('abstract'))
 			? $this->config->get_format('line_end')
 			: '';
 		return implode($glue, $lines);
@@ -42,28 +45,28 @@ class Method extends Block
 	{
 		$line = implode(' ', array_filter(array(
 			$this->render_boolean_attribute('abstract'),
-			$this->attributes['access'] ? : NULL,
+			$this->get('access') ? : NULL,
 			$this->render_boolean_attribute('static'),
-			'function '.$this->attributes['name'],
+			'function '.$this->get('name'),
 		)));
-		$line .= '('.implode(', ', $this->attributes['arguments']).')';
-		$line .= $this->attributes['abstract'] === TRUE ? '' : $this->config->get_format('brace_open');
+		$line .= '('.implode(', ', $this->get('arguments')).')';
+		$line .= $this->get('abstract') === TRUE ? '' : $this->config->get_format('brace_open');
 		return $line;
 	}
 
 	private function render_body()
 	{
-		return $this->attributes['abstract'] === TRUE ? '' : $this->render_block($this->attributes['body']);
+		return $this->get('abstract') === TRUE ? '' : $this->render_block($this->get('body'));
 	}
 
 	private function render_method_footing()
 	{
-		return $this->attributes['abstract'] === TRUE ? ';' : $this->config->get_format('brace_close');
+		return $this->get('abstract') === TRUE ? ';' : $this->config->get_format('brace_close');
 	}
 
 	private function render_boolean_attribute($attribute)
 	{
-		if ($this->attributes[$attribute] === TRUE)
+		if ($this->get($attribute) === TRUE)
 		{
 			return $attribute;
 		}

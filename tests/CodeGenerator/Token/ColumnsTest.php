@@ -71,4 +71,24 @@ class ColumnsTest extends Testcase
 			),
 		));
 	}
+
+	/**
+	 * @dataProvider  provide_validate_widths
+	 */
+	public function test_validate_widths($values, $expected)
+	{
+		$this->setup_mock();
+		$actual = $this->object->validate_widths($values);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function provide_validate_widths()
+	{
+		return array(
+			array(array(), TRUE),
+			array(array(2, 3), TRUE),
+			array('something', FALSE),
+			array(array(1, TRUE), FALSE),
+		);
+	}
 }

@@ -28,18 +28,9 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 	protected function setup_with_attributes($attributes, $options = array())
 	{
 		$this->setup_object($options);
-		$this->set_object_attributes($this->object, $attributes);
-	}
-
-	/**
-	 * @param  object  $object
-	 * @param  array   $attributes
-	 */
-	protected function set_object_attributes($object, $attributes)
-	{
 		foreach ($attributes as $name => $value)
 		{
-			$object->set($name, $value);
+			$this->object->set($name, $value);
 		}
 	}
 
@@ -68,8 +59,7 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 	 */
 	protected function get_class_constructor_arguments()
 	{
-		$this->setup_config();
-		return array($this->config);
+		return array($this->get_config());
 	}
 
 	/**

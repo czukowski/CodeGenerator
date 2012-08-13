@@ -192,17 +192,17 @@ class TokenTest extends Testcase
 	}
 
 	/**
-	 * @dataProvider  provide_token
+	 * @dataProvider  provide_get_type
 	 */
-	public function test_token($mock_classname, $expected)
+	public function test_get_type($mock_classname, $expected)
 	{
 		$this->setup_mock(array(
 			'mock_classname' => $mock_classname,
 		));
-		$this->assertEquals($expected, $this->object->token());
+		$this->assertEquals($expected, $this->object->get_type());
 	}
 
-	public function provide_token()
+	public function provide_get_type()
 	{
 		$timestamp = time();
 		return array(

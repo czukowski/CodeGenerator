@@ -76,7 +76,7 @@ abstract class Token extends \CodeGenerator\Object
 	{
 		if ( ! array_key_exists($attribute, $this->attributes))
 		{
-			throw new \InvalidArgumentException($this->token().'.'.$attribute.' does not exist');
+			throw new \InvalidArgumentException($this->get_type().'.'.$attribute.' does not exist');
 		}
 	}
 
@@ -90,7 +90,7 @@ abstract class Token extends \CodeGenerator\Object
 	{
 		if ( ! is_array($this->attributes[$attribute]))
 		{
-			throw new \InvalidArgumentException($this->token().'.'.$attribute.' is not array');
+			throw new \InvalidArgumentException($this->get_type().'.'.$attribute.' is not array');
 		}
 	}
 
@@ -118,7 +118,7 @@ abstract class Token extends \CodeGenerator\Object
 		}
 		if (isset($validator) AND ! $validator->$method_name($value))
 		{
-			throw new \InvalidArgumentException('Invalid value for '.$this->token().'.'.$attribute);
+			throw new \InvalidArgumentException('Invalid value for '.$this->get_type().'.'.$attribute);
 		}
 	}
 
@@ -148,7 +148,7 @@ abstract class Token extends \CodeGenerator\Object
 	 * 
 	 * @return  string
 	 */
-	public function token()
+	public function get_type()
 	{
 		return preg_replace('#^([a-z0-9]\\\\)+#i', '', get_class($this));
 	}

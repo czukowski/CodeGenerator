@@ -49,6 +49,6 @@ class Whitespace extends Token
 			$this->width = $value;
 			return $this;
 		}
-		throw new \InvalidArgumentException($this->token().'.set_width() takes integer argument');
+		throw new \InvalidArgumentException($this->get_type().'.set_width() takes integer argument');
 	}
 }

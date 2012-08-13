@@ -20,6 +20,8 @@ class Config
 			'brace_open' => "\n{",
 			'column_delimiter' => ' ',
 			'indent' => "\t",
+			'line_end' => "\n",
+			'line_break' => "\r",
 		),
 		'options' => array(
 			'charset' => 'utf-8',

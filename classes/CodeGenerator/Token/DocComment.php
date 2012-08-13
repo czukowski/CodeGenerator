@@ -35,7 +35,7 @@ class DocComment extends Token
 			$lines[] = ' * '.$annotation;
 		}
 		$lines[] = ' */';
-		return implode("\n", $lines);
+		return implode($this->config->get_format('line_end'), $lines);
 	}
 
 }

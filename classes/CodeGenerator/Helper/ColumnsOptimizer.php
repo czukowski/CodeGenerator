@@ -133,7 +133,7 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 			{
 				if ($part instanceof Token\Whitespace)
 				{
-					$whitespace_count += $part->get_width();
+					$whitespace_count += $part->get('width');
 				}
 			}
 		}
@@ -177,7 +177,8 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 				$this->increment_count($overflow);
 			}
 			// Underflow
-			$buffer[] = $this->create_whitespace(-1 * $overflow + $column_space);
+			$buffer[] = $this->config->helper('tokenFactory')
+				->create('Whitespace', array('width' => -1 * $overflow + $column_space));
 		}
 		array_pop($buffer);
 		return $buffer;
@@ -202,14 +203,6 @@ class ColumnsOptimizer extends \CodeGenerator\Object
 			$this->columns_count++;
 			$this->fixed_widths[$this->cursor] = $overflow - $this->config->get_options('column_min_space');
 		}
-	}
-
-	/**
-	 * Creates Whitespace token of the specified width
-	 */
-	private function create_whitespace($width)
-	{
-		return new Token\Whitespace($this->config, $width);
 	}
 
 	/**

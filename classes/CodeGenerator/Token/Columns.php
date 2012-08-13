@@ -36,7 +36,7 @@ abstract class Columns extends Token
 	 */
 	public function validate_widths($values)
 	{
-		if ( ! is_array($values))
+		if ( ! $this->config->helper('arrays')->is_array($values))
 		{
 			return FALSE;
 		}

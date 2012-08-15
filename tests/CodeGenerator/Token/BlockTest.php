@@ -15,12 +15,12 @@ class BlockTest extends Testcase
 	/**
 	 * @dataProvider  provide_render_block
 	 */
-	public function test_render_block($lines, $indent, $expected)
+	public function test_render_block($lines, $glue, $indent, $expected)
 	{
 		$this->setup_mock();
 		$this->object->set('indentation', $indent);
 		$actual = $this->get_object_method($this->object, 'render_block')
-			->invoke($this->object, $lines);
+			->invoke($this->object, $lines, $glue);
 		$this->assertEquals($expected, $actual);
 	}
 
@@ -32,6 +32,7 @@ class BlockTest extends Testcase
 					'$a = 1;',
 					'$b = $a;',
 				),
+				NULL,
 				2,
 				"\t\t\$a = 1;\n".
 				"\t\t\$b = \$a;",
@@ -40,15 +41,27 @@ class BlockTest extends Testcase
 				array(
 					"\$a = 1;\n\$b = \$a;",
 				),
+				NULL,
 				1,
 				"\t\$a = 1;\n".
 				"\t\$b = \$a;",
 			),
 			array(
-				'Weird argument', 0, NULL,
+				array(
+					'$a = 1;',
+					'$b = $a;',
+				),
+				"\n\n",
+				1,
+				"\t\$a = 1;\n".
+				"\n".
+				"\t\$b = \$a;",
 			),
 			array(
-				new \stdClass(), 10, NULL,
+				'Weird argument', NULL, 0, NULL,
+			),
+			array(
+				new \stdClass(), NULL, 10, NULL,
 			),
 		);
 	}

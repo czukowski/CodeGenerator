@@ -24,31 +24,35 @@ abstract class Block extends Token
 	}
 
 	/**
-	 * Renders block of lines and indents them
+	 * Renders block of lines or items (other tokens) and indents them
 	 * 
-	 * @param  array  $lines
+	 * @param  array  $items
 	 */
-	protected function render_block($lines)
+	protected function render_block($items, $glue = NULL)
 	{
-		if ( ! $this->config->helper('arrays')->is_array($lines))
+		if ( ! $this->config->helper('arrays')->is_array($items))
 		{
 			return;
 		}
-		foreach ($lines as &$line)
+		foreach ($items as &$item)
 		{
-			$line = $this->render_line($line);
+			$item = $this->render_item($item);
 		}
-		return implode($this->config->get_format('line_end'), $lines);
+		if ($glue === NULL)
+		{
+			$glue = $this->config->get_format('line_end');
+		}
+		return implode($glue, $items);
 	}
 
 	/**
 	 * Renders a single line or token
 	 */
-	private function render_line($line)
+	private function render_item($item)
 	{
 		$line_end = $this->config->get_format('line_end');
 		$indentation = str_repeat($this->config->get_format('indent'), $this->get('indentation'));
-		return $indentation.str_replace($line_end, $line_end.$indentation, $line);
+		return $indentation.str_replace($line_end, $line_end.$indentation, $item);
 	}
 
 	/**

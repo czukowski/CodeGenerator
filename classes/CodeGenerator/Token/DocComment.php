@@ -33,6 +33,10 @@ class DocComment extends Token
 		if ($this->get('text'))
 		{
 			$lines[] = ' * '.$this->get('text');
+			if ($this->get('annotations'))
+			{
+				$lines[] = ' * ';
+			}
 		}
 		foreach ($this->get('annotations') as $annotation)
 		{

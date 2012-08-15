@@ -67,6 +67,21 @@ class DocCommentTest extends Testcase
 				" * @throws  \InvalidArgumentException\n".
 				" */",
 			),
+			array(
+				array(
+					'annotations' => array(
+						$this->_create_annotation('param', array('string', '$param', 'Input parameter')),
+						$this->_create_annotation('return', array('mixed')),
+					),
+					'text' => 'Returns different values based on the argument',
+				),
+				"/**\n".
+				" * Returns different values based on the argument\n".
+				" * \n".
+				" * @param   string  \$param  Input parameter\n".
+				" * @return  mixed\n".
+				" */",
+			),
 		);
 	}
 

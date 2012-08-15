@@ -17,7 +17,6 @@ class MethodTest extends Testcase
 	 */
 	public function test_render($attributes, $expected)
 	{
-		$this->set_expected_exception_from_argument($expected);
 		$this->setup_with_attributes($attributes);
 		$this->assertEquals($expected, $this->object->render());
 	}

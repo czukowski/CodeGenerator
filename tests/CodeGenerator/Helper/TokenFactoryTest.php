@@ -34,6 +34,8 @@ class TokenFactoryTest extends Testcase
 			array('Whitespace', 'not array', new \InvalidArgumentException),
 			array('Annotation', array(), '\CodeGenerator\Token\Annotation'),
 			array('Argument', array('name' => 'var'), '\CodeGenerator\Token\Argument'),
+			array('Function', array('name' => 'something'), '\CodeGenerator\Token\Method'),
+			array('Method', array('name' => 'something'), '\CodeGenerator\Token\Method'),
 		);
 	}
 }

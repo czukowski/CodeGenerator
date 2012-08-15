@@ -19,20 +19,50 @@ class TokenFactory extends \CodeGenerator\Singleton
 	 */
 	public function create($type, $attributes = array())
 	{
-		$classname = '\CodeGenerator\Token\\'.ucfirst($type);
+		if ( ! $type OR ! is_string($type))
+		{
+			throw new \InvalidArgumentException('Invalid token type name or alias');
+		}
+		$type = $this->get_type_by_alias(ucfirst($type));
+		$classname = $this->get_classname($type);
 		if ( ! class_exists($classname))
 		{
 			throw new \InvalidArgumentException('Token '.ucfirst($type).' does not exist');
 		}
-		elseif ( ! $this->config->helper('arrays')->is_array($attributes))
+		if ( ! $this->config->helper('arrays')->is_array($attributes))
 		{
 			throw new \InvalidArgumentException('TokenFactory.create() takes an array as the 2nd argument');
 		}
 		$token = new $classname($this->config);
+		$attributes = $this->config->helper('arrays')->merge($attributes, $this->get_type_defaults($type));
 		foreach ($attributes as $name => $value)
 		{
 			$token->set($name, $value);
 		}
 		return $token;
+	}
+
+	/**
+	 * Return class name from the argument
+	 */
+	private function get_classname($type)
+	{
+		return '\CodeGenerator\Token\\'.$type;
+	}
+
+	/**
+	 * Gets type from an alias in config, if any
+	 */
+	private function get_type_by_alias($alias)
+	{
+		return $this->config->get_options('factory.aliases.'.$alias, $alias);
+	}
+
+	/**
+	 * Get type default attribute values in config
+	 */
+	private function get_type_defaults($type)
+	{
+		return $this->config->get_options('factory.attributes.'.$type, array());
 	}
 }

@@ -28,6 +28,18 @@ class Config
 			'column_min_space' => 2,
 			'line_width' => 100,
 			'wrap_comment_text' => TRUE,
+			'factory' => array(
+				'aliases' => array(
+					'Interface' => 'Type',
+					'Class' => 'Type',
+					'Function' => 'Method',
+				),
+				'attributes' => array(
+					'Interface' => array(
+						'type' => 'interface',
+					),
+				),
+			),
 		),
 	);
 	/**

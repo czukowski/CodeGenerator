@@ -33,9 +33,9 @@ class Method extends Block
 	public function render()
 	{
 		$lines = array(
-			$this->render_method_heading(),
+			$this->render_heading(),
 			$this->render_body(),
-			$this->render_method_footing(),
+			$this->render_footing(),
 		);
 		$glue = ($this->get('body') AND ! $this->get('abstract'))
 			? $this->config->get_format('line_end')
@@ -43,7 +43,7 @@ class Method extends Block
 		return implode($glue, $lines);
 	}
 
-	private function render_method_heading()
+	private function render_heading()
 	{
 		$line = $this->render_comment();
 		$line .= implode(' ', array_filter(array(
@@ -80,7 +80,7 @@ class Method extends Block
 		return $this->get('abstract') === TRUE ? '' : $this->render_block($this->get('body'));
 	}
 
-	private function render_method_footing()
+	private function render_footing()
 	{
 		return $this->get('abstract') === TRUE ? ';' : $this->config->get_format('brace_close');
 	}

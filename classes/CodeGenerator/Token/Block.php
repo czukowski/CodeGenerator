@@ -69,7 +69,7 @@ abstract class Block extends Token
 		}
 		if ($comment AND $comment instanceof DocComment)
 		{
-			return $comment.$this->config->get_format('line_end');
+			return (string) $comment;
 		}
 		return NULL;
 	}

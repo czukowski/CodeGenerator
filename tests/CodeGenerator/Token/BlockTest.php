@@ -85,7 +85,7 @@ class BlockTest extends Testcase
 				'123',
 				"/**\n".
 				" * 123\n".
-				" */\n",
+				" */",
 			),
 			array(
 				$this->get_config()
@@ -98,7 +98,7 @@ class BlockTest extends Testcase
 				" * Returns object attributes\n".
 				" * \n".
 				" * @return  array\n".
-				" */\n",
+				" */",
 			)
 		);
 	}

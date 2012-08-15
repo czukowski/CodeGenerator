@@ -45,8 +45,20 @@ class Method extends Block
 
 	private function render_heading()
 	{
-		$line = $this->render_block_comment($this->get('comment'));
-		$line .= implode(' ', array_filter(array(
+		return implode($this->config->get_format('line_end'), array_filter(array(
+			$this->render_comment(),
+			$this->render_declaration(),
+		)));
+	}
+
+	private function render_comment()
+	{
+		return $this->render_block_comment($this->get('comment'));
+	}
+
+	private function render_declaration()
+	{
+		$line = implode(' ', array_filter(array(
 			$this->render_boolean_attribute('abstract'),
 			$this->get('access') ? : NULL,
 			$this->render_boolean_attribute('static'),

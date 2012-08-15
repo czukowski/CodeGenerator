@@ -50,4 +50,23 @@ abstract class Block extends Token
 		$indentation = str_repeat($this->config->get_format('indent'), $this->get('indentation'));
 		return $indentation.str_replace($line_end, $line_end.$indentation, $line);
 	}
+
+	/**
+	 * Render block comment, optionally generate it
+	 */
+	protected function render_block_comment($comment)
+	{
+		if ($comment AND is_string($comment))
+		{
+			$comment = $this->config->helper('tokenFactory')
+				->create('DocComment', array(
+					'text' => $comment,
+				));
+		}
+		if ($comment AND $comment instanceof DocComment)
+		{
+			return $comment.$this->config->get_format('line_end');
+		}
+		return NULL;
+	}
 }

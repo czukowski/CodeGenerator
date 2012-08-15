@@ -52,4 +52,41 @@ class BlockTest extends Testcase
 			),
 		);
 	}
+
+	/**
+	 * @dataProvider  provide_render_block_comment
+	 */
+	public function test_render_block_comment($comment, $expected)
+	{
+		$this->setup_mock();
+		$actual = $this->get_object_method($this->object, 'render_block_comment')
+			->invoke($this->object, $comment);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function provide_render_block_comment()
+	{
+		return array(
+			array(123, NULL),
+			array(
+				'123',
+				"/**\n".
+				" * 123\n".
+				" */\n",
+			),
+			array(
+				$this->get_config()
+					->helper('tokenFactory')
+					->create('DocComment', array(
+						'annotations' => array('@return  array'),
+						'text' => 'Returns object attributes',
+					)),
+				"/**\n".
+				" * Returns object attributes\n".
+				" * \n".
+				" * @return  array\n".
+				" */\n",
+			)
+		);
+	}
 }

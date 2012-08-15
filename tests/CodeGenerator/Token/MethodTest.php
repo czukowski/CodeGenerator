@@ -24,6 +24,16 @@ class MethodTest extends Testcase
 	public function provide_render()
 	{
 		return array(
+			// Lambda function
+			array(
+				array(
+					'body' => array('return TRUE;'),
+				),
+				"function()\n".
+				"{\n".
+				"\treturn TRUE;\n".
+				"}",
+			),
 			// Abstract method
 			array(
 				array(

@@ -50,7 +50,8 @@ class Method extends Block
 			$this->render_boolean_attribute('abstract'),
 			$this->get('access') ? : NULL,
 			$this->render_boolean_attribute('static'),
-			'function '.$this->get('name'),
+			'function',
+			$this->get('name'),
 		)));
 		$line .= '('.implode(', ', $this->get('arguments')).')';
 		$line .= $this->get('abstract') === TRUE ? '' : $this->config->get_format('brace_open');

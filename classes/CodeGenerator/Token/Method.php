@@ -16,6 +16,7 @@ class Method extends Block
 	{
 		parent::initialize();
 		$this->initialize_attributes(array(
+			'comment' => NULL,
 			'access' => NULL,
 			'static' => NULL,
 			'abstract' => NULL,
@@ -44,7 +45,8 @@ class Method extends Block
 
 	private function render_method_heading()
 	{
-		$line = implode(' ', array_filter(array(
+		$line = $this->render_comment();
+		$line .= implode(' ', array_filter(array(
 			$this->render_boolean_attribute('abstract'),
 			$this->get('access') ? : NULL,
 			$this->render_boolean_attribute('static'),
@@ -53,6 +55,23 @@ class Method extends Block
 		$line .= '('.implode(', ', $this->get('arguments')).')';
 		$line .= $this->get('abstract') === TRUE ? '' : $this->config->get_format('brace_open');
 		return $line;
+	}
+
+	private function render_comment()
+	{
+		$comment = $this->get('comment');
+		if ($comment AND is_string($comment))
+		{
+			$comment = $this->config->helper('tokenFactory')
+				->create('DocComment', array(
+					'text' => $comment,
+				));
+		}
+		if ($comment AND $comment instanceof DocComment)
+		{
+			return $comment.$this->config->get_format('line_end');
+		}
+		return NULL;
 	}
 
 	private function render_body()

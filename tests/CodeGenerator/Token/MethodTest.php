@@ -51,20 +51,32 @@ class MethodTest extends Testcase
 				"function get_value()\n".
 				"{}",
 			),
-			// Name only, some body
+			// Name, some body, comment
 			array(
 				array(
+					'comment' => $this->get_config()
+						->helper('tokenFactory')
+						->create('DocComment', array(
+							'annotations' => array('@return  mixed'),
+							'text' => 'Returns object value',
+						)),
 					'name' => 'get_value',
-					'body' => array('return;'),
+					'body' => array('return $this->value;'),
 				),
+				"/**\n".
+				" * Returns object value\n".
+				" * \n".
+				" * @return  mixed\n".
+				" */\n".
 				"function get_value()\n".
 				"{\n".
-				"\treturn;\n".
+				"\treturn \$this->value;\n".
 				"}",
 			),
-			// More attributes, body
+			// More attributes, body, comment as string
 			array(
 				array(
+					'comment' => 'This function returns the sign of the argument',
 					'access' => 'public',
 					'static' => TRUE,
 					'name' => 'sign',
@@ -79,6 +91,9 @@ class MethodTest extends Testcase
 						'else return 0;',
 					),
 				),
+				"/**\n".
+				" * This function returns the sign of the argument\n".
+				" */\n".
 				"public static function sign(\$number)\n".
 				"{\n".
 				"\tif (\$number > 0) return 1;\n".

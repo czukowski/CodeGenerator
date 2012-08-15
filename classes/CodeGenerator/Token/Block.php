@@ -69,4 +69,15 @@ abstract class Block extends Token
 		}
 		return NULL;
 	}
+
+	/**
+	 * If attribute is set, returns its name, else NULL
+	 */
+	protected function render_boolean_attribute($attribute)
+	{
+		if ($this->get($attribute) === TRUE)
+		{
+			return $attribute;
+		}
+	}
 }

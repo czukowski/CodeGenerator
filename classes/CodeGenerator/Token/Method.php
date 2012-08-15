@@ -68,14 +68,6 @@ class Method extends Block
 		return $this->get('abstract') === TRUE ? ';' : $this->config->get_format('brace_close');
 	}
 
-	private function render_boolean_attribute($attribute)
-	{
-		if ($this->get($attribute) === TRUE)
-		{
-			return $attribute;
-		}
-	}
-
 	public function validate_access($value)
 	{
 		return $value === NULL OR in_array($value, array('public', 'private', 'protected'), TRUE);

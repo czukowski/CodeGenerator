@@ -13,6 +13,10 @@ namespace CodeGenerator\Framework;
 abstract class Testcase extends \PHPUnit_Framework_TestCase
 {
 	/**
+	 * @var  \CodeGenerator\Config
+	 */
+	protected $config;
+	/**
 	 * @var  object  Tested object instance
 	 */
 	protected $object;
@@ -25,6 +29,14 @@ abstract class Testcase extends \PHPUnit_Framework_TestCase
 		}
 	}
 
+	/**
+	 * Setup config
+	 */
+	protected function setup_config()
+	{
+		$this->config = new \CodeGenerator\Config;
+	}
+
 	protected function setup_object($options = array())
 	{
 		$options = $this->get_setup_options($options);
@@ -35,6 +47,18 @@ abstract class Testcase extends \PHPUnit_Framework_TestCase
 	protected function setup_mock($options = array())
 	{
 		$this->object = $this->get_mock($options);
+	}
+
+	/**
+	 * @return  \CodeGenerator\Config
+	 */
+	protected function get_config()
+	{
+		if ($this->config === NULL)
+		{
+			$this->setup_config();
+		}
+		return $this->config;
 	}
 
 	protected function get_mock($options = array())

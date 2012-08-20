@@ -54,7 +54,7 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 
 	public function provide_get()
 	{
-		$config = $this->get_config();
+		$config = $this->get_config_array();
 		$default = array();
 		return array(
 			array($default, 'format.brace_close', NULL, '}'),
@@ -80,7 +80,7 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 
 	public function provide_get_format()
 	{
-		$config = $this->get_config();
+		$config = $this->get_config_array();
 		$default = array();
 		return array(
 			array($default, 'brace_close', NULL, '}'),
@@ -104,7 +104,7 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 
 	public function provide_get_options()
 	{
-		$config = $this->get_config();
+		$config = $this->get_config_array();
 		$default = array();
 		return array(
 			array($default, 'column_min_space', NULL, 2),
@@ -114,7 +114,7 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 		);
 	}
 
-	private function get_config()
+	private function get_config_array()
 	{
 		return array(
 			'format' => array(

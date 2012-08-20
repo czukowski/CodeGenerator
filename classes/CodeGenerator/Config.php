@@ -40,6 +40,7 @@ class Config
 					),
 				),
 				'transform' => array(
+					'Block' => 'items',
 					'DocComment' => 'text',
 				),
 			),

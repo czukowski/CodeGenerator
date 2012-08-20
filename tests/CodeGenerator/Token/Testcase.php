@@ -13,10 +13,6 @@ namespace CodeGenerator\Token;
 class Testcase extends \CodeGenerator\Framework\Testcase
 {
 	/**
-	 * @var  \CodeGenerator\Config
-	 */
-	protected $config;
-	/**
 	 * @var  array  Backup of the replaced helpers
 	 */
 	private $_backup_helpers = array();
@@ -32,26 +28,6 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 		{
 			$this->object->set($name, $value);
 		}
-	}
-
-	/**
-	 * Setup config
-	 */
-	protected function setup_config()
-	{
-		$this->config = new \CodeGenerator\Config;
-	}
-
-	/**
-	 * @return  \CodeGenerator\Config
-	 */
-	protected function get_config()
-	{
-		if ($this->config === NULL)
-		{
-			$this->setup_config();
-		}
-		return $this->config;
 	}
 
 	/**

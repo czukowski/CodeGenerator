@@ -23,12 +23,7 @@ class TokenFactory extends \CodeGenerator\Singleton
 		{
 			throw new \InvalidArgumentException('Invalid token type name or alias');
 		}
-		$type = $this->get_type_by_alias(ucfirst($type));
 		$classname = $this->get_classname($type);
-		if ( ! class_exists($classname))
-		{
-			throw new \InvalidArgumentException('Token '.ucfirst($type).' does not exist');
-		}
 		if ( ! $this->config->helper('arrays')->is_array($attributes))
 		{
 			throw new \InvalidArgumentException('TokenFactory.create() takes an array as the 2nd argument');
@@ -47,7 +42,12 @@ class TokenFactory extends \CodeGenerator\Singleton
 	 */
 	private function get_classname($type)
 	{
-		return '\CodeGenerator\Token\\'.$type;
+		$classname = '\CodeGenerator\Token\\'.$this->get_type_by_alias($type);
+		if ( ! class_exists($classname))
+		{
+			throw new \InvalidArgumentException('Token '.ucfirst($type).' does not exist');
+		}
+		return $classname;
 	}
 
 	/**
@@ -55,7 +55,7 @@ class TokenFactory extends \CodeGenerator\Singleton
 	 */
 	private function get_type_by_alias($alias)
 	{
-		return $this->config->get_options('factory.aliases.'.$alias, $alias);
+		return $this->config->get_options('factory.aliases.'.ucfirst($alias), ucfirst($alias));
 	}
 
 	/**
@@ -63,6 +63,6 @@ class TokenFactory extends \CodeGenerator\Singleton
 	 */
 	private function get_type_defaults($type)
 	{
-		return $this->config->get_options('factory.attributes.'.$type, array());
+		return $this->config->get_options('factory.attributes.'.$this->get_type_by_alias($type), array());
 	}
 }

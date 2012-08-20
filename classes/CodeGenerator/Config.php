@@ -39,6 +39,9 @@ class Config
 						'type' => 'interface',
 					),
 				),
+				'transform' => array(
+					'DocComment' => 'text',
+				),
 			),
 		),
 	);

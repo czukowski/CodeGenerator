@@ -19,11 +19,7 @@ class TokenFactoryTest extends Testcase
 		$this->set_expected_exception_from_argument($expected);
 		$actual = $this->object->create($name, $attributes);
 		$this->assertInstanceOf($expected, $actual);
-		foreach ($attributes as $attribute_name => $expected_value)
-		{
-			$actual_value = $actual->get($attribute_name);
-			$this->assertEquals($expected_value, $actual_value);
-		}
+		$this->assert_attributes_equal($attributes, $actual);
 	}
 
 	public function provide_create()
@@ -37,5 +33,43 @@ class TokenFactoryTest extends Testcase
 			array('Function', array('name' => 'something'), '\CodeGenerator\Token\Method'),
 			array('Method', array('name' => 'something'), '\CodeGenerator\Token\Method'),
 		);
+	}
+
+	/**
+	 * @dataProvider  provide_transform
+	 */
+	public function test_transform($type, $object, $expected, $expected_attributes = array())
+	{
+		$this->set_expected_exception_from_argument($expected);
+		$actual = $this->object->transform($type, $object);
+		$this->assertInstanceOf($expected, $actual);
+		$this->assert_attributes_equal($expected_attributes, $actual);
+	}
+
+	public function provide_transform()
+	{
+		return array(
+			array('DocComment', new \stdClass, new \InvalidArgumentException),
+			array('DocComment', 123, '\CodeGenerator\Token\DocComment', array('text' => 123)),
+			array(
+				'DocComment', 
+				$this->get_config()
+					->helper('tokenFactory')
+					->create('DocComment', array(
+						'annotations' => array('@return  array'),
+						'text' => 'Returns object attributes',
+					)),
+				'\CodeGenerator\Token\DocComment',
+			)
+		);
+	}
+
+	private function assert_attributes_equal($expected, $token)
+	{
+		foreach ($expected as $attribute_name => $expected_value)
+		{
+			$actual_value = $token->get($attribute_name);
+			$this->assertEquals($expected_value, $actual_value);
+		}
 	}
 }

@@ -16,6 +16,7 @@ class TokenFactory extends \CodeGenerator\Singleton
 	 * 
 	 * @param  string  $type
 	 * @param  array   $attributes
+	 * @return  \CodeGenerator\Token
 	 */
 	public function create($type, $attributes = array())
 	{
@@ -64,5 +65,36 @@ class TokenFactory extends \CodeGenerator\Singleton
 	private function get_type_defaults($type)
 	{
 		return $this->config->get_options('factory.attributes.'.$this->get_type_by_alias($type), array());
+	}
+
+	/**
+	 * Transform strings into tokens
+	 * 
+	 * @param   string  $type
+	 * @param   mixed   $object
+	 * @return  \CodeGenerator\Token
+	 */
+	public function transform($type, $object)
+	{
+		if ($object AND is_scalar($object))
+		{
+			$transform_attribute = $this->get_type_transform_attribute($type);
+			$attributes = $transform_attribute ? array($transform_attribute => $object) : array();
+			$object = $this->create($type, $attributes);
+		}
+		$classname = $this->get_classname($type);
+		if ($object AND $object instanceof $classname)
+		{
+			return $object;
+		}
+		throw new \InvalidArgumentException('Cannot transform the object to '.ucfirst($type).' token');
+	}
+
+	/**
+	 * Get type default attribute name for converting from string
+	 */
+	private function get_type_transform_attribute($type)
+	{
+		return $this->config->get_options('factory.transform.'.$this->get_type_by_alias($type));
 	}
 }

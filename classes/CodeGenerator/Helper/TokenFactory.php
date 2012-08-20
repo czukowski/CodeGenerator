@@ -76,7 +76,7 @@ class TokenFactory extends \CodeGenerator\Singleton
 	 */
 	public function transform($type, $object)
 	{
-		if ($object AND is_scalar($object))
+		if ($object AND ! is_object($object))
 		{
 			$transform_attribute = $this->get_type_transform_attribute($type);
 			$attributes = $transform_attribute ? array($transform_attribute => $object) : array();
@@ -91,7 +91,7 @@ class TokenFactory extends \CodeGenerator\Singleton
 	}
 
 	/**
-	 * Get type default attribute name for converting from string
+	 * Get type default attribute name for converting from non-object arguments
 	 */
 	private function get_type_transform_attribute($type)
 	{

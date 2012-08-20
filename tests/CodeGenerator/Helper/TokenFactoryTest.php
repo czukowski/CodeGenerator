@@ -49,6 +49,7 @@ class TokenFactoryTest extends Testcase
 	public function provide_transform()
 	{
 		return array(
+			array('Block', array('123'), '\CodeGenerator\Token\Block'),
 			array('DocComment', new \stdClass, new \InvalidArgumentException),
 			array('DocComment', 123, '\CodeGenerator\Token\DocComment', array('text' => 123)),
 			array(

@@ -136,6 +136,17 @@ abstract class Token extends \CodeGenerator\Object
 	abstract public function render();
 
 	/**
+	 * If attribute is set, returns its name, else NULL
+	 */
+	protected function render_boolean_attribute($attribute)
+	{
+		if ($this->get($attribute) === TRUE)
+		{
+			return $attribute;
+		}
+	}
+
+	/**
 	 * @param  \CodeGenerator\Config  $config
 	 */
 	public function __construct(\CodeGenerator\Config $config)

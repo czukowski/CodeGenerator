@@ -26,7 +26,7 @@ class Type extends Block
 			'extends' => NULL,
 			'implements' => array(),
 			'traits' => array(),
-			'body' => array(),
+			'body' => NULL,
 			'indentation' => 1,
 		));
 		$this->initialize_validation(array(
@@ -62,7 +62,11 @@ class Type extends Block
 
 	private function render_comment()
 	{
-		return $this->render_block_comment($this->get('comment'));
+		if (($comment = $this->get('comment')))
+		{
+			return $this->config->helper('tokenFactory')
+				->transform('DocComment', $comment);
+		}
 	}
 
 	private function render_namespace()
@@ -103,7 +107,12 @@ class Type extends Block
 
 	private function render_body()
 	{
-		return $this->render_block($this->get('body'), $this->get_items_glue());
+		if (($body = $this->get('body')))
+		{
+			return $this->config->helper('tokenFactory')
+				->transform('Block', $body)
+				->set('glue', $this->get_items_glue());
+		}
 	}
 
 	private function render_footing()

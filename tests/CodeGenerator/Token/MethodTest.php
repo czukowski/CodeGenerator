@@ -94,11 +94,13 @@ class MethodTest extends Testcase
 							->helper('tokenFactory')
 							->create('argument', array('name' => 'number')),
 					),
-					'body' => array(
-						'if ($number > 0) return 1;',
-						'elseif ($number < 0) return -1;',
-						'else return 0;',
-					),
+					'body' => $this->get_config()
+						->helper('tokenFactory')
+						->create('block', array('items' => array(
+							'if ($number > 0) return 1;',
+							'elseif ($number < 0) return -1;',
+							'else return 0;',
+						))),
 				),
 				"/**\n".
 				" * This function returns the sign of the argument\n".

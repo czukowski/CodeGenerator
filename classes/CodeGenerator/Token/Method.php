@@ -10,7 +10,7 @@
  */
 namespace CodeGenerator\Token;
 
-class Method extends Block
+class Method extends Token
 {
 	protected function initialize()
 	{
@@ -22,8 +22,7 @@ class Method extends Block
 			'abstract' => NULL,
 			'name' => NULL,
 			'arguments' => array(),
-			'body' => array(),
-			'indentation' => 1,
+			'body' => NULL,
 		));
 		$this->initialize_validation(array(
 			'access' => 'access',
@@ -53,7 +52,11 @@ class Method extends Block
 
 	private function render_comment()
 	{
-		return $this->render_block_comment($this->get('comment'));
+		if (($comment = $this->get('comment')))
+		{
+			return $this->config->helper('tokenFactory')
+				->transform('DocComment', $comment);
+		}
 	}
 
 	private function render_declaration()
@@ -72,7 +75,15 @@ class Method extends Block
 
 	private function render_body()
 	{
-		return $this->get('abstract') === TRUE ? '' : $this->render_block($this->get('body'));
+		if ($this->get('abstract') === TRUE)
+		{
+			return '';
+		}
+		elseif (($body = $this->get('body')))
+		{
+			return $this->config->helper('tokenFactory')
+				->transform('Block', $body);
+		}
 	}
 
 	private function render_footing()

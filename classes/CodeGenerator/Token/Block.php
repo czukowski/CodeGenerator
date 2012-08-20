@@ -10,17 +10,24 @@
  */
 namespace CodeGenerator\Token;
 
-abstract class Block extends Token
+class Block extends Token
 {
 	protected function initialize()
 	{
 		parent::initialize();
 		$this->initialize_attributes(array(
-			'indentation' => 0,
+			'indentation' => 1,
+			'items' => array(),
+			'glue' => NULL,
 		));
 		$this->initialize_validation(array(
 			'indentation' => 'integer',
 		));
+	}
+
+	public function render()
+	{
+		return $this->render_block($this->get('items'));
 	}
 
 	/**
@@ -28,7 +35,7 @@ abstract class Block extends Token
 	 * 
 	 * @param  array  $items
 	 */
-	protected function render_block($items, $glue = NULL)
+	protected function render_block($items)
 	{
 		if ( ! $this->config->helper('arrays')->is_array($items))
 		{
@@ -38,7 +45,7 @@ abstract class Block extends Token
 		{
 			$item = $this->render_item($item);
 		}
-		if ($glue === NULL)
+		if (($glue = $this->get('glue')) === NULL)
 		{
 			$glue = $this->config->get_format('line_end');
 		}
@@ -53,35 +60,5 @@ abstract class Block extends Token
 		$line_end = $this->config->get_format('line_end');
 		$indentation = str_repeat($this->config->get_format('indent'), $this->get('indentation'));
 		return $indentation.str_replace($line_end, $line_end.$indentation, $item);
-	}
-
-	/**
-	 * Render block comment, optionally generate it
-	 */
-	protected function render_block_comment($comment)
-	{
-		if ($comment AND is_string($comment))
-		{
-			$comment = $this->config->helper('tokenFactory')
-				->create('DocComment', array(
-					'text' => $comment,
-				));
-		}
-		if ($comment AND $comment instanceof DocComment)
-		{
-			return (string) $comment;
-		}
-		return NULL;
-	}
-
-	/**
-	 * If attribute is set, returns its name, else NULL
-	 */
-	protected function render_boolean_attribute($attribute)
-	{
-		if ($this->get($attribute) === TRUE)
-		{
-			return $attribute;
-		}
 	}
 }

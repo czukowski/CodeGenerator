@@ -161,6 +161,34 @@ class TokenTest extends Testcase
 	}
 
 	/**
+	 * @dataProvider  provide_parent
+	 */
+	public function test_parent($parent)
+	{
+		$this->setup_mock();
+		$this->object->set_parent($parent);
+		$this->assertSame($parent, $this->object->get_parent());
+	}
+
+	public function test_parent_self()
+	{
+		$this->setExpectedException('InvalidArgumentException');
+		$this->setup_mock();
+		$this->object->set_parent($this->object);
+	}
+
+	public function provide_parent()
+	{
+		return array(
+			array(
+				$this->get_config()
+					->helper('tokenFactory')
+					->create('Block'),
+			),
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_get_type
 	 */
 	public function test_get_type($mock_classname, $expected)

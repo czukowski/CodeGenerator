@@ -17,6 +17,10 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	private $attributes = array();
 	/**
+	 * @var  Token  Parent token
+	 */
+	private $parent = NULL;
+	/**
 	 * @var  array  Token attributes to validation mapping
 	 */
 	private $validation = array();
@@ -116,6 +120,32 @@ abstract class Token extends \CodeGenerator\Object
 		{
 			throw new \InvalidArgumentException('Invalid value for '.$this->get_type().'.'.$attribute);
 		}
+	}
+
+	/**
+	 * Returns the containing token for this token
+	 * 
+	 * @return  Token
+	 */
+	public function get_parent()
+	{
+		return $this->parent;
+	}
+
+	/**
+	 * Sets the containing token for this token
+	 * 
+	 * @param   Token  $parent  Parent token
+	 * @return  Token  self
+	 */
+	public function set_parent(Token $parent)
+	{
+		if ($parent === $this)
+		{
+			throw new \InvalidArgumentException('Token cannot be parent of itself');
+		}
+		$this->parent = $parent;
+		return $this;
 	}
 
 	/**

@@ -110,11 +110,13 @@ class Type extends Token
 	private function render_body()
 	{
 		return implode($this->get_methods_glue(), array_filter(array(
-			(string)$this->config->helper('tokenFactory')
-				->create('Block', array('items' => $this->get('properties'))),
-			(string)$this->config->helper('tokenFactory')
+			(string) $this->config->helper('tokenFactory')
+				->create('Block', array('items' => $this->get('properties')))
+				->set_parent($this),
+			(string) $this->config->helper('tokenFactory')
 				->create('Block', array('items' => $this->get('methods')))
-				->set('glue', $this->get_methods_glue()),
+				->set('glue', $this->get_methods_glue())
+				->set_parent($this),
 		)));
 	}
 

@@ -27,7 +27,9 @@ class Config
 			'charset' => 'utf-8',
 			'column_min_space' => 2,
 			'line_width' => 100,
-			'wrap_comment_text' => TRUE,
+			'word_wrap' => array(
+				'comment_text' => TRUE,
+			),
 			'factory' => array(
 				'aliases' => array(
 					'Interface' => 'Type',

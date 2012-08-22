@@ -127,7 +127,6 @@ class ConfigTest extends \CodeGenerator\Framework\Testcase
 				'charset' => 'utf-8',
 				'column_min_space' => 1,
 				'line_width' => 100,
-				'wrap_comment_text' => TRUE,
 			),
 		);
 	}

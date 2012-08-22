@@ -1,6 +1,7 @@
 <?php
 /**
- * Function argument class
+ * Block token argument class. Serves as a container for multiple items and intended for use as a class
+ * or method body.
  * 
  * @package    CodeGenerator
  * @category   Tokens

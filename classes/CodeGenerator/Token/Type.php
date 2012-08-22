@@ -67,7 +67,8 @@ class Type extends Token
 		if (($comment = $this->get('comment')))
 		{
 			return $this->config->helper('tokenFactory')
-				->transform('DocComment', $comment);
+				->transform('DocComment', $comment)
+				->set_parent($this);
 		}
 	}
 

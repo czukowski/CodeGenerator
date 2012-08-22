@@ -10,7 +10,7 @@
  */
 namespace CodeGenerator\Token;
 
-class Type extends Block
+class Type extends Token
 {
 	protected function initialize()
 	{
@@ -26,8 +26,8 @@ class Type extends Block
 			'extends' => NULL,
 			'implements' => array(),
 			'traits' => array(),
-			'body' => NULL,
-			'indentation' => 1,
+			'properties' => array(),
+			'methods' => array(),
 		));
 		$this->initialize_validation(array(
 			'type' => 'type',
@@ -45,13 +45,15 @@ class Type extends Block
 			$this->render_body(),
 			$this->render_footing(),
 		);
-		$glue = $this->get('body') ? $this->config->get_format('line_end') : '';
+		$glue = ($this->get('properties') OR $this->get('methods'))
+			? $this->config->get_format('line_end')
+			: '';
 		return implode($glue, $lines);
 	}
 
 	private function render_heading()
 	{
-		$heading = implode($this->get_items_glue(), array_filter(array(
+		$heading = implode($this->get_methods_glue(), array_filter(array(
 			$this->render_comment(),
 			$this->render_namespace(),
 			$this->render_declaration(),
@@ -107,12 +109,13 @@ class Type extends Block
 
 	private function render_body()
 	{
-		if (($body = $this->get('body')))
-		{
-			return $this->config->helper('tokenFactory')
-				->transform('Block', $body)
-				->set('glue', $this->get_items_glue());
-		}
+		return implode($this->get_methods_glue(), array_filter(array(
+			(string)$this->config->helper('tokenFactory')
+				->create('Block', array('items' => $this->get('properties'))),
+			(string)$this->config->helper('tokenFactory')
+				->create('Block', array('items' => $this->get('methods')))
+				->set('glue', $this->get_methods_glue()),
+		)));
 	}
 
 	private function render_footing()
@@ -120,7 +123,7 @@ class Type extends Block
 		return $this->config->get_format('brace_close');
 	}
 
-	private function get_items_glue()
+	private function get_methods_glue()
 	{
 		return str_repeat($this->config->get_format('line_end'), 2);
 	}

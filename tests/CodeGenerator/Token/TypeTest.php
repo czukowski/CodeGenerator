@@ -58,7 +58,7 @@ class TypeTest extends Testcase
 					'name' => 'HTTPRequest',
 					'final' => TRUE,
 					'implements' => array('IRequest'),
-					'body' => array('// Here go class methods'),
+					'methods' => array('// Here go class methods'),
 				),
 				"final class HTTPRequest implements IRequest\n".
 				"{\n".
@@ -70,8 +70,10 @@ class TypeTest extends Testcase
 				array(
 					'type' => 'class',
 					'name' => 'Foo',
-					'body' => array(
+					'properties' => array(
 						'private $bar;',
+					),
+					'methods' => array(
 						$this->create_method('get_bar', array(), array('return $this->bar;')),
 						$this->create_method('set_bar', array('$value'), array('$this->bar = $value;')),
 					),
@@ -99,7 +101,7 @@ class TypeTest extends Testcase
 					'name' => 'ISuperObject',
 					'namespace' => '\Foo',
 					'use' => array('\Foo\Bar as Bar'),
-					'body' => array('// Here go class methods'),
+					'methods' => array('// Here go class methods'),
 				),
 				"/**\n".
 				" * @package Fubar\n".

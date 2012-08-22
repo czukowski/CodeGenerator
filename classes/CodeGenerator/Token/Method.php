@@ -26,6 +26,7 @@ class Method extends Token
 		));
 		$this->initialize_validation(array(
 			'access' => 'access',
+			'name' => 'name',
 		));
 	}
 

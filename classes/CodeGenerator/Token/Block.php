@@ -28,7 +28,11 @@ class Block extends Token
 
 	public function render()
 	{
-		return $this->render_block($this->get('items'));
+		if (($items = $this->get('items')))
+		{
+			return $this->render_block($this->get('items'));
+		}
+		return '';
 	}
 
 	/**

@@ -27,6 +27,13 @@ class BlockTest extends Testcase
 		return array(
 			array(
 				array(
+					'items' => array(),
+					'indentation' => 2,
+				),
+				'',
+			),
+			array(
+				array(
 					'items' => array(
 						'$a = 1;',
 						'$b = $a;',

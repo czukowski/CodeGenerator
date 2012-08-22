@@ -27,6 +27,9 @@ class Config
 			'charset' => 'utf-8',
 			'column_min_space' => 2,
 			'line_width' => 100,
+			'char_width' => array(
+				"\t" => 4,
+			),
 			'word_wrap' => array(
 				'comment_text' => TRUE,
 			),

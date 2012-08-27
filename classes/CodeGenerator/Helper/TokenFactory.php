@@ -76,7 +76,7 @@ class TokenFactory extends \CodeGenerator\Singleton
 	 */
 	public function transform($type, $object)
 	{
-		if ($object AND ! is_object($object))
+		if ( ! is_object($object))
 		{
 			$transform_attribute = $this->get_type_transform_attribute($type);
 			$attributes = $transform_attribute ? array($transform_attribute => $object) : array();

@@ -66,8 +66,7 @@ class Type extends Token
 		if (($comment = $this->get('comment')))
 		{
 			return $this->config->helper('tokenFactory')
-				->transform('DocComment', $comment)
-				->set('parent', $this);
+				->transform('DocComment', $comment, $this);
 		}
 	}
 
@@ -111,12 +110,10 @@ class Type extends Token
 	{
 		return implode($this->get_methods_glue(), array_filter(array(
 			(string) $this->config->helper('tokenFactory')
-				->transform('Block', $this->get('properties'))
-				->set('parent', $this),
+				->transform('Block', $this->get('properties'), $this),
 			(string) $this->config->helper('tokenFactory')
-				->transform('Block', $this->get('methods'))
-				->set('glue', $this->get_methods_glue())
-				->set('parent', $this),
+				->transform('Block', $this->get('methods'), $this)
+				->set('glue', $this->get_methods_glue()),
 		)));
 	}
 

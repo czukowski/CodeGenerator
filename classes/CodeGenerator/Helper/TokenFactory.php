@@ -86,7 +86,7 @@ class TokenFactory extends \CodeGenerator\Singleton
 		$classname = $this->get_classname($type);
 		if ($object AND $object instanceof $classname)
 		{
-			if ($parent instanceof \CodeGenerator\Token)
+			if ($parent instanceof \CodeGenerator\Token\Token)
 			{
 				$object->set('parent', $parent);
 			}

@@ -38,29 +38,32 @@ class TokenFactoryTest extends Testcase
 	/**
 	 * @dataProvider  provide_transform
 	 */
-	public function test_transform($type, $object, $expected, $expected_attributes = array())
+	public function test_transform($type, $object, $parent, $expected, $expected_attributes = array())
 	{
 		$this->set_expected_exception_from_argument($expected);
-		$actual = $this->object->transform($type, $object);
+		$actual = $this->object->transform($type, $object, $parent);
 		$this->assertInstanceOf($expected, $actual);
+		$this->assertSame($parent, $actual->get('parent'));
 		$this->assert_attributes_equal($expected_attributes, $actual);
 	}
 
 	public function provide_transform()
 	{
+		$factory = $this->get_config()
+			->helper('tokenFactory');
+		$block = $factory->create('Block');
 		return array(
-			array('Block', array('123'), '\CodeGenerator\Token\Block'),
-			array('Block', array(), '\CodeGenerator\Token\Block'),
-			array('DocComment', new \stdClass, new \InvalidArgumentException),
-			array('DocComment', 123, '\CodeGenerator\Token\DocComment', array('text' => 123)),
+			array('Block', array('123'), NULL, '\CodeGenerator\Token\Block'),
+			array('Block', array(), $block, '\CodeGenerator\Token\Block'),
+			array('DocComment', new \stdClass, NULL, new \InvalidArgumentException),
+			array('DocComment', 123, $block, '\CodeGenerator\Token\DocComment', array('text' => 123)),
 			array(
-				'DocComment', 
-				$this->get_config()
-					->helper('tokenFactory')
-					->create('DocComment', array(
-						'annotations' => array('@return  array'),
-						'text' => 'Returns object attributes',
-					)),
+				'DocComment',
+				$factory->create('DocComment', array(
+					'annotations' => array('@return  array'),
+					'text' => 'Returns object attributes',
+				)),
+				$block,
 				'\CodeGenerator\Token\DocComment',
 			)
 		);

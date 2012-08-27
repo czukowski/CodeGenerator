@@ -11,8 +11,13 @@
  */
 namespace CodeGenerator\Token;
 
-class Block extends Token implements \ArrayAccess
+class Block extends Token implements \ArrayAccess, \Iterator
 {
+	/**
+	 * @var  integer  Current item index for Iterator access
+	 */
+	private $current_index = 0;
+
 	protected function initialize()
 	{
 		parent::initialize();
@@ -67,9 +72,31 @@ class Block extends Token implements \ArrayAccess
 		return $indentation.str_replace($line_end, $line_end.$indentation, $item);
 	}
 
-	private function get_items()
+	public function current()
 	{
-		return $this->get('items');
+		return $this[$this->current_index];
+	}
+
+	public function key()
+	{
+		return $this->current_index;
+	}
+
+	public function next()
+	{
+		$this->current_index++;
+		return $this;
+	}
+
+	public function rewind()
+	{
+		$this->current_index = 0;
+		return $this; 
+	}
+
+	public function valid()
+	{
+		return $this->offsetExists($this->current_index);
 	}
 
 	/**
@@ -116,5 +143,10 @@ class Block extends Token implements \ArrayAccess
 		$items = $this->get_items();
 		unset($items[$offset]);
 		$this->set('items', $items);
+	}
+
+	private function get_items()
+	{
+		return $this->get('items');
 	}
 }

@@ -160,11 +160,100 @@ class BlockTest extends Testcase
 		);
 	}
 
+	/**
+	 * @dataProvider  provide_current
+	 */
+	public function test_current($items, $next_times, $expected)
+	{
+		$this->setup_iterator_with_items($items, $next_times);
+		$this->set_expected_exception_from_argument($expected);
+		$this->assertSame($expected, $this->object->current());
+	}
+
+	public function provide_current()
+	{
+		return array(
+			array($this->get_items(), 0, 'a'),
+			array($this->get_items(), 1, 'b'),
+			array($this->get_items(), 2, 123),
+			array($this->get_items(), 3, new \OutOfRangeException),
+			array($this->get_items(), 10, new \OutOfRangeException),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_key
+	 */
+	public function test_key($items, $next_times, $expected)
+	{
+		$this->setup_iterator_with_items($items, $next_times);
+		$this->assertSame($expected, $this->object->key());
+	}
+
+	/**
+	 * @dataProvider  provide_key
+	 */
+	public function test_next($items, $next_times)
+	{
+		$this->setup_iterator_with_items($items, $next_times);
+		$this->assertSame($this->object, $this->object->next());
+	}
+
+	/**
+	 * @dataProvider  provide_key
+	 */
+	public function test_rewind($items, $next_times)
+	{
+		$this->setup_iterator_with_items($items, $next_times);
+		$this->assertSame($this->object, $this->object->rewind());
+		$this->assertSame(0, $this->object->key());
+	}
+
+	public function provide_key()
+	{
+		return array(
+			array($this->get_items(), 0, 0),
+			array($this->get_items(), 1, 1),
+			array($this->get_items(), 2, 2),
+			array($this->get_items(), 3, 3),
+			array($this->get_items(), 10, 10),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_valid
+	 */
+	public function test_valid($items, $next_times, $expected)
+	{
+		$this->setup_iterator_with_items($items, $next_times);
+		$this->assertSame($expected, $this->object->valid());
+	}
+
+	public function provide_valid()
+	{
+		return array(
+			array($this->get_items(), 0, TRUE),
+			array($this->get_items(), 1, TRUE),
+			array($this->get_items(), 2, TRUE),
+			array($this->get_items(), 3, FALSE),
+			array($this->get_items(), 10, FALSE),
+		);
+	}
+
 	private function get_items()
 	{
 		return array(
 			'a', 'b', 123,
 		);
+	}
+
+	private function setup_iterator_with_items($items, $next_times)
+	{
+		$this->setup_with_items($items);
+		for ($i = 0; $i < $next_times; $i++)
+		{
+			$this->object->next();
+		}
 	}
 
 	private function setup_with_items($items)

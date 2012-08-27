@@ -11,7 +11,7 @@
  */
 namespace CodeGenerator\Token;
 
-class Block extends Token
+class Block extends Token implements \ArrayAccess
 {
 	protected function initialize()
 	{
@@ -65,5 +65,52 @@ class Block extends Token
 		$line_end = $this->config->get_format('line_end');
 		$indentation = str_repeat($this->config->get_format('indent'), $this->get('indentation'));
 		return $indentation.str_replace($line_end, $line_end.$indentation, $item);
+	}
+
+	private function get_items()
+	{
+		return $this->get('items');
+	}
+
+	/**
+	 * ArrayAccess isset implementation
+	 */
+	public function offsetExists($offset)
+	{
+		$items = $this->get_items();
+		return isset($items[$offset]);
+	}
+
+	/**
+	 * ArrayAccess getter implementation
+	 */
+	public function offsetGet($offset)
+	{
+		$items = $this->get_items();
+		if ( ! isset($items[$offset]))
+		{
+			throw new \OutOfRangeException($this->get_type().'['.$offset.'] is not set');
+		}
+		return $items[$offset];
+	}
+
+	/**
+	 * ArrayAccess setter implementation
+	 */
+	public function offsetSet($offset, $value)
+	{
+		$items = $this->get_items();
+		$items[$offset] = $value;
+		$this->set('items', $items);
+	}
+
+	/**
+	 * ArrayAccess unset implementation
+	 */
+	public function offsetUnset($offset)
+	{
+		$items = $this->get_items();
+		unset($items[$offset]);
+		$this->set('items', $items);
 	}
 }

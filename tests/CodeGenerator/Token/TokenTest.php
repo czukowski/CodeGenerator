@@ -21,10 +21,14 @@ class TokenTest extends Testcase
 		$this->set_expected_exception_from_argument($expected);
 		$this->assertSame($this->object, $this->object->add($add_key, $add_value));
 		$this->assertEquals($expected, $this->object->get($add_key));
+		$this->assert_parent_token($add_value);
 	}
 
 	public function provide_add()
 	{
+		$block_token = $this->get_config()
+			->helper('tokenFactory')
+			->create('Block');
 		// [validation, attributes, add_key, add_value, expected]
 		return array(
 			array(
@@ -38,6 +42,9 @@ class TokenTest extends Testcase
 			),
 			array(
 				array(), array('me' => 'foo'), 'me', 'fubar', new \InvalidArgumentException,
+			),
+			array(
+				array(), array('token' => array()), 'token', $block_token, array($block_token),
 			),
 			array(
 				array('me' => TRUE), array('me' => array('foo')), 'me', 'bar', array('foo', 'bar'),
@@ -83,10 +90,14 @@ class TokenTest extends Testcase
 		$this->set_expected_exception_from_argument($expected);
 		$this->assertSame($this->object, $this->object->set($set_key, $set_value));
 		$this->assertEquals($expected, $this->object->get($set_key));
+		$this->assert_parent_token($set_value);
 	}
 
 	public function provide_set()
 	{
+		$comment_token = $this->get_config()
+			->helper('tokenFactory')
+			->create('DocComment');
 		// [validation, attributes, key, set_value, expected_set]
 		return array(
 			array(
@@ -99,12 +110,23 @@ class TokenTest extends Testcase
 				array(), array('foo' => 'bar'), 'boo', 'bar', new \InvalidArgumentException,
 			),
 			array(
+				array(), array('token' => NULL), 'token', $comment_token, $comment_token,
+			),
+			array(
 				array('foo' => TRUE), array('foo' => NULL), 'foo', 'bar', 'bar',
 			),
 			array(
 				array('foo' => FALSE), array('foo' => NULL), 'foo', 'bar', new \InvalidArgumentException,
 			),
 		);
+	}
+
+	private function assert_parent_token($token)
+	{
+		if ($token instanceof Token)
+		{
+			$this->assertSame($this->object, $token->get('parent'));
+		}
 	}
 
 	protected function setup_with_validator_methods($attributes, $validation_methods = array())
@@ -161,20 +183,23 @@ class TokenTest extends Testcase
 	}
 
 	/**
-	 * @dataProvider  provide_parent
+	 * @expectedException  InvalidArgumentException
 	 */
-	public function test_parent($parent)
+	public function test_set_parent_self()
 	{
 		$this->setup_mock();
-		$this->object->set_parent($parent);
-		$this->assertSame($parent, $this->object->get_parent());
+		$this->object->set('parent', $this->object);
 	}
 
-	public function test_parent_self()
+	/**
+	 * @dataProvider  provide_parent
+	 */
+	public function test_set_parent($parent)
 	{
-		$this->setExpectedException('InvalidArgumentException');
 		$this->setup_mock();
-		$this->object->set_parent($this->object);
+		$this->set_expected_exception_from_argument($parent);
+		$this->object->set('parent', $parent);
+		$this->assertEquals($parent, $this->object->get('parent'));
 	}
 
 	public function provide_parent()

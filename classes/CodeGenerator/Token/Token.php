@@ -17,10 +17,6 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	private $attributes = array();
 	/**
-	 * @var  Token  Parent token
-	 */
-	private $parent = NULL;
-	/**
 	 * @var  array  Token attributes to validation mapping
 	 */
 	private $validation = array();
@@ -36,6 +32,7 @@ abstract class Token extends \CodeGenerator\Object
 	{
 		$this->assert_attribute_exists($attribute);
 		$this->assert_attribute_array($attribute);
+		$this->set_parent($attribute, $value);
 		return $this->set($attribute, array_merge($this->attributes[$attribute], array($value)));
 	}
 
@@ -62,6 +59,7 @@ abstract class Token extends \CodeGenerator\Object
 	{
 		$this->assert_attribute_exists($attribute);
 		$this->assert_attribute_valid($attribute, $value);
+		$this->set_parent($attribute, $value);
 		$this->attributes[$attribute] = $value;
 		return $this;
 	}
@@ -123,29 +121,14 @@ abstract class Token extends \CodeGenerator\Object
 	}
 
 	/**
-	 * Returns the containing token for this token
-	 * 
-	 * @return  Token
+	 * Sets token parent attribute
 	 */
-	public function get_parent()
+	private function set_parent($attribute, $item)
 	{
-		return $this->parent;
-	}
-
-	/**
-	 * Sets the containing token for this token
-	 * 
-	 * @param   Token  $parent  Parent token
-	 * @return  Token  self
-	 */
-	public function set_parent(Token $parent)
-	{
-		if ($parent === $this)
+		if ($attribute !== 'parent' AND $item instanceof self)
 		{
-			throw new \InvalidArgumentException('Token cannot be parent of itself');
+			$item->set('parent', $this);
 		}
-		$this->parent = $parent;
-		return $this;
 	}
 
 	/**
@@ -190,7 +173,12 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	protected function initialize()
 	{
-		// Nothing by default
+		$this->initialize_attributes(array(
+			'parent' => NULL,
+		));
+		$this->initialize_validation(array(
+			'parent' => 'parent_token',
+		));
 	}
 
 	/**
@@ -213,6 +201,14 @@ abstract class Token extends \CodeGenerator\Object
 		{
 			$this->validation[$attribute] = $rule;
 		}
+	}
+
+	/**
+	 * Validate token to be set as parent - may be NULL or another token
+	 */
+	public function validate_parent_token($value)
+	{
+		return ($value === NULL OR ($value instanceof self AND $value !== $this));
 	}
 
 	/**

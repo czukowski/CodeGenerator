@@ -72,9 +72,10 @@ class TokenFactory extends \CodeGenerator\Singleton
 	 * 
 	 * @param   string  $type
 	 * @param   mixed   $object
+	 * @param   mixed   $parent
 	 * @return  \CodeGenerator\Token
 	 */
-	public function transform($type, $object)
+	public function transform($type, $object, $parent = NULL)
 	{
 		if ( ! is_object($object))
 		{
@@ -85,6 +86,10 @@ class TokenFactory extends \CodeGenerator\Singleton
 		$classname = $this->get_classname($type);
 		if ($object AND $object instanceof $classname)
 		{
+			if ($parent instanceof \CodeGenerator\Token)
+			{
+				$object->set('parent', $parent);
+			}
 			return $object;
 		}
 		throw new \InvalidArgumentException('Cannot transform the object to '.ucfirst($type).' token');

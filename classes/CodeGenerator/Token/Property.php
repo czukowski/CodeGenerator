@@ -47,8 +47,7 @@ class Property extends Token
 		if (($comment = $this->get('comment')))
 		{
 			return $this->config->helper('tokenFactory')
-				->transform('DocComment', $comment)
-				->set('parent', $this);
+				->transform('DocComment', $comment, $this);
 		}
 	}
 

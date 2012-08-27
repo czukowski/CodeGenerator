@@ -57,8 +57,7 @@ class Method extends Token
 		if (($comment = $this->get('comment')))
 		{
 			return $this->config->helper('tokenFactory')
-				->transform('DocComment', $comment)
-				->set('parent', $this);
+				->transform('DocComment', $comment, $this);
 		}
 	}
 
@@ -85,8 +84,7 @@ class Method extends Token
 		if (($body = $this->get('body')))
 		{
 			return (string) $this->config->helper('tokenFactory')
-				->transform('Block', $body)
-				->set('parent', $this);
+				->transform('Block', $body, $this);
 		}
 	}
 

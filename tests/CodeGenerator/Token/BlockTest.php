@@ -127,9 +127,12 @@ class BlockTest extends Testcase
 
 	public function provide_offset_set()
 	{
+		$token = $this->get_config()
+			->helper('tokenFactory')
+			->create('DocComment');
 		return array(
 			array($this->get_items(), 0, '123', '123'),
-			array($this->get_items(), 1, FALSE, FALSE),
+			array($this->get_items(), 1, $token, $token),
 			array($this->get_items(), 2, NULL, new \OutOfRangeException),  // Setting NULL is the same as unset
 			array($this->get_items(), 3, TRUE, TRUE),
 			array($this->get_items(), 10, 3.14, 3.14),

@@ -22,7 +22,7 @@ class Method extends Token
 			'abstract' => NULL,
 			'name' => NULL,
 			'arguments' => array(),
-			'body' => NULL,
+			'body' => array(),
 		));
 		$this->initialize_validation(array(
 			'access' => 'access',
@@ -32,12 +32,13 @@ class Method extends Token
 
 	public function render()
 	{
+		$body_render = $this->render_body();
 		$lines = array(
 			$this->render_heading(),
-			$this->render_body(),
+			$body_render,
 			$this->render_footing(),
 		);
-		$glue = ($this->get('body') AND ! $this->get('abstract'))
+		$glue = ($body_render AND ! $this->get('abstract'))
 			? $this->config->get_format('line_end')
 			: '';
 		return implode($glue, $lines);
@@ -57,7 +58,7 @@ class Method extends Token
 		{
 			return $this->config->helper('tokenFactory')
 				->transform('DocComment', $comment)
-				->set_parent($this);
+				->set('parent', $this);
 		}
 	}
 
@@ -81,11 +82,11 @@ class Method extends Token
 		{
 			return '';
 		}
-		elseif (($body = $this->get('body')))
+		if (($body = $this->get('body')))
 		{
-			return $this->config->helper('tokenFactory')
+			return (string) $this->config->helper('tokenFactory')
 				->transform('Block', $body)
-				->set_parent($this);
+				->set('parent', $this);
 		}
 	}
 

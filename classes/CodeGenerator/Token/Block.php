@@ -101,6 +101,10 @@ class Block extends Token implements \ArrayAccess
 	{
 		$items = $this->get_items();
 		$items[$offset] = $value;
+		if ($value instanceof Token)
+		{
+			$value->set('parent', $this);
+		}
 		$this->set('items', $items);
 	}
 

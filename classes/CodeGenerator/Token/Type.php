@@ -40,14 +40,13 @@ class Type extends Token
 		{
 			return '';
 		}
+		$body_render = $this->render_body();
 		$lines = array(
 			$this->render_heading(),
-			$this->render_body(),
+			$body_render,
 			$this->render_footing(),
 		);
-		$glue = ($this->get('properties') OR $this->get('methods'))
-			? $this->config->get_format('line_end')
-			: '';
+		$glue = $body_render ? $this->config->get_format('line_end') : '';
 		return implode($glue, $lines);
 	}
 
@@ -68,7 +67,7 @@ class Type extends Token
 		{
 			return $this->config->helper('tokenFactory')
 				->transform('DocComment', $comment)
-				->set_parent($this);
+				->set('parent', $this);
 		}
 	}
 
@@ -112,12 +111,12 @@ class Type extends Token
 	{
 		return implode($this->get_methods_glue(), array_filter(array(
 			(string) $this->config->helper('tokenFactory')
-				->create('Block', array('items' => $this->get('properties')))
-				->set_parent($this),
+				->transform('Block', $this->get('properties'))
+				->set('parent', $this),
 			(string) $this->config->helper('tokenFactory')
-				->create('Block', array('items' => $this->get('methods')))
+				->transform('Block', $this->get('methods'))
 				->set('glue', $this->get_methods_glue())
-				->set_parent($this),
+				->set('parent', $this),
 		)));
 	}
 

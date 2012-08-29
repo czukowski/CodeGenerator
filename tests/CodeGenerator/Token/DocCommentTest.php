@@ -35,7 +35,7 @@ class DocCommentTest extends Testcase
 			),
 			array(
 				array('annotations' => array(
-					$this->_create_annotation('var', array('string')),
+					$this->create_annotation('var', array('string')),
 				)),
 				"/**\n".
 				" * @var  string\n".
@@ -43,10 +43,10 @@ class DocCommentTest extends Testcase
 			),
 			array(
 				array('annotations' => array(
-					$this->_create_annotation('param', array('string', '$input', 'Input string')),
-					$this->_create_annotation('param', array('integer', '&$output', 'Error code')),
-					$this->_create_annotation('param', array('bool', '$flag', 'Flags')),
-					$this->_create_annotation('return', array('integer')),
+					$this->create_annotation('param', array('string', '$input', 'Input string')),
+					$this->create_annotation('param', array('integer', '&$output', 'Error code')),
+					$this->create_annotation('param', array('bool', '$flag', 'Flags')),
+					$this->create_annotation('return', array('integer')),
 				)),
 				"/**\n".
 				" * @param   string   \$input    Input string\n".
@@ -57,9 +57,9 @@ class DocCommentTest extends Testcase
 			),
 			array(
 				array('annotations' => array(
-					$this->_create_annotation('param', array('string', '$input', 'Input string')),
-					$this->_create_annotation('param', array('integer', '&$output', 'Error code')),
-					$this->_create_annotation('throws', array('\InvalidArgumentException')),
+					$this->create_annotation('param', array('string', '$input', 'Input string')),
+					$this->create_annotation('param', array('integer', '&$output', 'Error code')),
+					$this->create_annotation('throws', array('\InvalidArgumentException')),
 				)),
 				"/**\n".
 				" * @param   string   \$input    Input string\n".
@@ -70,8 +70,8 @@ class DocCommentTest extends Testcase
 			array(
 				array(
 					'annotations' => array(
-						$this->_create_annotation('param', array('string', '$param', 'Input parameter')),
-						$this->_create_annotation('return', array('mixed')),
+						$this->create_annotation('param', array('string', '$param', 'Input parameter')),
+						$this->create_annotation('return', array('mixed')),
 					),
 					'text' => 'Returns different values based on the argument',
 				),
@@ -85,7 +85,7 @@ class DocCommentTest extends Testcase
 		);
 	}
 
-	private function _create_annotation($name, $columns)
+	private function create_annotation($name, $columns)
 	{
 		$this->setup_with_attributes(array(
 			'name' => $name,

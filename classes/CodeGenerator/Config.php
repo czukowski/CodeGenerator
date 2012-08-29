@@ -30,9 +30,7 @@ class Config
 			'char_length' => array(
 				'x09' => 4,  // tab (\t) char
 			),
-			'word_wrap' => array(
-				'comment_text' => TRUE,
-			),
+			'word_wrap' => TRUE,
 			'factory' => array(
 				'aliases' => array(
 					'Interface' => 'Type',

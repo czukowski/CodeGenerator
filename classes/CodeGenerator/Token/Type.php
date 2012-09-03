@@ -73,9 +73,23 @@ class Type extends Token
 	private function render_namespace()
 	{
 		return implode($this->config->get_format('line_end'), array_filter(array(
-			($namespace = $this->get('namespace')) ? 'namespace '.$namespace : '',
-			($use = $this->get('use')) ? 'use '.implode($this->config->get_format('line_end'), $use) : '',
+			$this->render_class_namespace(),
+			$this->render_use_namespace(),
 		)));
+	}
+
+	private function render_class_namespace()
+	{
+		return ($namespace = $this->get('namespace')) ? 'namespace '.$namespace.';' : '';
+	}
+
+	private function render_use_namespace()
+	{
+		if (($use = $this->get('use')))
+		{
+			$glue = ','.$this->config->get_format('line_end').$this->config->get_format('indent');
+			return 'use '.implode($glue, $use).';';
+		}
 	}
 
 	private function render_declaration()

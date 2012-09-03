@@ -100,15 +100,16 @@ class TypeTest extends Testcase
 					'type' => 'interface',
 					'name' => 'ISuperObject',
 					'namespace' => '\Foo',
-					'use' => array('\Foo\Bar as Bar'),
+					'use' => array('\Foo\Bar as Bar', '\Foo\Fubar'),
 					'methods' => array('// Here go class methods'),
 				),
 				"/**\n".
 				" * @package Fubar\n".
 				" */\n".
 				"\n".
-				"namespace \Foo\n".
-				"use \Foo\Bar as Bar\n".
+				"namespace \Foo;\n".
+				"use \Foo\Bar as Bar,\n".
+				"\t\Foo\Fubar;\n".
 				"\n".
 				"interface ISuperObject\n".
 				"{\n".

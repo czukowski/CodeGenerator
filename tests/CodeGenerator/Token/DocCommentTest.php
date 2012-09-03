@@ -85,14 +85,57 @@ class DocCommentTest extends Testcase
 		);
 	}
 
+	/**
+	 * @dataProvider  provide_word_wrap_render
+	 */
+	public function test_word_wrap_render($attributes, $word_wrap, $line_width, $expected)
+	{
+		$this->setup_word_wrap_render($attributes, $word_wrap, $line_width);
+		$this->assertEquals($expected, $this->object->render());
+	}
+
+	public function provide_word_wrap_render()
+	{
+		$text = 'Suppose this is a really quite long method description';
+		return array(
+			array(
+				array('text' => $text), FALSE, 30,
+				"/**\n".
+				" * $text\n".
+				" */",
+			),
+			array(
+				array('text' => $text), TRUE, 30,
+				"/**\n".
+				" * Suppose this is a really\n".
+				" * quite long method\n".
+				" * description\n".
+				" */",
+			),
+		);
+	}
+
+	private function setup_word_wrap_render($attributes, $word_wrap, $line_width)
+	{
+		$this->setup_with_attributes($attributes, array(
+			'arguments' => array(
+				new \CodeGenerator\Config(array(
+					'options' => array(
+						'line_width' => $line_width,
+						'word_wrap' => $word_wrap,
+					),
+				)),
+			),
+		));
+	}
+
 	private function create_annotation($name, $columns)
 	{
-		$this->setup_with_attributes(array(
-			'name' => $name,
-			'columns' => $columns,
-		), array(
-			'classname' => __NAMESPACE__.'\Annotation',
-		));
-		return $this->object;
+		return $this->get_config()
+			->helper('tokenFactory')
+			->create('Annotation', array(
+				'name' => $name,
+				'columns' => $columns,
+			));
 	}
 }

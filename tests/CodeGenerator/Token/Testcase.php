@@ -57,6 +57,10 @@ class Testcase extends \CodeGenerator\Framework\Testcase
 
 	protected function restore_helpers()
 	{
+		if ( ! $this->config)
+		{
+			return;
+		}
 		$current_helpers = $this->get_object_property($this->config, 'helpers')
 			->getValue($this->config);
 		foreach ($this->_backup_helpers as $helper => $object)

@@ -49,7 +49,7 @@ class Block extends Token implements \ArrayAccess, \Iterator
 	{
 		if ( ! $this->config->helper('arrays')->is_array($items))
 		{
-			return;
+			return '';
 		}
 		foreach ($items as &$item)
 		{

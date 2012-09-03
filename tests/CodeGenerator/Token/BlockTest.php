@@ -66,11 +66,12 @@ class BlockTest extends Testcase
 				"\n".
 				"\t\$b = \$a;",
 			),
+			// Items attribute that is not array is also supported
 			array(
 				array(
-					'items' => 'Weird argument',
+					'items' => '// Some comment',
 				),
-				NULL,
+				"\t// Some comment",
 			),
 		);
 	}

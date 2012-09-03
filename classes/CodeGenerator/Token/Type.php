@@ -52,8 +52,9 @@ class Type extends Token
 
 	private function render_heading()
 	{
-		$heading = implode($this->get_methods_glue(), array_filter(array(
-			$this->render_comment(),
+		$heading = $this->render_comment();
+		$heading .= $heading ? $this->config->get_format('line_end') : '';
+		$heading .= implode($this->get_methods_glue(), array_filter(array(
 			$this->render_namespace(),
 			$this->render_declaration(),
 		)));

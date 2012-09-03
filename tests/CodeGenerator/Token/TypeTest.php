@@ -106,7 +106,6 @@ class TypeTest extends Testcase
 				"/**\n".
 				" * @package Fubar\n".
 				" */\n".
-				"\n".
 				"namespace \Foo;\n".
 				"use \Foo\Bar as Bar,\n".
 				"\t\Foo\Fubar;\n".

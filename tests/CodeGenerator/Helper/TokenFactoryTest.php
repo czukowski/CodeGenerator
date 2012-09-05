@@ -38,6 +38,16 @@ class TokenFactoryTest extends Testcase
 			array('Function', array('name' => 'something'), '\CodeGenerator\Token\Method'),
 			array('Method', array('name' => 'something'), '\CodeGenerator\Token\Method'),
 			array('Interface', array(), '\CodeGenerator\Token\Type'),
+			array('Class', array(), '\CodeGenerator\Token\Type'),
+			array('Function', array(), '\CodeGenerator\Token\Method'),
+			array('If', array(), '\CodeGenerator\Token\Construct'),
+			array('Elseif', array(), '\CodeGenerator\Token\Construct'),
+			array('Else', array(), '\CodeGenerator\Token\Construct'),
+			array('For', array(), '\CodeGenerator\Token\Construct'),
+			array('Foreach', array(), '\CodeGenerator\Token\Construct'),
+			array('While', array(), '\CodeGenerator\Token\Construct'),
+			array('Do', array(), '\CodeGenerator\Token\Construct'),
+			array('Switch', array(), '\CodeGenerator\Token\Construct'),
 		);
 	}
 

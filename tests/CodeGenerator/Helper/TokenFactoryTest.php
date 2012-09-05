@@ -48,6 +48,7 @@ class TokenFactoryTest extends Testcase
 			array('While', array(), '\CodeGenerator\Token\Construct'),
 			array('Do', array(), '\CodeGenerator\Token\Construct'),
 			array('Switch', array(), '\CodeGenerator\Token\Construct'),
+			array('Case', array(), '\CodeGenerator\Token\SwitchCase'),
 		);
 	}
 
@@ -81,7 +82,7 @@ class TokenFactoryTest extends Testcase
 				)),
 				$block,
 				'\CodeGenerator\Token\DocComment',
-			)
+			),
 		);
 	}
 

@@ -44,6 +44,7 @@ class Config
 					'While' => 'Construct',
 					'Do' => 'Construct',
 					'Switch' => 'Construct',
+					'Case' => 'SwitchCase',
 				),
 				'attributes' => array(
 					'Interface' => array(

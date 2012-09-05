@@ -50,12 +50,21 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				$factory->create('Property', array(
 					'access' => 'private',
 					'name' => 'values',
+					'comment' => $factory->create('DocComment', array(
+						'annotations' => array(
+							$factory->create('Annotation', array(
+								'name' => 'var',
+								'columns' => array('array', 'Values array'),
+							)),
+						),
+					)),
 				)),
 			),
 			'methods' => array(
 				$factory->create('Method', array(
 					'access' => 'public',
 					'name' => '__construct',
+					'comment' => 'Class constructor',
 					'arguments' => array(
 						$factory->create('Argument', array(
 							'constraint' => 'array',
@@ -86,12 +95,55 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				"\n".
 				"class TestClass\n".
 				"{\n".
+				"\t/**\n".
+				"\t * @var  array  Values array\n".
+				"\t */\n".
 				"\tprivate \$values;\n".
 				"\n".
+				"\t/**\n".
+				"\t * Class constructor\n".
+				"\t */\n".
 				"\tpublic function __construct(array \$values)\n".
 				"\t{\n".
 				"\t\t\$this->values = \$values;\n".
 				"\t}\n".
+				"}",
+			),
+			// Non-default config values
+			array(
+				array(
+					'format' => array(
+						'brace_open' => " {",
+						'indent' => "    ",
+					),
+					'options' => array(
+						'line_width' => 40,
+					),
+				),
+				"/**\n".
+				" * This is a generated test class to\n".
+				" * check the render integration across\n".
+				" * most of the tokens\n".
+				" * \n".
+				" * @author     Korney Czukowski\n".
+				" * @copyright  (c) 2012 Korney Czukowski\n".
+				" * @license    MIT License\n".
+				" */\n".
+				"namespace CodeGenerator;\n".
+				"use CodeGenerator\Math\SimpleOptimizer;\n".
+				"\n".
+				"class TestClass {\n".
+				"    /**\n".
+				"     * @var  array  Values array\n".
+				"     */\n".
+				"    private \$values;\n".
+				"\n".
+				"    /**\n".
+				"     * Class constructor\n".
+				"     */\n".
+				"    public function __construct(array \$values) {\n".
+				"        \$this->values = \$values;\n".
+				"    }\n".
 				"}",
 			),
 		);

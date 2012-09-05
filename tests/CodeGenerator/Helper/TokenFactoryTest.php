@@ -19,7 +19,12 @@ class TokenFactoryTest extends Testcase
 		$this->set_expected_exception_from_argument($expected);
 		$actual = $this->object->create($name, $attributes);
 		$this->assertInstanceOf($expected, $actual);
-		$this->assert_attributes_equal($attributes, $actual);
+		$default_attributes = $this->get_config()
+			->get_options('factory.attributes.'.ucfirst($name), array());
+		$expected_attributes = $this->get_config()
+			->helper('arrays')
+			->merge($default_attributes, $attributes);
+		$this->assert_attributes_equal($expected_attributes, $actual);
 	}
 
 	public function provide_create()
@@ -32,6 +37,7 @@ class TokenFactoryTest extends Testcase
 			array('Argument', array('name' => 'var'), '\CodeGenerator\Token\Argument'),
 			array('Function', array('name' => 'something'), '\CodeGenerator\Token\Method'),
 			array('Method', array('name' => 'something'), '\CodeGenerator\Token\Method'),
+			array('Interface', array(), '\CodeGenerator\Token\Type'),
 		);
 	}
 

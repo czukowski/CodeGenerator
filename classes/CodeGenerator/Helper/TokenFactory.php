@@ -30,7 +30,8 @@ class TokenFactory extends \CodeGenerator\Singleton
 			throw new \InvalidArgumentException('TokenFactory.create() takes an array as the 2nd argument');
 		}
 		$token = new $classname($this->config);
-		$attributes = $this->config->helper('arrays')->merge($attributes, $this->get_type_defaults($type));
+		$attributes = $this->config->helper('arrays')
+			->merge($attributes, $this->get_type_defaults($type));
 		foreach ($attributes as $name => $value)
 		{
 			$token->set($name, $value);
@@ -64,7 +65,7 @@ class TokenFactory extends \CodeGenerator\Singleton
 	 */
 	private function get_type_defaults($type)
 	{
-		return $this->config->get_options('factory.attributes.'.$this->get_type_by_alias($type), array());
+		return $this->config->get_options('factory.attributes.'.$type, array());
 	}
 
 	/**

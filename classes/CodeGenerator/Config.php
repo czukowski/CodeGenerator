@@ -36,10 +36,39 @@ class Config
 					'Interface' => 'Type',
 					'Class' => 'Type',
 					'Function' => 'Method',
+					'If' => 'Construct',
+					'Elseif' => 'Construct',
+					'Else' => 'Construct',
+					'For' => 'Construct',
+					'Foreach' => 'Construct',
+					'While' => 'Construct',
+					'Do' => 'Construct',
+					'Switch' => 'Construct',
 				),
 				'attributes' => array(
 					'Interface' => array(
 						'type' => 'interface',
+					),
+					'If' => array(
+						'type' => 'if',
+					),
+					'Elseif' => array(
+						'type' => 'elseif',
+					),
+					'For' => array(
+						'type' => 'for',
+					),
+					'Foreach' => array(
+						'type' => 'foreach',
+					),
+					'While' => array(
+						'type' => 'while',
+					),
+					'Do' => array(
+						'type' => 'do',
+					),
+					'Switch' => array(
+						'type' => 'switch',
 					),
 				),
 				'transform' => array(

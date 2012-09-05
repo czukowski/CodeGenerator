@@ -17,7 +17,7 @@ class ValidatorTest extends Testcase
 	public function test_validate_boolean($value, $expected)
 	{
 		$this->setup_object();
-		$this->assertEquals($expected, $this->object->validate_boolean($value));
+		$this->assertSame($expected, $this->object->validate_boolean($value));
 	}
 
 	public function provide_boolean()
@@ -39,7 +39,7 @@ class ValidatorTest extends Testcase
 	public function test_validate_constraint($constraint, $expected)
 	{
 		$this->setup_object();
-		$this->assertEquals($expected, $this->object->validate_constraint($constraint));
+		$this->assertSame($expected, $this->object->validate_constraint($constraint));
 	}
 
 	public function provide_constraint()
@@ -67,7 +67,7 @@ class ValidatorTest extends Testcase
 	public function test_validate_integer($value, $expected)
 	{
 		$this->setup_object();
-		$this->assertEquals($expected, $this->object->validate_integer($value));
+		$this->assertSame($expected, $this->object->validate_integer($value));
 	}
 
 	public function provide_integer()
@@ -90,7 +90,7 @@ class ValidatorTest extends Testcase
 	public function test_validate_name($name, $expected)
 	{
 		$this->setup_object();
-		$this->assertEquals($expected, $this->object->validate_name($name));
+		$this->assertSame($expected, $this->object->validate_name($name));
 	}
 
 	public function provide_name()

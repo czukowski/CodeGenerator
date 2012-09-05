@@ -12,6 +12,28 @@ namespace CodeGenerator\Helper;
 class ValidatorTest extends Testcase
 {	
 	/**
+	 * @dataProvider  provide_boolean
+	 */
+	public function test_validate_boolean($value, $expected)
+	{
+		$this->setup_object();
+		$this->assertEquals($expected, $this->object->validate_boolean($value));
+	}
+
+	public function provide_boolean()
+	{
+		return array(
+			array(NULL, FALSE),
+			array(TRUE, TRUE),
+			array(FALSE, TRUE),
+			array(0, FALSE),
+			array(3.14, FALSE),
+			array('123', FALSE),
+			array(new \stdClass, FALSE),
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_constraint
 	 */
 	public function test_validate_constraint($constraint, $expected)

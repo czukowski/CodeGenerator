@@ -14,6 +14,14 @@ class Validator extends \CodeGenerator\Singleton
 	const NAME_PATTERN = '[A-Za-z_][A-Za-z0-9_]+?';
 
 	/**
+	 * Tests that the value is boolean
+	 */
+	public function validate_boolean($value)
+	{
+		return is_bool($value);
+	}
+
+	/**
 	 * Tests that the value is a string that can be used as a class name
 	 */
 	public function validate_constraint($value)

@@ -35,9 +35,28 @@ class Block extends Token implements \ArrayAccess, \Iterator
 	{
 		if (($items = $this->get('items')))
 		{
+			$this->assert_items_array();
 			return $this->render_block($this->get('items'));
 		}
 		return '';
+	}
+
+	public function add($attribute, $value)
+	{
+		if ($attribute === 'items')
+		{
+			$this->assert_items_array();
+		}
+		parent::add($attribute, $value);
+	}
+
+	private function assert_items_array()
+	{
+		$items = $this->get('items');
+		if ( ! $this->config->helper('arrays')->is_array($items))
+		{
+			$this->set('items', array($items));
+		}
 	}
 
 	/**
@@ -47,10 +66,6 @@ class Block extends Token implements \ArrayAccess, \Iterator
 	 */
 	protected function render_block($items)
 	{
-		if ( ! $this->config->helper('arrays')->is_array($items))
-		{
-			$items = array($items);
-		}
 		foreach ($items as &$item)
 		{
 			$item = $this->render_item($item);

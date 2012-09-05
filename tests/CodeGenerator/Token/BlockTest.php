@@ -13,6 +13,61 @@ namespace CodeGenerator\Token;
 class BlockTest extends Testcase
 {
 	/**
+	 * @dataProvider  provide_add
+	 */
+	public function test_add($attributes, $add_attribute, $add_value, $expected)
+	{
+		$this->setup_with_attributes($attributes);
+		$this->set_expected_exception_from_argument($expected);
+		$this->object->add($add_attribute, $add_value);
+		foreach ($expected as $attribute => $expected_value)
+		{
+			$this->assertSame($expected_value, $this->object->get($attribute));
+		}
+	}
+
+	public function provide_add()
+	{
+		return array(
+			array(
+				array(),
+				'items',
+				'item 1',
+				array(
+					'items' => array('item 1'),
+				),
+			),
+			array(
+				array('indentation' => 2),
+				'items',
+				NULL,
+				array(
+					'items' => array(NULL),
+					'indentation' => 2,
+				),
+			),
+			array(
+				array('items' => 'item 1'),
+				'items',
+				'item 2',
+				array(
+					'items' => array('item 1', 'item 2'),
+				),
+			),
+			array(
+				array(
+					'items' => array('item 1', 'item 2'),
+				),
+				'items',
+				'item 3',
+				array(
+					'items' => array('item 1', 'item 2', 'item 3'),
+				),
+			),
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_render
 	 */
 	public function test_render($attributes, $expected)

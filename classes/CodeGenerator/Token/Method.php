@@ -68,7 +68,8 @@ class Method extends Token
 			$this->get('access') ? : NULL,
 			$this->render_boolean_attribute('static'),
 			'function',
-			$this->get('name'),
+			$this->config->helper('tokenPartsRenderer')
+				->render_name($this->get('name')),
 		)));
 		$line .= '('.implode(', ', $this->get('arguments')).')';
 		$line .= $this->get('abstract') === TRUE ? '' : $this->config->get_format('brace_open');

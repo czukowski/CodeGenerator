@@ -56,7 +56,8 @@ class Property extends Token
 		return implode(' ', array_filter(array(
 			$this->get('access'),
 			$this->render_boolean_attribute('static'),
-			'$'.$this->get('name'),
+			'$'.$this->config->helper('tokenPartsRenderer')
+				->render_name($this->get('name')),
 			($this->get('default') ? '= '.$this->get('default') : '')
 		))).';';
 	}

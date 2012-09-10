@@ -38,6 +38,10 @@ class PropertyTest extends Testcase
 				'public static $instance;',
 			),
 			array(
+				array('name' => 'service instance'),
+				'public $service_instance;',
+			),
+			array(
 				array('name' => 'list', 'default' => 'array()'),
 				'public $list = array();',
 			),

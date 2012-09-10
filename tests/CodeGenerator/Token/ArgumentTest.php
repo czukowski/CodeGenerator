@@ -42,6 +42,9 @@ class ArgumentTest extends Testcase
 			array(
 				array('name' => 'user', 'constraint' => '\Auth\User', 'default' => 'NULL'), '\Auth\User $user = NULL',
 			),
+			array(
+				array('name' => 'user', 'constraint' => '\Auth\Priveleged User'), '\Auth\Priveleged_User $user',
+			),
 		);
 	}
 }

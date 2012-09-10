@@ -99,7 +99,8 @@ class Type extends Token
 			$this->render_boolean_attribute('abstract'),
 			$this->render_boolean_attribute('final'),
 			$this->get('type'),
-			$this->get('name'),
+			$this->config->helper('tokenPartsRenderer')
+				->render_class_name($this->get('name')),
 			$this->render_extends(),
 			$this->render_implements(),
 		)));

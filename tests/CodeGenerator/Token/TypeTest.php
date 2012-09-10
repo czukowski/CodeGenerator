@@ -40,6 +40,15 @@ class TypeTest extends Testcase
 				"interface IDoSomething\n".
 				"{}",
 			),
+			// Phrase name
+			array(
+				array(
+					'type' => 'interface',
+					'name' => 'i do something',
+				),
+				"interface I_Do_Something\n".
+				"{}",
+			),
 			// Basic class w/extends and implements
 			array(
 				array(

@@ -60,6 +60,14 @@ class MethodTest extends Testcase
 				"function get_value()\n".
 				"{}",
 			),
+			// Phrase name
+			array(
+				array(
+					'name' => 'get value',
+				),
+				"function get_value()\n".
+				"{}",
+			),
 			// Name, some body, comment
 			array(
 				array(

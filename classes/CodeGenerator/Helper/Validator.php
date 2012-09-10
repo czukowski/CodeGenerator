@@ -11,7 +11,10 @@ namespace CodeGenerator\Helper;
 
 class Validator extends \CodeGenerator\Singleton
 {
-	const NAME_PATTERN = '[A-Za-z_][A-Za-z0-9_]+?';
+	/**
+	 * Valid variable, class name, etc. characters, plus a space
+	 */
+	const NAME_PATTERN = '[A-Za-z_][A-Za-z0-9_ ]+?';
 
 	/**
 	 * Tests that the value is boolean

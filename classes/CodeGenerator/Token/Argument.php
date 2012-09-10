@@ -33,8 +33,46 @@ class Argument extends Token
 		{
 			return '';
 		}
-		return ($this->get('constraint') ? $this->get('constraint').' ' : '')
-			.'$'.$this->get('name')
-			.($this->get('default') ? ' = '.$this->get('default') : '');
+		return $this->render_constraint()
+			.$this->render_name()
+			.$this->render_default();
+	}
+
+	/**
+	 * Render default part
+	 */
+	private function render_constraint()
+	{
+		if (($constraint = $this->get('constraint')))
+		{
+			if ($constraint !== 'array')
+			{
+				$constraint = $this->config->helper('tokenPartsRenderer')
+					->render_class_name($constraint);
+			}
+			return $constraint.' ';
+		}
+		return '';
+	}
+
+	/**
+	 * Render variable name part
+	 */
+	private function render_name()
+	{
+		return '$'.$this->config->helper('tokenPartsRenderer')
+			->render_name($this->get('name'));
+	}
+
+	/**
+	 * Render default variable value part
+	 */
+	private function render_default()
+	{
+		if (($default = $this->get('default')))
+		{
+			return ' = '.$default;
+		}
+		return '';
 	}
 }

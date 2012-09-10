@@ -37,6 +37,12 @@ class TokenPartsRenderer extends \CodeGenerator\Singleton
 	 */
 	public function render_name($str)
 	{
+		// If the string is not a phrase, return the original string
+		if (strpos($str, ' ') === FALSE)
+		{
+			return $str;
+		}
+		// Otherwise return formatted string appropriately to the config option
 		switch ($this->config->get_options('names'))
 		{
 			case 'camelcase':
@@ -48,6 +54,7 @@ class TokenPartsRenderer extends \CodeGenerator\Singleton
 					->underscore($str);
 				break;
 		}
+		// Break on invalid config option
 		throw new \LogicException('Invalid config option `names`');
 	}
 }

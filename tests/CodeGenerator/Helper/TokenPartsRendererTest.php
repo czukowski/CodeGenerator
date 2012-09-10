@@ -27,12 +27,18 @@ class TokenPartsRendererTest extends Testcase
 	public function provide_render_class_name()
 	{
 		return array(
+			// Phrase names
 			array('camelcase', 'some class name', 'SomeClassName'),
 			array('camelcase', 'Some Class Name', 'SomeClassName'),
 			array('underscore', 'some class name', 'Some_Class_Name'),
 			array('underscore', 'Some Class Name', 'Some_Class_Name'),
+			// Class names with namespaces
 			array('camelcase', 'Namespace\Some Class Name', 'Namespace\SomeClassName'),
 			array('underscore', 'Namespace\some class name', 'Namespace\Some_Class_Name'),
+			// Already formatted names will not be changed
+			array('camelcase', 'Some_Class_Name', 'Some_Class_Name'),
+			array('underscore', 'SomeClassName', 'SomeClassName'),
+			// Invalid config option
 			array('anything else', 'Some Class Name', new \LogicException),
 		);
 	}
@@ -53,10 +59,15 @@ class TokenPartsRendererTest extends Testcase
 	public function provide_render_name()
 	{
 		return array(
+			// Phrase names
 			array('camelcase', 'some variable name', 'someVariableName'),
 			array('camelcase', 'Some Variable Name', 'someVariableName'),
 			array('underscore', 'some variable name', 'some_variable_name'),
 			array('underscore', 'Some Variable Name', 'Some_Variable_Name'),
+			// Already formatted names will not be changed
+			array('camelcase', 'Some_Class_Name', 'Some_Class_Name'),
+			array('underscore', 'SomeClassName', 'SomeClassName'),
+			// Invalid config option
 			array('anything else', 'Some Variable Name', new \LogicException),
 		);
 	}

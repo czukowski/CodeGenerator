@@ -23,6 +23,8 @@ class ConstructTest extends Testcase
 
 	public function provide_render()
 	{
+		$factory = $this->get_config()
+			->helper('tokenFactory');
 		return array(
 			// Type attribute not set
 			array(
@@ -96,6 +98,40 @@ class ConstructTest extends Testcase
 				"\t\$this->loop();\n".
 				"}\n".
 				"while (TRUE);",
+			),
+			// Switch
+			array(
+				array(
+					'type' => 'switch',
+					'condition' => '$error_code',
+					'body' => array(
+						$factory->create('Case', array(
+							'match' => 'TRUE',
+							'body' => 'throw new \\Exception;',
+							'break' => TRUE,
+						)),
+						$factory->create('Case', array(
+							'match' => 'FALSE',
+							'body' => 'return $result;',
+							'break' => TRUE,
+						)),
+						$factory->create('Case', array(
+							'default' => TRUE,
+							'body' => 'throw new \\LogicException;',
+						)),
+					),
+				),
+				"switch (\$error_code)\n".
+				"{\n".
+				"\tcase TRUE:\n".
+				"\t\tthrow new \Exception;\n".
+				"\t\tbreak;\n".
+				"\tcase FALSE:\n".
+				"\t\treturn \$result;\n".
+				"\t\tbreak;\n".
+				"\tdefault:\n".
+				"\t\tthrow new \LogicException;\n".
+				"}",
 			),
 		);
 	}

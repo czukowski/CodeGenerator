@@ -91,6 +91,16 @@ abstract class Token extends \CodeGenerator\Object
 	}
 
 	/**
+	 * @param   string   $attribute
+	 * @return  boolean
+	 */
+	private function is_attribute_array($attribute)
+	{
+		return $this->config->helper('arrays')
+			->is_array($this->attributes[$attribute]);
+	}
+
+	/**
 	 * Asserts that token attribute is array
 	 * 
 	 * @param   string  $attribute
@@ -98,7 +108,7 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	private function assert_attribute_array($attribute)
 	{
-		if ( ! $this->config->helper('arrays')->is_array($this->attributes[$attribute]))
+		if ( ! $this->is_attribute_array($attribute))
 		{
 			throw new \InvalidArgumentException($this->get_type().'.'.$attribute.' is not array');
 		}

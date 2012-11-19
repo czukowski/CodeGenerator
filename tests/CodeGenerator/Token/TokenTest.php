@@ -119,6 +119,9 @@ class TokenTest extends Testcase
 				array(), array('ts' => array()), 'ts', array($token_1, $token_2), array($token_1, $token_2),
 			),
 			array(
+				array(), array('token' => array()), 'token', $token_2, array($token_2),
+			),
+			array(
 				array('foo' => TRUE), array('foo' => NULL), 'foo', 'bar', 'bar',
 			),
 			array(

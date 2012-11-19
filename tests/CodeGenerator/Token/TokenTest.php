@@ -95,7 +95,10 @@ class TokenTest extends Testcase
 
 	public function provide_set()
 	{
-		$comment_token = $this->get_config()
+		$token_1 = $this->get_config()
+			->helper('tokenFactory')
+			->create('DocComment');
+		$token_2 = $this->get_config()
 			->helper('tokenFactory')
 			->create('DocComment');
 		// [validation, attributes, key, set_value, expected_set]
@@ -110,7 +113,10 @@ class TokenTest extends Testcase
 				array(), array('foo' => 'bar'), 'boo', 'bar', new \InvalidArgumentException,
 			),
 			array(
-				array(), array('token' => NULL), 'token', $comment_token, $comment_token,
+				array(), array('token' => NULL), 'token', $token_1, $token_1,
+			),
+			array(
+				array(), array('ts' => array()), 'ts', array($token_1, $token_2), array($token_1, $token_2),
 			),
 			array(
 				array('foo' => TRUE), array('foo' => NULL), 'foo', 'bar', 'bar',
@@ -153,11 +159,14 @@ class TokenTest extends Testcase
 		);
 	}
 
-	private function assert_parent_token($token)
+	private function assert_parent_token($tokens)
 	{
-		if ($token instanceof Token)
+		foreach ( (array) $tokens as $token)
 		{
-			$this->assertSame($this->object, $token->get('parent'));
+			if ($token instanceof Token)
+			{
+				$this->assertSame($this->object, $token->get('parent'));
+			}
 		}
 	}
 

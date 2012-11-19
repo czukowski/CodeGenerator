@@ -121,6 +121,38 @@ class TokenTest extends Testcase
 		);
 	}
 
+	/**
+	 * @dataProvider  provide_has
+	 */
+	public function test_has($attributes, $has_key, $expected)
+	{
+		$this->setup_with_validator_helper($attributes);
+		$actual = $this->object->has($has_key);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function provide_has()
+	{
+		// [attributes, key, set_value, expected_set]
+		return array(
+			array(
+				array('foo' => 'bar'), 'foo', TRUE,
+			),
+			array(
+				array('foo' => 'bar', 'rab' => 'oof'), 'foo', TRUE,
+			),
+			array(
+				array('foo' => 'bar'), 'bar', FALSE,
+			),
+			array(
+				array('foo' => NULL), 'foo', TRUE,
+			),
+			array(
+				array('foo' => NULL), 'bar', FALSE,
+			),
+		);
+	}
+
 	private function assert_parent_token($token)
 	{
 		if ($token instanceof Token)

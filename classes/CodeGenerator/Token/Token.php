@@ -66,6 +66,17 @@ abstract class Token extends \CodeGenerator\Object
 	}
 
 	/**
+	 * Tests attribute exists in the token
+	 * 
+	 * @param   string   $attribute
+	 * @return  boolean
+	 */
+	public function has($attribute)
+	{
+		return array_key_exists($attribute, $this->attributes);
+	}
+
+	/**
 	 * Asserts that token attribute exists
 	 * 
 	 * @param   string  $attribute
@@ -73,7 +84,7 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	private function assert_attribute_exists($attribute)
 	{
-		if ( ! array_key_exists($attribute, $this->attributes))
+		if ( ! $this->has($attribute))
 		{
 			throw new \InvalidArgumentException($this->get_type().'.'.$attribute.' does not exist');
 		}

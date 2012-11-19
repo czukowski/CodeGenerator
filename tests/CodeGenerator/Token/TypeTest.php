@@ -54,10 +54,10 @@ class TypeTest extends Testcase
 				array(
 					'type' => 'class',
 					'name' => 'Vehicle',
-					'extends' => 'Tech',
-					'implements' => array('IDoSomething', 'IMove'),
+					'extends' => 'Tech object',
+					'implements' => array('I Do Something', 'I Move'),
 				),
-				"class Vehicle extends Tech implements IDoSomething, IMove\n".
+				"class Vehicle extends Tech_Object implements I_Do_Something, I_Move\n".
 				"{}",
 			),
 			// Final class
@@ -108,16 +108,16 @@ class TypeTest extends Testcase
 					'comment' => "@package Fubar",
 					'type' => 'interface',
 					'name' => 'ISuperObject',
-					'namespace' => '\Foo',
-					'use' => array('\Foo\Bar as Bar', '\Foo\Fubar'),
+					'namespace' => '\Fu bar',
+					'use' => array(array('\Fu bar\Bar', 'Bar'), '\Fu bar\Fu'),
 					'methods' => array('// Here go class methods'),
 				),
 				"/**\n".
 				" * @package Fubar\n".
 				" */\n".
-				"namespace \Foo;\n".
-				"use \Foo\Bar as Bar,\n".
-				"\t\Foo\Fubar;\n".
+				"namespace \Fu_Bar;\n".
+				"use \Fu_Bar\Bar as Bar,\n".
+				"\t\Fu_Bar\Fu;\n".
 				"\n".
 				"interface ISuperObject\n".
 				"{\n".
@@ -154,6 +154,38 @@ class TypeTest extends Testcase
 			array('class', TRUE),
 			array('interface', TRUE),
 			array('something else', FALSE),
+			array(7.62, FALSE),
+			array(TRUE, FALSE),
+			array(FALSE, FALSE),
+			array(NULL, FALSE),
+			array(new \stdClass, FALSE),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_validate_use
+	 */
+	public function test_validate_use($value, $expected)
+	{
+		$this->setup_object();
+		$this->assertEquals($expected, $this->object->validate_use($value));
+	}
+
+	public function provide_validate_use()
+	{
+		return array(
+			array('classname', FALSE),
+			array('class name', FALSE),
+			array('\namespace name\class name', FALSE),
+			array(array('classname'), TRUE),
+			array(array('class name'), TRUE),
+			array(array('\namespace name\class name'), TRUE),
+			array(array('\namespace name\class name', 'name'), TRUE),
+			array(array(array('\namespace name\class name', 'class name'), 'name'), TRUE),
+			array(array(), FALSE),
+			array(array('\namespace name\class name', 'name', 3.14), FALSE),
+			array(array(array('\namespace name\class name', 'class name', 'another name'), 'name'), FALSE),
+			array('something/else', FALSE),
 			array(7.62, FALSE),
 			array(TRUE, FALSE),
 			array(FALSE, FALSE),

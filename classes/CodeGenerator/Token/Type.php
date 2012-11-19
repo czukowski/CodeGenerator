@@ -31,6 +31,7 @@ class Type extends Token
 		));
 		$this->initialize_validation(array(
 			'type' => 'type',
+			'use' => 'use',
 		));
 	}
 
@@ -81,7 +82,10 @@ class Type extends Token
 
 	private function render_class_namespace()
 	{
-		return ($namespace = $this->get('namespace')) ? 'namespace '.$namespace.';' : '';
+		if (($namespace = $this->get('namespace')))
+		{
+			return 'namespace '.call_user_func($this->get_name_renderer(), $namespace).';';
+		}
 	}
 
 	private function render_use_namespace()
@@ -89,8 +93,20 @@ class Type extends Token
 		if (($use = $this->get('use')))
 		{
 			$glue = ','.$this->config->get_format('line_end').$this->config->get_format('indent');
-			return 'use '.implode($glue, $use).';';
+			return 'use '.implode($glue, array_map(array($this, 'render_use_namespace_item'), $use)).';';
 		}
+	}
+
+	protected function render_use_namespace_item($item)
+	{
+		$renderer = $this->get_name_renderer();
+		$item = (array) $item;
+		$line = call_user_func($renderer, $item[0]);
+		if (isset($item[1]))
+		{
+			$line .= ' as '.$item[1];
+		}
+		return $line;
 	}
 
 	private function render_declaration()
@@ -110,7 +126,8 @@ class Type extends Token
 	{
 		if (($classname = $this->get('extends')))
 		{
-			return 'extends '.$classname;
+			return 'extends '.$this->config->helper('tokenPartsRenderer')
+				->render_class_name($classname);
 		}
 	}
 
@@ -118,7 +135,7 @@ class Type extends Token
 	{
 		if (($interfaces = $this->get('implements')))
 		{
-			return 'implements '.implode(', ', $interfaces);
+			return 'implements '.implode(', ', array_map($this->get_name_renderer(), $interfaces));
 		}
 	}
 
@@ -143,8 +160,32 @@ class Type extends Token
 		return str_repeat($this->config->get_format('line_end'), 2);
 	}
 
+	private function get_name_renderer()
+	{
+		return array($this->config->helper('tokenPartsRenderer'), 'render_class_name');
+	}
+
 	public function validate_type($value)
 	{
 		return in_array($value, array('class', 'interface'), TRUE);
+	}
+
+	public function validate_use($values)
+	{
+		if ( ! is_array($values) OR empty($values))
+		{
+			return FALSE;
+		}
+		$validator = $this->config->helper('validator');
+		foreach ($values as $value)
+		{
+			$passed = ((is_string($value) AND $validator->validate_constraint($value))
+				OR (is_array($value) AND count($value) === 2 AND $validator->validate_constraint($value[0]) AND $validator->validate_name($value[1])));
+			if ( ! $passed)
+			{
+				return FALSE;
+			}
+		}
+		return TRUE;
 	}
 }

@@ -15,6 +15,9 @@ class Type extends Token
 	protected function initialize()
 	{
 		parent::initialize();
+		$this->initialize_transformations(array(
+			'comment' => 'DocComment',
+		));
 		$this->initialize_attributes(array(
 			'comment' => NULL,
 			'type' => 'class',
@@ -28,9 +31,6 @@ class Type extends Token
 			'traits' => array(),
 			'properties' => array(),
 			'methods' => array(),
-		));
-		$this->initialize_transformations(array(
-			'comment' => 'DocComment',
 		));
 		$this->initialize_validation(array(
 			'type' => 'type',
@@ -70,7 +70,7 @@ class Type extends Token
 	{
 		if (($comment = $this->get('comment')))
 		{
-			return $comment;
+			return (string) $comment;
 		}
 	}
 

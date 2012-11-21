@@ -243,7 +243,7 @@ abstract class Token extends \CodeGenerator\Object
 	{
 		foreach ($attributes as $name => $default_value)
 		{
-			$this->attributes[$name] = $default_value;
+			$this->attributes[$name] = $this->transform_attribute($name, $default_value);
 		}
 	}
 

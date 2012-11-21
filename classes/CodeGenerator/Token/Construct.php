@@ -15,13 +15,13 @@ class Construct extends Token
 	protected function initialize()
 	{
 		parent::initialize();
+		$this->initialize_transformations(array(
+			'body' => 'Block',
+		));
 		$this->initialize_attributes(array(
 			'type' => NULL,
 			'condition' => NULL,
 			'body' => array(),
-		));
-		$this->initialize_transformations(array(
-			'body' => 'Block',
 		));
 		$this->initialize_validation(array(
 			'type' => 'type',

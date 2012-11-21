@@ -15,6 +15,10 @@ class Method extends Token
 	protected function initialize()
 	{
 		parent::initialize();
+		$this->initialize_transformations(array(
+			'body' => 'Block',
+			'comment' => 'DocComment',
+		));
 		$this->initialize_attributes(array(
 			'comment' => NULL,
 			'access' => NULL,
@@ -23,10 +27,6 @@ class Method extends Token
 			'name' => NULL,
 			'arguments' => array(),
 			'body' => array(),
-		));
-		$this->initialize_transformations(array(
-			'body' => 'Block',
-			'comment' => 'DocComment',
 		));
 		$this->initialize_validation(array(
 			'access' => 'access',
@@ -51,17 +51,9 @@ class Method extends Token
 	private function render_heading()
 	{
 		return implode($this->config->get_format('line_end'), array_filter(array(
-			$this->render_comment(),
+			(string) $this->get('comment'),
 			$this->render_declaration(),
 		)));
-	}
-
-	private function render_comment()
-	{
-		if (($comment = $this->get('comment')))
-		{
-			return $comment;
-		}
 	}
 
 	private function render_declaration()

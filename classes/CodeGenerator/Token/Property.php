@@ -15,6 +15,9 @@ class Property extends Token
 	protected function initialize()
 	{
 		parent::initialize();
+		$this->initialize_transformations(array(
+			'comment' => 'DocComment',
+		));
 		$this->initialize_attributes(array(
 			'comment' => NULL,
 			'constraint' => NULL,
@@ -22,9 +25,6 @@ class Property extends Token
 			'static' => NULL,
 			'name' => NULL,
 			'default' => NULL,
-		));
-		$this->initialize_transformations(array(
-			'comment' => 'DocComment',
 		));
 		$this->initialize_validation(array(
 			'access' => 'access',
@@ -40,17 +40,9 @@ class Property extends Token
 			return '';
 		}
 		return implode($this->config->get_format('line_end'), array_filter(array(
-			$this->render_comment(),
+			(string) $this->get('comment'),
 			$this->render_declaration(),
 		)));
-	}
-
-	private function render_comment()
-	{
-		if (($comment = $this->get('comment')))
-		{
-			return $comment;
-		}
 	}
 
 	private function render_declaration()

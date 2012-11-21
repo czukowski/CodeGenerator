@@ -21,6 +21,9 @@ class SwitchCase extends Token
 			'default' => FALSE,
 			'break' => FALSE,
 		));
+		$this->initialize_transformations(array(
+			'body' => 'Block',
+		));
 		$this->initialize_validation(array(
 			'default' => 'boolean',
 			'break' => 'boolean',
@@ -56,13 +59,11 @@ class SwitchCase extends Token
 	{
 		if (($body = $this->get('body')))
 		{
-			$body_token = $this->config->helper('tokenFactory')
-				->transform('Block', $body, $this);
 			if ($this->get('break'))
 			{
-				$body_token->add('items', 'break;');
+				$body->add('items', 'break;');
 			}
-			return (string) $body_token;
+			return (string) $body;
 		}
 	}
 }

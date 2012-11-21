@@ -24,6 +24,10 @@ class Method extends Token
 			'arguments' => array(),
 			'body' => array(),
 		));
+		$this->initialize_transformations(array(
+			'body' => 'Block',
+			'comment' => 'DocComment',
+		));
 		$this->initialize_validation(array(
 			'access' => 'access',
 			'name' => 'name',
@@ -56,8 +60,7 @@ class Method extends Token
 	{
 		if (($comment = $this->get('comment')))
 		{
-			return $this->config->helper('tokenFactory')
-				->transform('DocComment', $comment, $this);
+			return $comment;
 		}
 	}
 
@@ -84,8 +87,7 @@ class Method extends Token
 		}
 		if (($body = $this->get('body')))
 		{
-			return (string) $this->config->helper('tokenFactory')
-				->transform('Block', $body, $this);
+			return (string) $body;
 		}
 	}
 

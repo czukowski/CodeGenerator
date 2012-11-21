@@ -20,6 +20,10 @@ abstract class Token extends \CodeGenerator\Object
 	 * @var  array  Token attributes to validation mapping
 	 */
 	private $validation = array();
+	/**
+	 * @var  array  Token transform settings
+	 */
+	private $transform = array();
 
 	/**
 	 * Add a value to array token attribute
@@ -75,7 +79,7 @@ abstract class Token extends \CodeGenerator\Object
 		{
 			$this->set_parent($attribute, $value);
 		}
-		$this->attributes[$attribute] = $value;
+		$this->attributes[$attribute] = $this->transform_attribute($attribute, $value);
 		return $this;
 	}
 
@@ -88,6 +92,21 @@ abstract class Token extends \CodeGenerator\Object
 	public function has($attribute)
 	{
 		return array_key_exists($attribute, $this->attributes);
+	}
+
+	/**
+	 * Transforms attribute to object if needed
+	 * 
+	 * @param  string  $attribute
+	 */
+	protected function transform_attribute($attribute, $value)
+	{
+		if ( ! isset($this->transform[$attribute]))
+		{
+			return $value;
+		}
+		return $this->config->helper('tokenFactory')
+			->transform($this->transform[$attribute], $value, $this);
 	}
 
 	/**
@@ -225,6 +244,14 @@ abstract class Token extends \CodeGenerator\Object
 		foreach ($attributes as $name => $default_value)
 		{
 			$this->attributes[$name] = $default_value;
+		}
+	}
+
+	protected function initialize_transformations($transformations)
+	{
+		foreach ($transformations as $attribute => $object_type)
+		{
+			$this->transform[$attribute] = $object_type;
 		}
 	}
 

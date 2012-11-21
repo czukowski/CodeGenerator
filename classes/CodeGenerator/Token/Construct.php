@@ -20,6 +20,9 @@ class Construct extends Token
 			'condition' => NULL,
 			'body' => array(),
 		));
+		$this->initialize_transformations(array(
+			'body' => 'Block',
+		));
 		$this->initialize_validation(array(
 			'type' => 'type',
 		));
@@ -31,7 +34,7 @@ class Construct extends Token
 		{
 			return '';
 		}
-		$body_render = $this->render_body();
+		$body_render = $this->get('body') ? (string) $this->get('body') : '';
 		$lines = array(
 			$this->render_heading(),
 			$body_render,
@@ -55,15 +58,6 @@ class Construct extends Token
 	private function is_condition_in_heading($type)
 	{
 		return ! in_array($type, array('else', 'do'));
-	}
-
-	private function render_body()
-	{
-		if (($body = $this->get('body')))
-		{
-			return (string) $this->config->helper('tokenFactory')
-				->transform('Block', $body, $this);
-		}
 	}
 
 	private function render_footing()

@@ -29,6 +29,9 @@ class Type extends Token
 			'properties' => array(),
 			'methods' => array(),
 		));
+		$this->initialize_transformations(array(
+			'comment' => 'DocComment',
+		));
 		$this->initialize_validation(array(
 			'type' => 'type',
 			'use' => 'use',
@@ -67,8 +70,7 @@ class Type extends Token
 	{
 		if (($comment = $this->get('comment')))
 		{
-			return $this->config->helper('tokenFactory')
-				->transform('DocComment', $comment, $this);
+			return $comment;
 		}
 	}
 

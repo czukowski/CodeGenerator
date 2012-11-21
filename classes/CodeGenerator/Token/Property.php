@@ -23,6 +23,9 @@ class Property extends Token
 			'name' => NULL,
 			'default' => NULL,
 		));
+		$this->initialize_transformations(array(
+			'comment' => 'DocComment',
+		));
 		$this->initialize_validation(array(
 			'access' => 'access',
 			'constraint' => 'constraint',
@@ -46,8 +49,7 @@ class Property extends Token
 	{
 		if (($comment = $this->get('comment')))
 		{
-			return $this->config->helper('tokenFactory')
-				->transform('DocComment', $comment, $this);
+			return $comment;
 		}
 	}
 

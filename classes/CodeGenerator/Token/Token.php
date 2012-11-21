@@ -62,7 +62,7 @@ abstract class Token extends \CodeGenerator\Object
 		$this->assert_attribute_valid($attribute, $value);
 		if ($this->is_attribute_array($attribute))
 		{
-			if ( ! $this->config->helper('arrays')->is_array($value))
+			if ( ! $this->config->helper('arrays')->is_array($value) OR $value instanceof Block)
 			{
 				$value = array($value);
 			}

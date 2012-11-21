@@ -12,17 +12,18 @@ namespace CodeGenerator\Token;
 
 class SwitchCase extends Token
 {
+	protected $transform = array(
+		'body' => 'Block',
+	);
+
 	protected function initialize()
 	{
 		parent::initialize();
 		$this->initialize_attributes(array(
-			'body' => NULL,
+			'body' => array(),
 			'match' => NULL,
 			'default' => FALSE,
 			'break' => FALSE,
-		));
-		$this->initialize_transformations(array(
-			'body' => 'Block',
 		));
 		$this->initialize_validation(array(
 			'default' => 'boolean',
@@ -57,7 +58,7 @@ class SwitchCase extends Token
 
 	private function render_body()
 	{
-		if (($body = $this->get('body')))
+		if (($body = $this->get('body')) AND count($body))
 		{
 			if ($this->get('break'))
 			{

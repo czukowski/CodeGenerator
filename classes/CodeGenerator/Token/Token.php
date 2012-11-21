@@ -23,7 +23,7 @@ abstract class Token extends \CodeGenerator\Object
 	/**
 	 * @var  array  Token transform settings
 	 */
-	private $transform = array();
+	protected $transform = array();
 
 	/**
 	 * Add a value to array token attribute
@@ -244,14 +244,6 @@ abstract class Token extends \CodeGenerator\Object
 		foreach ($attributes as $name => $default_value)
 		{
 			$this->attributes[$name] = $this->transform_attribute($name, $default_value);
-		}
-	}
-
-	protected function initialize_transformations($transformations)
-	{
-		foreach ($transformations as $attribute => $object_type)
-		{
-			$this->transform[$attribute] = $object_type;
 		}
 	}
 

@@ -12,13 +12,14 @@ namespace CodeGenerator\Token;
 
 class Method extends Token
 {
+	protected $transform = array(
+		'body' => 'Block',
+		'comment' => 'DocComment',
+	);
+
 	protected function initialize()
 	{
 		parent::initialize();
-		$this->initialize_transformations(array(
-			'body' => 'Block',
-			'comment' => 'DocComment',
-		));
 		$this->initialize_attributes(array(
 			'comment' => NULL,
 			'access' => NULL,

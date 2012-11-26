@@ -20,6 +20,10 @@ abstract class Testcase extends \PHPUnit_Framework_TestCase
 	 * @var  object  Tested object instance
 	 */
 	protected $object;
+	/**
+	 * @var  \CodeGenerator\Samples
+	 */
+	protected $samples;
 
 	protected function set_expected_exception_from_argument($expected)
 	{
@@ -115,4 +119,14 @@ abstract class Testcase extends \PHPUnit_Framework_TestCase
 		$property->setAccessible(TRUE);
 		return $property;
 	}
+
+	protected function get_sample_factory()
+	{
+		if ($this->samples === NULL)
+		{
+			$this->samples = new \CodeGenerator\Samples($this->get_config());
+		}
+		return $this->samples;
+	}
+
 }

@@ -44,7 +44,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				),
 			)),
 			'namespace' => 'CodeGenerator',
-			'use' => array('CodeGenerator\Math\SimpleOptimizer'),
+			'use' => array('code generator\math\simple optimizer'),
 			'name' => 'TestClass',
 			'properties' => array(
 				$factory->create('Property', array(
@@ -68,10 +68,10 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 					'arguments' => array(
 						$factory->create('Argument', array(
 							'constraint' => 'array',
-							'name' => 'values',
+							'name' => 'array values',
 						)),
 					),
-					'body' => '$this->values = $values;'
+					'body' => '$this->values = $array_values;'
 				)),
 			),
 		));
@@ -91,7 +91,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				" * @license    MIT License\n".
 				" */\n".
 				"namespace CodeGenerator;\n".
-				"use CodeGenerator\Math\SimpleOptimizer;\n".
+				"use Code_Generator\Math\Simple_Optimizer;\n".
 				"\n".
 				"class TestClass\n".
 				"{\n".
@@ -103,9 +103,9 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				"\t/**\n".
 				"\t * Class constructor\n".
 				"\t */\n".
-				"\tpublic function __construct(array \$values)\n".
+				"\tpublic function __construct(array \$array_values)\n".
 				"\t{\n".
-				"\t\t\$this->values = \$values;\n".
+				"\t\t\$this->values = \$array_values;\n".
 				"\t}\n".
 				"}",
 			),
@@ -118,6 +118,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 					),
 					'options' => array(
 						'line_width' => 40,
+						'names' => 'camelcase',
 					),
 				),
 				"/**\n".
@@ -141,8 +142,8 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				"    /**\n".
 				"     * Class constructor\n".
 				"     */\n".
-				"    public function __construct(array \$values) {\n".
-				"        \$this->values = \$values;\n".
+				"    public function __construct(array \$arrayValues) {\n".
+				"        \$this->values = \$array_values;\n".
 				"    }\n".
 				"}",
 			),

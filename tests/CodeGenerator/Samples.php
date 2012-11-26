@@ -12,59 +12,81 @@ namespace CodeGenerator;
 class Samples extends Object
 {
 	/**
+	 * @var  array
+	 */
+	private $tokens = array();
+
+	/**
 	 * @return  array
 	 */
 	public function get_sample()
 	{
+		if (empty($this->tokens))
+		{
+			$this->setup();
+		}
+		return $this->tokens;
+	}
+
+	public function setup()
+	{
 		$factory = $this->config->helper('tokenFactory');
-		$sample['ann1'] = $factory->create('Annotation', array(
+		$this->tokens['ann1'] = $factory->create('Annotation', array(
 			'name' => 'author',
 			'columns' => array('Korney Czukowski'),
 		));
-		$sample['ann2'] = $factory->create('Annotation', array(
+		$this->tokens['ann2'] = $factory->create('Annotation', array(
 			'name' => 'copyright',
 			'columns' => array('(c) 2012 Korney Czukowski'),
 		));
-		$sample['ann3'] = $factory->create('Annotation', array(
+		$this->tokens['ann3'] = $factory->create('Annotation', array(
 			'name' => 'license',
 			'columns' => array('MIT License'),
 		));
-		$sample['doccomment1'] = $factory->create('DocComment', array(
+		$this->tokens['doccomment1'] = $factory->create('DocComment', array(
 			'text' => 'This is a generated test class to check the render integration across most of the tokens',
-			'annotations' => array($sample['ann1'], $sample['ann2'], $sample['ann3']),
+			'annotations' => array($this->tokens['ann1'], $this->tokens['ann2'], $this->tokens['ann3']),
 		));
-		$sample['ann4'] = $factory->create('Annotation', array(
+		$this->tokens['ann4'] = $factory->create('Annotation', array(
 			'name' => 'var',
 			'columns' => array('array', 'Values array'),
 		));
-		$sample['doccomment2'] = $factory->create('DocComment', array(
-			'annotations' => array($sample['ann4']),
+		$this->tokens['doccomment2'] = $factory->create('DocComment', array(
+			'annotations' => array($this->tokens['ann4']),
 		));
-		$sample['property1'] = $factory->create('Property', array(
+		$this->tokens['property1'] = $factory->create('Property', array(
 			'access' => 'private',
 			'name' => 'values',
-			'comment' => $sample['doccomment2'],
+			'comment' => $this->tokens['doccomment2'],
 		));
-		$sample['arg1'] = $factory->create('Argument', array(
+		$this->tokens['arg1'] = $factory->create('Argument', array(
 			'constraint' => 'array',
 			'name' => 'array values',
 		));
-		$sample['method1'] = $factory->create('Method', array(
+		$this->tokens['method1'] = $factory->create('Method', array(
 			'access' => 'public',
 			'name' => '__construct',
 			'comment' => 'Class constructor',
-			'arguments' => array($sample['arg1']),
+			'arguments' => array($this->tokens['arg1']),
 			'body' => '$this->values = $array_values;'
 		));
-		$sample['class'] = $factory->create('Class', array(
-			'comment' => $sample['doccomment1'],
+		$this->tokens['class'] = $factory->create('Class', array(
+			'comment' => $this->tokens['doccomment1'],
 			'namespace' => 'CodeGenerator',
 			'use' => array('code generator\math\simple optimizer'),
 			'name' => 'TestClass',
-			'properties' => array($sample['property1']),
-			'methods' => array($sample['method1']),
+			'properties' => array($this->tokens['property1']),
+			'methods' => array($this->tokens['method1']),
 		));
-		return $sample;
 	}
 
+	public function call_before_render()
+	{
+		foreach ($this->tokens as $token)
+		{
+			$before_render = new \ReflectionMethod($token, 'before_render');
+			$before_render->setAccessible(TRUE);
+			$before_render->invoke($token);
+		}
+	}
 }

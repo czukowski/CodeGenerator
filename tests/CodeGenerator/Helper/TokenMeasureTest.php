@@ -12,11 +12,6 @@ namespace CodeGenerator\Helper;
 class TokenMeasureTest extends Testcase
 {
 	/**
-	 * @var  array
-	 */
-	private $tokens;
-
-	/**
 	 * @dataProvider  provide_get_indentation
 	 */
 	public function test_get_indentation($token, $expected)

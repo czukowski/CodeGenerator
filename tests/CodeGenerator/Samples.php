@@ -28,6 +28,9 @@ class Samples extends Object
 		return $this->tokens;
 	}
 
+	/**
+	 * @return  Samples
+	 */
 	public function setup()
 	{
 		$factory = $this->config->helper('tokenFactory');
@@ -78,8 +81,12 @@ class Samples extends Object
 			'properties' => array($this->tokens['property1']),
 			'methods' => array($this->tokens['method1']),
 		));
+		return $this;
 	}
 
+	/**
+	 * @return  Samples
+	 */
 	public function call_before_render()
 	{
 		foreach ($this->tokens as $token)
@@ -88,5 +95,6 @@ class Samples extends Object
 			$before_render->setAccessible(TRUE);
 			$before_render->invoke($token);
 		}
+		return $this;
 	}
 }

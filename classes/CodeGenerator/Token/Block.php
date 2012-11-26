@@ -142,7 +142,8 @@ class Block extends Token implements \ArrayAccess, \Iterator
 	public function offsetSet($offset, $value)
 	{
 		$items = $this->get_items();
-		$items[$offset] = $value;
+		$index = $offset !== NULL ? $offset : count($items);
+		$items[$index] = $value;
 		if ($value instanceof Token)
 		{
 			$value->set('parent', $this);

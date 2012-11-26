@@ -126,7 +126,7 @@ class BlockTest extends Testcase
 				array(
 					'items' => '// Some comment',
 				),
-				"\t// Some comment",
+				"// Some comment",
 			),
 		);
 	}

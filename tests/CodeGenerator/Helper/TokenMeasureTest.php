@@ -25,12 +25,12 @@ class TokenMeasureTest extends Testcase
 	{
 		$factory = $this->get_config()
 			->helper('tokenFactory');
-		$method_body = $factory->create('Block');
-		$method_comment = $factory->create('DocComment', array('text' => 'Some text'));
-		$method = $factory->create('Method', array('body' => $method_body));
+		$method_body = $this->create_token('Block');
+		$method_comment = $this->create_token('DocComment', array('text' => 'Some text'));
+		$method = $this->create_token('Method', array('body' => $method_body));
 		$method->set('comment', $method_comment);
-		$class = $factory->create('Class', array(
-			'methods' => $factory->create('Block'),
+		$class = $this->create_token('Class', array(
+			'methods' => $this->create_token('Block'),
 		));
 		$class->add('methods', $method);
 		return array(
@@ -39,6 +39,16 @@ class TokenMeasureTest extends Testcase
 			array($method, 1),
 			array($class, 0),
 		);
+	}
+
+	private function create_token($type, $arguments = array())
+	{
+		$token = $this->get_config()
+			->helper('tokenFactory')
+			->create($type, $arguments);
+		$this->get_object_method($token, 'before_render')
+			->invoke($token);
+		return $token;
 	}
 
 	/**

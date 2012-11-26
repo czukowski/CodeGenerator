@@ -59,7 +59,7 @@ class Type extends Token
 
 	private function render_heading()
 	{
-		$heading = $this->render_comment();
+		$heading = (string) $this->get('comment');
 		$heading .= $heading ? $this->config->get_format('line_end') : '';
 		$heading .= implode($this->get_methods_glue(), array_filter(array(
 			$this->render_namespace(),
@@ -67,14 +67,6 @@ class Type extends Token
 		)));
 		$heading .= $this->config->get_format('brace_open');
 		return $heading;
-	}
-
-	private function render_comment()
-	{
-		if (($comment = $this->get('comment')))
-		{
-			return (string) $comment;
-		}
 	}
 
 	private function render_namespace()
@@ -148,8 +140,7 @@ class Type extends Token
 	{
 		return implode($this->get_methods_glue(), array_filter(array(
 			(string) $this->get('properties'),
-			(string) $this->get('methods')
-				->set('glue', $this->get_methods_glue()),
+			(string) $this->get('methods')->set('glue', $this->get_methods_glue()),
 		)));
 	}
 

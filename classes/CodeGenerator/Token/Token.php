@@ -208,6 +208,12 @@ abstract class Token extends \CodeGenerator\Object
 	abstract public function render();
 
 	/**
+	 * Called before rendering, used to finalize attribute transformations where necessary.
+	 */
+	protected function before_render()
+	{}
+
+	/**
 	 * If attribute is set, returns its name, else NULL
 	 */
 	protected function render_boolean_attribute($attribute)
@@ -281,6 +287,7 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	public function __toString()
 	{
+		$this->before_render();
 		return $this->render();
 	}
 }

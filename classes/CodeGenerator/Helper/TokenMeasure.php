@@ -58,4 +58,37 @@ class TokenMeasure extends \CodeGenerator\Singleton
 		}
 		return $encoded;
 	}
+
+	/**
+	 * Finds named attribute in parents then childs and returns its value. If not found, NULL is returned.
+	 * 
+	 * @param   \CodeGenerator\Token\Token  $token
+	 * @param   string  $attribute
+	 * @return  mixed
+	 */
+	public function find_attribute(Token\Token $token, $attribute)
+	{
+		$found = $this->find_attribute_in_parents($token, $attribute);
+		return $found;
+	}
+
+	/**
+	 * Finds named attribute in parents and returns its value. If not found, NULL is returned.
+	 * 
+	 * @param   \CodeGenerator\Token\Token  $token
+	 * @param   string  $attribute
+	 * @return  mixed
+	 */
+	public function find_attribute_in_parents(Token\Token $token, $attribute)
+	{
+		$parent = $token;
+		do
+		{
+			if ($parent instanceof Token\Token AND $parent->has($attribute))
+			{
+				return $parent->get($attribute);
+			}
+		}
+		while (($parent = $parent->get('parent')));
+	}
 }

@@ -80,7 +80,7 @@ class Method extends Token
 		}
 		if (($body = $this->get('body')))
 		{
-			return (string) $body;
+			return (string) $body->set('indentation', 1);
 		}
 	}
 

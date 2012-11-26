@@ -22,7 +22,7 @@ class Block extends Token implements \ArrayAccess, \Iterator
 	{
 		parent::initialize();
 		$this->initialize_attributes(array(
-			'indentation' => 1,
+			'indentation' => 0,
 			'items' => array(),
 			'glue' => NULL,
 		));

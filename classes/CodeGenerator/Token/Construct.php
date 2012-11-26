@@ -35,7 +35,7 @@ class Construct extends Token
 		{
 			return '';
 		}
-		$body_render = $this->get('body') ? (string) $this->get('body') : '';
+		$body_render = $this->get('body') ? (string) $this->get('body')->set('indentation', 1) : '';
 		$lines = array(
 			$this->render_heading(),
 			$body_render,

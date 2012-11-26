@@ -64,7 +64,7 @@ class SwitchCase extends Token
 			{
 				$body->add('items', 'break;');
 			}
-			return (string) $body;
+			return (string) $body->set('indentation', 1);
 		}
 	}
 }

@@ -139,8 +139,11 @@ class Type extends Token
 	private function render_body()
 	{
 		return implode($this->get_methods_glue(), array_filter(array(
-			(string) $this->get('properties'),
-			(string) $this->get('methods')->set('glue', $this->get_methods_glue()),
+			(string) $this->get('properties')
+				->set('indentation', 1),
+			(string) $this->get('methods')
+				->set('indentation', 1)
+				->set('glue', $this->get_methods_glue()),
 		)));
 	}
 

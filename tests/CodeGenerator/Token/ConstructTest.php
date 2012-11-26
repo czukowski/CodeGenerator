@@ -18,7 +18,7 @@ class ConstructTest extends Testcase
 	public function test_render($attributes, $expected)
 	{
 		$this->setup_with_attributes($attributes);
-		$this->assertEquals($expected, $this->object->render());
+		$this->assertEquals($expected, (string) $this->object);
 	}
 
 	public function provide_render()

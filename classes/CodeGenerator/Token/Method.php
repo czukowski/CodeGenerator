@@ -35,6 +35,12 @@ class Method extends Token
 		));
 	}
 
+	protected function before_render()
+	{
+		$this->get('body')
+			->set('indentation', 1);
+	}
+
 	public function render()
 	{
 		$body_render = $this->render_body();
@@ -80,7 +86,7 @@ class Method extends Token
 		}
 		if (($body = $this->get('body')))
 		{
-			return (string) $body->set('indentation', 1);
+			return (string) $body;
 		}
 	}
 

@@ -41,6 +41,15 @@ class Type extends Token
 		));
 	}
 
+	protected function before_render()
+	{
+		$this->get('properties')
+			->set('indentation', 1);
+		$this->get('methods')
+			->set('indentation', 1)
+			->set('glue', $this->get_methods_glue());
+	}
+
 	public function render()
 	{
 		if ( ! $this->get('name') OR ! $this->get('type'))
@@ -139,11 +148,8 @@ class Type extends Token
 	private function render_body()
 	{
 		return implode($this->get_methods_glue(), array_filter(array(
-			(string) $this->get('properties')
-				->set('indentation', 1),
-			(string) $this->get('methods')
-				->set('indentation', 1)
-				->set('glue', $this->get_methods_glue()),
+			(string) $this->get('properties'),
+			(string) $this->get('methods'),
 		)));
 	}
 

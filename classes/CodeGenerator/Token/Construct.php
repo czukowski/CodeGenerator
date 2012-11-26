@@ -29,13 +29,19 @@ class Construct extends Token
 		));
 	}
 
+	protected function before_render()
+	{
+		$this->get('body')
+			->set('indentation', 1);
+	}
+
 	public function render()
 	{
 		if ( ! $this->get('type'))
 		{
 			return '';
 		}
-		$body_render = $this->get('body') ? (string) $this->get('body')->set('indentation', 1) : '';
+		$body_render = $this->get('body') ? (string) $this->get('body') : '';
 		$lines = array(
 			$this->render_heading(),
 			$body_render,

@@ -31,6 +31,12 @@ class SwitchCase extends Token
 		));
 	}
 
+	protected function before_render()
+	{
+		$this->get('body')
+			->set('indentation', 1);
+	}
+
 	public function render()
 	{
 		if ( ! $this->get('match') AND ! $this->get('default'))
@@ -64,7 +70,7 @@ class SwitchCase extends Token
 			{
 				$body->add('items', 'break;');
 			}
-			return (string) $body->set('indentation', 1);
+			return (string) $body;
 		}
 	}
 }

@@ -42,7 +42,8 @@ abstract class Token extends \CodeGenerator\Object
 		$this->assert_attribute_array($attribute);
 		$this->set_parent($attribute, $value);
 		$this->attributes[$attribute][] = $value;
-		return $this->set($attribute, $this->attributes[$attribute]);
+		$this->assert_attribute_valid($attribute, $this->attributes[$attribute]);
+		return $this;
 	}
 
 	/**

@@ -14,6 +14,8 @@ class Type extends Token
 {
 	protected $transform = array(
 		'comment' => 'DocComment',
+		'properties' => 'Block',
+		'methods' => 'Block',
 	);
 
 	protected function initialize()
@@ -145,10 +147,8 @@ class Type extends Token
 	private function render_body()
 	{
 		return implode($this->get_methods_glue(), array_filter(array(
-			(string) $this->config->helper('tokenFactory')
-				->transform('Block', $this->get('properties'), $this),
-			(string) $this->config->helper('tokenFactory')
-				->transform('Block', $this->get('methods'), $this)
+			(string) $this->get('properties'),
+			(string) $this->get('methods')
 				->set('glue', $this->get_methods_glue()),
 		)));
 	}

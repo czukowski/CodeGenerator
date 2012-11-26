@@ -17,6 +17,10 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	private $attributes = array();
 	/**
+	 * @var  array  List of array attributes
+	 */
+	private $array_atributes = array();
+	/**
 	 * @var  array  Token attributes to validation mapping
 	 */
 	private $validation = array();
@@ -129,8 +133,7 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	private function is_attribute_array($attribute)
 	{
-		return $this->config->helper('arrays')
-			->is_array($this->attributes[$attribute]);
+		return in_array($attribute, $this->array_atributes);
 	}
 
 	/**
@@ -244,6 +247,10 @@ abstract class Token extends \CodeGenerator\Object
 		foreach ($attributes as $name => $default_value)
 		{
 			$this->attributes[$name] = $this->transform_attribute($name, $default_value);
+			if (is_array($default_value))
+			{
+				$this->array_atributes[] = $name;
+			}
 		}
 	}
 

@@ -87,45 +87,33 @@ class TokenMeasureTest extends Testcase
 	}
 
 	/**
-	 * @dataProvider  provide_find_attribute
+	 * @dataProvider  provide_find_in_parents
 	 */
-	public function test_find_attribute($token, $find, $expected)
+	public function test_find_in_parents($token, $find, $expected)
 	{
 		$sample = $this->get_sample_factory()
 			->get_sample();
-		$actual = $this->object->find_attribute($sample[$token], $find);
-		$this->assert_found_attribute($expected, $sample, $find, $actual);
+		$actual = $this->object->find_in_parents($sample[$token], $find);
+		if ($expected === NULL)
+		{
+			$this->assertNull($actual);
+		}
+		else
+		{
+			$this->assertSame($sample[$expected], $actual);
+		}
 	}
 
-	public function provide_find_attribute()
-	{
-		// [source_token, find_attribute, found_in_token]
-		return $this->provide_find_attribute_in_parents();
-	}
-
-	/**
-	 * @dataProvider  provide_find_attribute_in_parents
-	 */
-	public function test_find_attribute_in_parents($token, $find, $expected)
-	{
-		$sample = $this->get_sample_factory()
-			->get_sample();
-		$actual = $this->object->find_attribute_in_parents($sample[$token], $find);
-		$this->assert_found_attribute($expected, $sample, $find, $actual);
-	}
-
-	public function provide_find_attribute_in_parents()
+	public function provide_find_in_parents()
 	{
 		// [source_token, find_attribute, found_in_token]
 		return array(
-			// Not found
-			array('method1', 'property-that-not-exists', NULL),
-			// Found in self
-			array('ann1', 'name', 'ann1'),
-			array('class', 'properties', 'class'),
-			// Found in parents
-			array('ann2', 'text', 'doccomment1'),
-			array('arg1', 'namespace', 'class'),
+			array('method1', 'TokenThatNotExists', NULL), // Not found
+			array('method1', 'Property', NULL), // Not found
+			array('doccomment1', 'DocComment', 'doccomment1'), // Found self
+			array('class', 'Class', 'class'), // Found self, aliased
+			array('method1', 'Class', 'class'), // Aliased
+			array('methodbody1', 'Type', 'class'),
 		);
 	}
 
@@ -154,20 +142,8 @@ class TokenMeasureTest extends Testcase
 			array('class', 'Function', 1, array('method1')), // Aliased
 			array('class', 'Argument', 1, array('arg1')), // Deep
 			array('class', 'DocComment', 3, array('doccomment1', 'doccomment2')), // One auto-generated
-			array('property1', 'token-that-not-exists', 0, array()), // Not found
+			array('property1', 'TokenThatNotExists', 0, array()), // Not found
 		);
-	}
-
-	protected function assert_found_attribute($expected, $sample, $find, $actual)
-	{
-		if ($expected !== NULL)
-		{
-			$this->assertSame($sample[$expected]->get($find), $actual);
-		}
-		else
-		{
-			$this->assertNull($actual);
-		}
 	}
 
 }

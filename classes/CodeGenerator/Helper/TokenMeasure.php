@@ -60,33 +60,20 @@ class TokenMeasure extends \CodeGenerator\Singleton
 	}
 
 	/**
-	 * Finds named attribute in parents then childs and returns its value. If not found, NULL is returned.
+	 * Finds a token of the specified type in parent chain. If not found, NULL is returned.
 	 * 
 	 * @param   \CodeGenerator\Token\Token  $token
-	 * @param   string  $attribute
+	 * @param   string  $type
 	 * @return  mixed
 	 */
-	public function find_attribute(Token\Token $token, $attribute)
-	{
-		$found = $this->find_attribute_in_parents($token, $attribute);
-		return $found;
-	}
-
-	/**
-	 * Finds named attribute in parents and returns its value. If not found, NULL is returned.
-	 * 
-	 * @param   \CodeGenerator\Token\Token  $token
-	 * @param   string  $attribute
-	 * @return  mixed
-	 */
-	public function find_attribute_in_parents(Token\Token $token, $attribute)
+	public function find_in_parents(Token\Token $token, $type)
 	{
 		$parent = $token;
 		do
 		{
-			if ($parent instanceof Token\Token AND $parent->has($attribute))
+			if ($parent instanceof Token\Token AND $parent->get_type() === $this->get_type($type))
 			{
-				return $parent->get($attribute);
+				return $parent;
 			}
 		}
 		while (($parent = $parent->get('parent')));
@@ -102,10 +89,9 @@ class TokenMeasure extends \CodeGenerator\Singleton
 	public function find_in_children(Token\Token $token, $type)
 	{
 		$result = array();
-		$factory = $this->config->helper('tokenFactory');
 		foreach ($token->get_children() as $child)
 		{
-			if ($child->get_type() === 'CodeGenerator\Token\\'.$factory->get_type_by_alias($type))
+			if ($child->get_type() === $this->get_type($type))
 			{
 				$result[] = $child;
 			}
@@ -115,6 +101,18 @@ class TokenMeasure extends \CodeGenerator\Singleton
 			}
 		}
 		return $result;
+	}
+
+	/**
+	 * Returns full type name.
+	 * 
+	 * @param   string  $alias
+	 * @return  string
+	 */
+	private function get_type($alias)
+	{
+		return 'CodeGenerator\Token\\'.$this->config->helper('tokenFactory')
+			->get_type_by_alias($alias);
 	}
 
 }

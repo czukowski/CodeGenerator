@@ -62,13 +62,13 @@ class TokenMeasure extends \CodeGenerator\Singleton
 	/**
 	 * Finds a token of the specified type in parent chain. If not found, NULL is returned.
 	 * 
-	 * @param   \CodeGenerator\Token\Token  $token
+	 * @param   \CodeGenerator\Token\Token  $from
 	 * @param   string  $type
 	 * @return  mixed
 	 */
-	public function find_in_parents(Token\Token $token, $type)
+	public function find_in_parents(Token\Token $from, $type)
 	{
-		$parent = $token;
+		$parent = $from;
 		do
 		{
 			if ($parent instanceof Token\Token AND $parent->get_type() === $this->get_type($type))
@@ -82,14 +82,14 @@ class TokenMeasure extends \CodeGenerator\Singleton
 	/**
 	 * Finds a token of the specified type in children. If not found, empty array is returned.
 	 * 
-	 * @param   \CodeGenerator\Token\Token  $token
+	 * @param   \CodeGenerator\Token\Token  $from
 	 * @param   string  $type
 	 * @return  array
 	 */
-	public function find_in_children(Token\Token $token, $type)
+	public function find_in_children(Token\Token $from, $type)
 	{
 		$result = array();
-		foreach ($token->get_children() as $child)
+		foreach ($from->get_children() as $child)
 		{
 			if ($child->get_type() === $this->get_type($type))
 			{

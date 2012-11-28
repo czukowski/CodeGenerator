@@ -55,7 +55,7 @@ class TokenFactory extends \CodeGenerator\Singleton
 	/**
 	 * Gets type from an alias in config, if any
 	 */
-	private function get_type_by_alias($alias)
+	public function get_type_by_alias($alias)
 	{
 		return $this->config->get_options('factory.aliases.'.ucfirst($alias), ucfirst($alias));
 	}

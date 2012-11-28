@@ -87,6 +87,33 @@ class TokenMeasureTest extends Testcase
 	}
 
 	/**
+	 * @dataProvider  provide_find_token
+	 */
+	public function test_find_token($token, $find, $count, $expected)
+	{
+		$sample = $this->get_sample_factory()
+			->get_sample();
+		$actual = $this->object->find_token($sample[$token], $find);
+		$this->assertEquals($count, count($actual));
+		foreach ($expected as $item)
+		{
+			$this->assertTrue(in_array($sample[$item], $actual));
+		}
+	}
+
+	public function provide_find_token()
+	{
+		// [source_token, find_attribute, expected_count, found_in_token]
+		return array(
+			array('method1', 'Argument', 1, array('arg1')),
+			array('method1', 'Block', 2, array('methodbody1')), // Both in parents (auto-generated methods container) and children
+			array('doccomment1', 'DocComment', 1, array('doccomment1')), // Found self
+			array('class', 'Method', 1, array('method1')),
+			array('property1', 'TokenThatNotExists', 0, array()), // Not found
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_find_in_parents
 	 */
 	public function test_find_in_parents($token, $find, $expected)

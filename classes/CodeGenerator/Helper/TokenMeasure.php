@@ -64,6 +64,21 @@ class TokenMeasure extends \CodeGenerator\Singleton
 	 * 
 	 * @param   \CodeGenerator\Token\Token  $from
 	 * @param   string  $type
+	 * @return  array
+	 */
+	public function find_token(Token\Token $from, $type)
+	{
+		return array_filter(array_merge(
+			array($this->find_in_parents($from, $type)),
+			$this->find_in_children($from, $type)
+		));
+	}
+
+	/**
+	 * Finds a token of the specified type in parent chain. If not found, NULL is returned.
+	 * 
+	 * @param   \CodeGenerator\Token\Token  $from
+	 * @param   string  $type
 	 * @return  mixed
 	 */
 	public function find_in_parents(Token\Token $from, $type)

@@ -258,6 +258,34 @@ class TokenTest extends Testcase
 	}
 
 	/**
+	 * @dataProvider  provide_get_children
+	 */
+	public function test_get_children($token, $count, $expected)
+	{
+		$sample = $this->get_sample_factory()
+			->get_sample();
+		$actual = $sample[$token]->get_children();
+		$this->assertInternalType('array', $actual);
+		$this->assertEquals($count, count($actual));
+		foreach ($expected as $child)
+		{
+			$this->assertTrue(in_array($sample[$child], $actual));
+		}
+	}
+
+	public function provide_get_children()
+	{
+		// [sample_token, expected_children_count, expected_sample_children]
+		return array(
+			array('property1', 1, array('doccomment2')),
+			array('class', 3, array('doccomment1', 'property1', 'method1')),
+			array('method1', 3, array('arg1', 'methodbody1')), // one auto-generated (comment)
+			array('methodbody1', 0, array()), // no children
+			array('arg1', 0, array()),
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_get_type
 	 */
 	public function test_get_type($mock_classname, $expected)

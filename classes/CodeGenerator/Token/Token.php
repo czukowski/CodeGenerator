@@ -191,6 +191,33 @@ abstract class Token extends \CodeGenerator\Object
 	}
 
 	/**
+	 * @return  array
+	 */
+	public function get_children()
+	{
+		$result = array();
+		foreach ($this->attributes as $name => $attribute)
+		{
+			if ($name === 'parent')
+			{
+				continue;
+			}
+			if ( ! $this->is_attribute_array($name))
+			{
+				$attribute = array($attribute);
+			}
+			foreach ($attribute as $item)
+			{
+				if ($item instanceof self)
+				{
+					$result[] = $item;
+				}
+			}
+		}
+		return $result;
+	}
+
+	/**
 	 * Returns the current class name without namespace as a token name
 	 * 
 	 * @return  string

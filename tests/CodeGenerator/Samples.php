@@ -66,12 +66,15 @@ class Samples extends Object
 			'constraint' => 'array',
 			'name' => 'array values',
 		));
+		$this->tokens['methodbody1'] = $factory->create('Block', array(
+			'items' => '$this->values = $array_values;'
+		));
 		$this->tokens['method1'] = $factory->create('Method', array(
 			'access' => 'public',
 			'name' => '__construct',
 			'comment' => 'Class constructor',
 			'arguments' => array($this->tokens['arg1']),
-			'body' => '$this->values = $array_values;'
+			'body' => $this->tokens['methodbody1']
 		));
 		$this->tokens['class'] = $factory->create('Class', array(
 			'comment' => $this->tokens['doccomment1'],

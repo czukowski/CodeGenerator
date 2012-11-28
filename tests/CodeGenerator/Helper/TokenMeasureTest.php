@@ -17,38 +17,22 @@ class TokenMeasureTest extends Testcase
 	public function test_get_indentation($token, $expected)
 	{
 		$this->setup_object();
-		$actual = $this->object->get_indentation($token);
+		$sample = $this->get_sample_factory()
+			->setup()
+			->call_before_render()
+			->get_sample();
+		$actual = $this->object->get_indentation($sample[$token]);
 		$this->assertEquals($expected, $actual);
 	}
 
 	public function provide_get_indentation()
 	{
-		$factory = $this->get_config()
-			->helper('tokenFactory');
-		$method_body = $this->create_token('Block');
-		$method_comment = $this->create_token('DocComment', array('text' => 'Some text'));
-		$method = $this->create_token('Method', array('body' => $method_body));
-		$method->set('comment', $method_comment);
-		$class = $this->create_token('Class', array(
-			'methods' => $this->create_token('Block'),
-		));
-		$class->add('methods', $method);
 		return array(
-			array($method_body, 2),
-			array($method_comment, 1),
-			array($method, 1),
-			array($class, 0),
+			array('methodbody1', 2),
+			array('doccomment2', 1),
+			array('method1', 1),
+			array('class', 0),
 		);
-	}
-
-	private function create_token($type, $arguments = array())
-	{
-		$token = $this->get_config()
-			->helper('tokenFactory')
-			->create($type, $arguments);
-		$this->get_object_method($token, 'before_render')
-			->invoke($token);
-		return $token;
 	}
 
 	/**
@@ -59,8 +43,28 @@ class TokenMeasureTest extends Testcase
 		$this->setup_object(array(
 			'arguments' => array($this->create_config($indent_char, $indent_length)),
 		));
-		$actual = $this->object->get_indentation_length($token);
+		$sample = $this->get_sample_factory()
+			->setup()
+			->call_before_render()
+			->get_sample();
+		$actual = $this->object->get_indentation_length($sample[$token]);
 		$this->assertEquals($expected, $actual);
+	}
+
+	private function create_config($indent_char, $indent_length)
+	{
+		$key = $this->get_mock(array('methods' => array('none')))
+			->encode_string($indent_char);
+		return new \CodeGenerator\Config(array(
+			'format' => array(
+				'indent' => $indent_char,
+			),
+			'options' => array(
+				'char_length' => array(
+					$key => $indent_length,
+				),
+			),
+		));
 	}
 
 	public function provide_get_indentation_length()
@@ -80,22 +84,6 @@ class TokenMeasureTest extends Testcase
 			$provide[] = array($token, $char, $width, $indentation * $width);
 		}
 		return $provide;
-	}
-
-	private function create_config($indent_char, $indent_length)
-	{
-		$key = $this->get_mock(array('methods' => array('none')))
-			->encode_string($indent_char);
-		return new \CodeGenerator\Config(array(
-			'format' => array(
-				'indent' => $indent_char,
-			),
-			'options' => array(
-				'char_length' => array(
-					$key => $indent_length,
-				),
-			),
-		));
 	}
 
 	/**

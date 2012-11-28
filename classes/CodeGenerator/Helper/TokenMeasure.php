@@ -91,4 +91,30 @@ class TokenMeasure extends \CodeGenerator\Singleton
 		}
 		while (($parent = $parent->get('parent')));
 	}
+
+	/**
+	 * Finds a token of the specified type in children. If not found, empty array is returned.
+	 * 
+	 * @param   \CodeGenerator\Token\Token  $token
+	 * @param   string  $type
+	 * @return  array
+	 */
+	public function find_in_children(Token\Token $token, $type)
+	{
+		$result = array();
+		$factory = $this->config->helper('tokenFactory');
+		foreach ($token->get_children() as $child)
+		{
+			if ($child->get_type() === 'CodeGenerator\Token\\'.$factory->get_type_by_alias($type))
+			{
+				$result[] = $child;
+			}
+			elseif ($child instanceof Token\Token)
+			{
+				$result = array_merge($result, $this->find_in_children($child, $type));
+			}
+		}
+		return $result;
+	}
+
 }

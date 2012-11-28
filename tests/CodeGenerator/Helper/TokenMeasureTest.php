@@ -100,10 +100,7 @@ class TokenMeasureTest extends Testcase
 	public function provide_find_attribute()
 	{
 		// [source_token, find_attribute, found_in_token]
-		return array_merge(
-			$this->provide_find_attribute_in_parents(),
-			$this->provide_find_attribute_in_children()
-		);
+		return $this->provide_find_attribute_in_parents();
 	}
 
 	/**
@@ -133,28 +130,31 @@ class TokenMeasureTest extends Testcase
 	}
 
 	/**
-	 * @dataProvider  provide_find_attribute_in_children
-	 * @todo          FIXME
+	 * @dataProvider  provide_find_in_children
 	 */
-	public function _test_find_attribute_in_children($token, $find, $expected)
+	public function test_find_in_children($token, $find, $count, $expected)
 	{
 		$sample = $this->get_sample_factory()
 			->get_sample();
-		$actual = $this->object->find_attribute_in_children($sample[$token], $find);
-		$this->assert_found_attribute($expected, $sample, $find, $actual);
+		$actual = $this->object->find_in_children($sample[$token], $find);
+		$this->assertEquals($count, count($actual));
+		foreach ($expected as $item)
+		{
+			$this->assertTrue(in_array($sample[$item], $actual));
+		}
 	}
 
-	public function provide_find_attribute_in_children()
+	public function provide_find_in_children()
 	{
-		// [source_token, find_attribute, found_in_token]
+		// [source_token, find_attribute, expected_count, found_in_token]
 		return array(
-			// Not found
-			array('property1', 'attribute-that-not-exists', NULL),
-			// Found in self
-			array('ann2', 'name', 'ann2'),
-			array('class', 'methods', 'class'),
-			// Found in children
-			// FIXME
+			array('method1', 'Argument', 1, array('arg1')),
+			array('method1', 'Block', 1, array('methodbody1')),
+			array('class', 'Method', 1, array('method1')),
+			array('class', 'Function', 1, array('method1')), // Aliased
+			array('class', 'Argument', 1, array('arg1')), // Deep
+			array('class', 'DocComment', 3, array('doccomment1', 'doccomment2')), // One auto-generated
+			array('property1', 'token-that-not-exists', 0, array()), // Not found
 		);
 	}
 

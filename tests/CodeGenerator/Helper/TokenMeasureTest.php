@@ -89,11 +89,11 @@ class TokenMeasureTest extends Testcase
 	/**
 	 * @dataProvider  provide_find_token
 	 */
-	public function test_find_token($token, $find, $count, $expected)
+	public function test_find_token($token, $type, $count, $expected)
 	{
 		$sample = $this->get_sample_factory()
 			->get_sample();
-		$actual = $this->object->find_token($sample[$token], $find);
+		$actual = $this->object->find_token($sample[$token], $type);
 		$this->assertEquals($count, count($actual));
 		foreach ($expected as $item)
 		{
@@ -116,11 +116,11 @@ class TokenMeasureTest extends Testcase
 	/**
 	 * @dataProvider  provide_find_in_parents
 	 */
-	public function test_find_in_parents($token, $find, $expected)
+	public function test_find_in_parents($token, $type, $expected)
 	{
 		$sample = $this->get_sample_factory()
 			->get_sample();
-		$actual = $this->object->find_in_parents($sample[$token], $find);
+		$actual = $this->object->find_in_parents($sample[$token], $type);
 		if ($expected === NULL)
 		{
 			$this->assertNull($actual);
@@ -147,11 +147,11 @@ class TokenMeasureTest extends Testcase
 	/**
 	 * @dataProvider  provide_find_in_children
 	 */
-	public function test_find_in_children($token, $find, $count, $expected)
+	public function test_find_in_children($token, $type, $count, $expected)
 	{
 		$sample = $this->get_sample_factory()
 			->get_sample();
-		$actual = $this->object->find_in_children($sample[$token], $find);
+		$actual = $this->object->find_in_children($sample[$token], $type);
 		$this->assertEquals($count, count($actual));
 		foreach ($expected as $item)
 		{

@@ -193,6 +193,14 @@ abstract class Token extends \CodeGenerator\Object
 	/**
 	 * @return  array
 	 */
+	public function get_attributes()
+	{
+		return array_values(array_diff(array_keys($this->attributes), array('parent')));
+	}
+
+	/**
+	 * @return  array
+	 */
 	public function get_children()
 	{
 		$result = array();

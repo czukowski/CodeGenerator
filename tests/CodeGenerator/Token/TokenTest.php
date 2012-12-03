@@ -258,6 +258,30 @@ class TokenTest extends Testcase
 	}
 
 	/**
+	 * @dataProvider  provide_get_attributes
+	 */
+	public function test_get_attributes($attributes, $expected)
+	{
+		$this->setup_with_validator_helper($attributes);
+		$this->assertEquals($expected, $this->object->get_attributes());
+	}
+
+	public function provide_get_attributes()
+	{
+		return array(
+			array(
+				array(), array(),
+			),
+			array(
+				array('foo' => 'bar'), array('foo'),
+			),
+			array(
+				array('foo' => 'bar', 'rab' => 'oof'), array('foo', 'rab'),
+			)
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_get_children
 	 */
 	public function test_get_children($token, $count, $expected)

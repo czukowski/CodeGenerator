@@ -76,6 +76,15 @@ class Samples extends Object
 			'arguments' => array($this->tokens['arg1']),
 			'body' => $this->tokens['methodbody1']
 		));
+		$this->tokens['methodbody2'] = $factory->create('Block', array(
+			'items' => 'return $this->values;'
+		));
+		$this->tokens['method2'] = $factory->create('Method', array(
+			'access' => 'public',
+			'name' => 'get values',
+			'comment' => 'Get object values',
+			'body' => $this->tokens['methodbody2']
+		));
 		$this->tokens['class'] = $factory->create('Class', array(
 			'comment' => $this->tokens['doccomment1'],
 			'namespace' => 'CodeGenerator',

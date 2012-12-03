@@ -83,7 +83,8 @@ class Samples extends Object
 			'access' => 'public',
 			'name' => 'get values',
 			'comment' => 'Get object values',
-			'body' => $this->tokens['methodbody2']
+			'body' => $this->tokens['methodbody2'],
+			'static' => FALSE,
 		));
 		$this->tokens['class'] = $factory->create('Class', array(
 			'comment' => $this->tokens['doccomment1'],

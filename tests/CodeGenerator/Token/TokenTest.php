@@ -293,7 +293,7 @@ class TokenTest extends Testcase
 		$this->assertEquals($count, count($actual));
 		foreach ($expected as $child)
 		{
-			$this->assertTrue(in_array($sample[$child], $actual));
+			$this->assertTrue(in_array($sample[$child], $actual, TRUE));
 		}
 	}
 
@@ -302,7 +302,7 @@ class TokenTest extends Testcase
 		// [sample_token, expected_children_count, expected_sample_children]
 		return array(
 			array('property1', 1, array('doccomment2')),
-			array('class', 3, array('doccomment1', 'property1', 'method1')),
+			array('class', 4, array('doccomment1', 'property1', 'method1', 'method2')),
 			array('method1', 3, array('arg1', 'methodbody1')), // one auto-generated (comment)
 			array('methodbody1', 0, array()), // no children
 			array('arg1', 0, array()),

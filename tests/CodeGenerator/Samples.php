@@ -91,7 +91,7 @@ class Samples extends Object
 			'use' => array('code generator\math\simple optimizer'),
 			'name' => 'TestClass',
 			'properties' => array($this->tokens['property1']),
-			'methods' => array($this->tokens['method1']),
+			'methods' => array($this->tokens['method1'], $this->tokens['method2']),
 		));
 		return $this;
 	}

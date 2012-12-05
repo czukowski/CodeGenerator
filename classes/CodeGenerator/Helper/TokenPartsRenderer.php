@@ -23,7 +23,7 @@ class TokenPartsRenderer extends \CodeGenerator\Singleton
 	{
 		if ($option === NULL)
 		{
-			$option = $this->config->get_options('names');
+			$option = $this->config->get_options('names.classname');
 		}
 		$namespace_parts = explode('\\', $str);
 		foreach ($namespace_parts as &$part)
@@ -50,7 +50,7 @@ class TokenPartsRenderer extends \CodeGenerator\Singleton
 		}
 		if ($option === NULL)
 		{
-			$option = $this->config->get_options('names');
+			$option = $this->config->get_options('names.default');
 		}
 		// Otherwise return formatted string appropriately to the config option
 		switch ($option)

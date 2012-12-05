@@ -46,7 +46,7 @@ class TypeTest extends Testcase
 					'type' => 'interface',
 					'name' => 'i do something',
 				),
-				"interface I_Do_Something\n".
+				"interface IDoSomething\n".
 				"{}",
 			),
 			// Basic class w/extends and implements
@@ -57,7 +57,7 @@ class TypeTest extends Testcase
 					'extends' => 'Tech object',
 					'implements' => array('I Do Something', 'I Move'),
 				),
-				"class Vehicle extends Tech_Object implements I_Do_Something, I_Move\n".
+				"class Vehicle extends TechObject implements IDoSomething, IMove\n".
 				"{}",
 			),
 			// Final class
@@ -115,9 +115,9 @@ class TypeTest extends Testcase
 				"/**\n".
 				" * @package Fubar\n".
 				" */\n".
-				"namespace \Fu_Bar;\n".
-				"use \Fu_Bar\Bar as Bar,\n".
-				"\t\Fu_Bar\Fu;\n".
+				"namespace \FuBar;\n".
+				"use \FuBar\Bar as Bar,\n".
+				"\t\FuBar\Fu;\n".
 				"\n".
 				"interface ISuperObject\n".
 				"{\n".

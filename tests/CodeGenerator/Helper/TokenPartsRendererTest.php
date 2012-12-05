@@ -17,7 +17,7 @@ class TokenPartsRendererTest extends Testcase
 	public function test_render_class_name($format, $name, $option, $expected)
 	{
 		$this->setup_object(array(
-			'arguments' => array($this->create_config($format)),
+			'arguments' => array($this->create_config('classname', $format)),
 		));
 		$this->set_expected_exception_from_argument($expected);
 		$actual = $this->object->render_class_name($name, $option);
@@ -56,7 +56,7 @@ class TokenPartsRendererTest extends Testcase
 	public function test_render_name($format, $name, $option, $expected)
 	{
 		$this->setup_object(array(
-			'arguments' => array($this->create_config($format)),
+			'arguments' => array($this->create_config('default', $format)),
 		));
 		$this->set_expected_exception_from_argument($expected);
 		$actual = $this->object->render_name($name, $option);
@@ -84,11 +84,13 @@ class TokenPartsRendererTest extends Testcase
 		);
 	}
 
-	private function create_config($format)
+	private function create_config($items, $format)
 	{
 		return new \CodeGenerator\Config(array(
 			'options' => array(
-				'names' => $format,
+				'names' => array(
+					$items => $format,
+				),
 			),
 		));
 	}

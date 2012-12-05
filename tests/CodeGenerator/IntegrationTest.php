@@ -91,7 +91,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				" * @license    MIT License\n".
 				" */\n".
 				"namespace CodeGenerator;\n".
-				"use Code_Generator\Math\Simple_Optimizer;\n".
+				"use CodeGenerator\Math\SimpleOptimizer;\n".
 				"\n".
 				"class TestClass\n".
 				"{\n".
@@ -118,7 +118,9 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 					),
 					'options' => array(
 						'line_width' => 40,
-						'names' => 'camelcase',
+						'names' => array(
+							'default' => 'camelcase',
+						),
 					),
 				),
 				"/**\n".

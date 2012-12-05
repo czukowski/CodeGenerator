@@ -243,7 +243,7 @@ class TokenTreeTest extends Testcase
 	{
 		return array(
 			array('array values', 'name', 'array_values'),
-			array('math\sigma function', 'class-name', 'Math\Sigma_Function'),
+			array('math\sigma function', 'class-name', 'Math\SigmaFunction'),
 			array('method name', 'nonexistentformat', new \InvalidArgumentException),
 			array($this->get_sample_factory()->get_sample('method1'), 'name', new \InvalidArgumentException),
 			array($this->get_sample_factory()->get_sample('class')->get('methods'), 'name', new \InvalidArgumentException),

@@ -30,7 +30,10 @@ class Config
 			'char_length' => array(
 				'x09' => 4,  // tab (\t) char
 			),
-			'names' => 'underscore',
+			'names' => array(
+				'classname' => 'camelcase',
+				'default' => 'underscore',
+			),
 			'word_wrap' => TRUE,
 			'factory' => array(
 				'aliases' => array(

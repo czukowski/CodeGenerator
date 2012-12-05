@@ -90,6 +90,23 @@ class StringTest extends Testcase
 	}
 
 	/**
+	 * @dataProvider  provide_strpos
+	 */
+	public function test_strpos($input, $str, $offset, $expected)
+	{
+		$this->assertSame($expected, $this->object->strpos($input, $str, $offset));
+	}
+
+	public function provide_strpos()
+	{
+		return array(
+			array('Coconut', 'o', 0, 1),
+			array('Cocoñùт', 'o', 0, 1),
+			array('Cocoñùт', 'ñ', 1, 4),
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_trim
 	 */
 	public function test_trim($input, $input2, $expected)

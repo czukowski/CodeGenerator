@@ -107,6 +107,37 @@ class String extends \CodeGenerator\Singleton
 	}
 
 	/**
+	 * Finds position of first occurrence of a UTF-8 string. This is a
+	 * UTF8-aware version of [strpos](http://php.net/strpos).
+	 * 
+	 *     $position = UTF8::strpos($str, $search);
+	 * 
+	 * @param   string   $str     haystack
+	 * @param   string   $search  needle
+	 * @param   integer  $offset  offset from which character in haystack to start searching
+	 * @return  integer  position of needle
+	 * @return  boolean  FALSE if the needle is not found
+	 */
+	public function strpos($str, $search, $offset = 0)
+	{
+		$offset = (int) $offset;
+
+		if ($this->is_ascii($str) AND $this->is_ascii($search))
+		{
+			return strpos($str, $search, $offset);
+		}
+		if ($offset == 0)
+		{
+			$array = explode($search, $str, 2);
+			return isset($array[1]) ? $this->strlen($array[0]) : FALSE;
+		}
+
+		$str = $this->substr($str, $offset);
+		$pos = $this->strpos($str, $search);
+		return ($pos === FALSE) ? FALSE : ($pos + $offset);
+	}
+
+	/**
 	 * Returns part of a UTF-8 string. This is a UTF8-aware version
 	 * of [substr](http://php.net/substr).
 	 * 

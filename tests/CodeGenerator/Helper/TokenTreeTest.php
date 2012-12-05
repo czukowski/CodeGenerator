@@ -14,84 +14,67 @@ class TokenTreeTest extends Testcase
 	/**
 	 * @dataProvider  provide_find_path
 	 */
-	public function test_find_path($token, $path, $expected)
+	public function test_find_path($from, $path, $expected)
 	{
-		$sample = $this->get_sample_factory()
-			->setup()
-			->call_before_render()
-			->get_sample();
 		$this->set_expected_exception_from_argument($expected);
-		$actual = $this->object->find_path($sample[$token], $path);
-		if ($expected === NULL)
-		{
-			$this->assertNull($actual);
-			return;
-		}
-		if (is_array($expected))
-		{
-			foreach ($expected as $item)
-			{
-				$this->assertTrue(in_array($sample[$item], $actual, TRUE));
-			}
-		}
-		elseif (is_string($expected))
-		{
-			$this->assertSame($sample[$expected], $actual);
-		}
-		else
-		{
-			$this->assertEquals($expected, $actual);
-		}
+		$actual = $this->object->find_path($from, $path);
+		$this->assertSame($expected, $actual);
 	}
 
 	public function provide_find_path()
 	{
+		$samples = $this->get_sample_factory();
 		// [source_token, find_path, expected]
 		return array(
 			// Invalid path
-			array('method1', '\\', new \InvalidArgumentException),
-			array('class', '123', new \InvalidArgumentException),
+			array($samples->get_sample('method1'), '/', new \InvalidArgumentException),
+			array($samples->get_sample('method1'), '\\', new \InvalidArgumentException),
+			array($samples->get_sample('class'), '123', new \InvalidArgumentException),
 			// Self
-			array('class', 'Method.', new \InvalidArgumentException),
-			array('method1', '.', 'method1'),
-			array('method1', './', 'method1'),
+			array($samples->get_sample('class'), 'Method.', new \InvalidArgumentException),
+			array($samples->get_sample('method1'), '.', $samples->get_sample('method1')),
+			array($samples->get_sample('method1'), './', $samples->get_sample('method1')),
 			// Parent
-			array('method1', 'arguments..', new \InvalidArgumentException),
-			array('doccomment2', '..', 'property1'),
-			array('doccomment2', '../', 'property1'),
+			array($samples->get_sample('method1'), 'arguments..', new \InvalidArgumentException),
+			array($samples->get_sample('doccomment2'), '..', $samples->get_sample('property1')),
+			array($samples->get_sample('doccomment2'), '../', $samples->get_sample('property1')),
 			// Parent - skipping block
-			array('method1', '..', 'class'),
-			array('method1', '../', 'class'),
+			array($samples->get_sample('method1'), '..', $samples->get_sample('class')),
+			array($samples->get_sample('method1'), '../', $samples->get_sample('class')),
 			// Get by type
-			array('method1', 'Argument', array('arg1')),
-			array('method1', 'Block', array('methodbody1')),
-			array('doccomment2', 'Annotation', array('ann4')),
-			array('class', 'Method', array('method1')),
-			array('class', 'Function', array('method1')),
-			array('class', 'Property', array('property1')),
-			array('class', 'DocComment', array('doccomment1')),
+			array($samples->get_sample('method1'), 'Argument', array($samples->get_sample('arg1'))),
+			array($samples->get_sample('method1'), 'Block', array($samples->get_sample('methodbody1'))),
+			array($samples->get_sample('doccomment2'), 'Annotation', array($samples->get_sample('ann4'))),
+			array($samples->get_sample('class'), 'Method', array($samples->get_sample('method1'), $samples->get_sample('method2'))),
+			array($samples->get_sample('class'), 'Function', array($samples->get_sample('method1'), $samples->get_sample('method2'))),
+			array($samples->get_sample('class'), 'Property', array($samples->get_sample('property1'))),
+			array($samples->get_sample('class'), 'DocComment', array($samples->get_sample('doccomment1'))),
 			// Get by attribute
-			array('method1', 'arguments', array('arg1')),
-			array('doccomment2', 'annotations', array('ann4')),
-			array('class', 'methods', array('method1')),
-			array('class', 'properties', array('property1')),
-			array('class', 'comment', 'doccomment1'),
+			array($samples->get_sample('method1'), 'arguments', array($samples->get_sample('arg1'))),
+			array($samples->get_sample('doccomment2'), 'annotations', array($samples->get_sample('ann4'))),
+			array($samples->get_sample('class'), 'methods', array($samples->get_sample('method1'), $samples->get_sample('method2'))),
+			array($samples->get_sample('class'), 'properties', array($samples->get_sample('property1'))),
+			array($samples->get_sample('class'), 'comment', $samples->get_sample('doccomment1')),
 			// Get ordinal
-			array('method1', '../[2]', new \InvalidArgumentException),
-			array('method1', 'arguments[123]', new \OutOfRangeException),
-			array('method1', 'arguments[0]', 'arg1'),
-			array('class', 'methods[0]', 'method1'),
-			array('class', 'methods[1]', 'method2'),
+			array($samples->get_sample('method1'), '../[2]', new \InvalidArgumentException),
+			array($samples->get_sample('method1'), 'arguments[123]', new \OutOfRangeException),
+			array($samples->get_sample('method1'), 'arguments[0]', $samples->get_sample('arg1')),
+			array($samples->get_sample('class'), 'methods[0]', $samples->get_sample('method1')),
+			array($samples->get_sample('class'), 'methods[1]', $samples->get_sample('method2')),
 			// Get attribute value (this test cannot test for string and array attributes)
-			array('method1', 'arguments.constraint', new \InvalidArgumentException),
-			array('method1', 'arguments[0].nonexistentattribute', new \InvalidArgumentException),
-			array('class', 'methods[1].static', FALSE),
-			array('class', 'properties[0].constraint', NULL),
+			array($samples->get_sample('method1'), 'arguments.constraint', new \InvalidArgumentException),
+			array($samples->get_sample('method1'), 'arguments[0].nonexistentattribute', new \InvalidArgumentException),
+			array($samples->get_sample('class'), 'methods[1].static', FALSE),
+			array($samples->get_sample('class'), 'properties[0].constraint', NULL),
 			// Get formatted attribute value
-//			array('method1', 'arguments|name', new \InvalidArgumentException),
-//			array('method1', 'arguments[0]|name', new \InvalidArgumentException),
-//			array('method1', 'arguments[0].name|nonexistentformat', new \InvalidArgumentException),
-//			array('method1', 'arguments[0].name|name', 'array_values'),
+			array($samples->get_sample('method1'), 'arguments|name', new \InvalidArgumentException),
+			array($samples->get_sample('method1'), 'arguments[0]|name', new \InvalidArgumentException),
+			array($samples->get_sample('method1'), 'arguments[0].name|nonexistentformat', new \InvalidArgumentException),
+			array($samples->get_sample('method1'), 'arguments[0].name|name', 'array_values'),
+			// A little back & forth
+			array($samples->get_sample('method1'), 'arguments[0]..', $samples->get_sample('method1')),
+			array($samples->get_sample('method1'), 'arguments[0]../arguments[0]../.', $samples->get_sample('method1')),
+			array($samples->get_sample('method1'), 'arguments[0]../../Method[0]arguments[0]../.', $samples->get_sample('method1')),
 		);
 	}
 

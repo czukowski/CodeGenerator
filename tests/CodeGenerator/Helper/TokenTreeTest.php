@@ -96,6 +96,178 @@ class TokenTreeTest extends Testcase
 	}
 
 	/**
+	 * @dataProvider  provide_get_self
+	 */
+	public function test_get_self($from, $expected)
+	{
+		$this->set_expected_exception_from_argument($expected);
+		$actual = $this->object->get_self($from);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function provide_get_self()
+	{
+		$samples = $this->get_sample_factory();
+		return array(
+			array($samples->get_sample('doccomment2'), $samples->get_sample('doccomment2')),
+			array($samples->get_sample('method1'), $samples->get_sample('method1')),
+			array(array($samples->get_sample('method1'), $samples->get_sample('method1')), new \InvalidArgumentException),
+			array('some value', new \InvalidArgumentException),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_get_parent
+	 */
+	public function test_get_parent($from, $expected)
+	{
+		$this->set_expected_exception_from_argument($expected);
+		$actual = $this->object->get_parent($from);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function provide_get_parent()
+	{
+		$samples = $this->get_sample_factory();
+		return array(
+			array($samples->get_sample('doccomment2'), $samples->get_sample('property1')),
+			array($samples->get_sample('method1'), $samples->get_sample('class')),
+			array(array($samples->get_sample('method1'), $samples->get_sample('method1')), new \InvalidArgumentException),
+			array('some value', new \InvalidArgumentException),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_get_by_type
+	 */
+	public function test_get_by_type($from, $argument, $expected)
+	{
+		$this->set_expected_exception_from_argument($expected);
+		$actual = $this->object->get_by_type($from, $argument);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function provide_get_by_type()
+	{
+		$samples = $this->get_sample_factory();
+		$methods = array(
+			$samples->get_sample('method1'),
+			$samples->get_sample('method2'),
+		);
+		return array(
+			array($samples->get_sample('method1'), 'Argument', array($samples->get_sample('arg1'))),
+			array($samples->get_sample('method1'), 'Block', array($samples->get_sample('methodbody1'))),
+			array($samples->get_sample('doccomment2'), 'Annotation', array($samples->get_sample('ann4'))),
+			array($samples->get_sample('class'), 'Method', $methods),
+			array($samples->get_sample('class'), 'Function', $methods),
+			array($samples->get_sample('class'), 'Property', array($samples->get_sample('property1'))),
+			array($samples->get_sample('class'), 'DocComment', array($samples->get_sample('doccomment1'))),
+			array($methods, 'Argument', new \InvalidArgumentException),
+			array('some value', 'DocComment', new \InvalidArgumentException),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_get_by_attribute
+	 */
+	public function test_get_by_attribute($from, $argument, $expected)
+	{
+		$this->set_expected_exception_from_argument($expected);
+		$actual = $this->object->get_by_attribute($from, $argument);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function provide_get_by_attribute()
+	{
+		$samples = $this->get_sample_factory();
+		$methods = array(
+			$samples->get_sample('method1'),
+			$samples->get_sample('method2'),
+		);
+		return array(
+			array($samples->get_sample('method1'), 'arguments', array($samples->get_sample('arg1'))),
+			array($samples->get_sample('doccomment2'), 'annotations', array($samples->get_sample('ann4'))),
+			array($samples->get_sample('class'), 'methods', $methods),
+			array($samples->get_sample('class'), 'properties', array($samples->get_sample('property1'))),
+			array($samples->get_sample('class'), 'comment', $samples->get_sample('doccomment1')),
+			array($samples->get_sample('class'), 'comment', $samples->get_sample('doccomment1')),
+			array($methods, 'name', new \InvalidArgumentException),
+			array('some value', 'name', new \InvalidArgumentException),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_get_ord
+	 */
+	public function test_get_ord($from, $argument, $expected)
+	{
+		$this->set_expected_exception_from_argument($expected);
+		$actual = $this->object->get_ord($from, $argument);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function provide_get_ord()
+	{
+		$samples = $this->get_sample_factory();
+		$methods = array(
+			$samples->get_sample('method1'),
+			$samples->get_sample('method2'),
+		);
+		return array(
+			array($methods, 0, $samples->get_sample('method1')),
+			array($methods, 1, $samples->get_sample('method2')),
+			array($methods, '[0]', $samples->get_sample('method1')),
+			array($methods, '[1]', $samples->get_sample('method2')),
+			array($methods, '[2]', new \OutOfRangeException),
+			array($samples->get_sample('method1'), '[0]', new \InvalidArgumentException),
+			array('some value', '[0]', new \InvalidArgumentException),
+			array(array(1, 2, 3), '2', 3),
+			array(array(1, 2, 3), 3, new \OutOfRangeException),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_get_attribute
+	 */
+	public function test_get_attribute($from, $argument, $expected)
+	{
+		$this->set_expected_exception_from_argument($expected);
+		$actual = $this->object->get_attribute($from, $argument);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function provide_get_attribute()
+	{
+		$samples = $this->get_sample_factory();
+		return array(
+			array($samples->get_sample('method1'), 'name', '__construct'),
+			array($samples->get_sample('class')->get('methods'), 'name', new \InvalidArgumentException),
+			array('some value', 'name', new \InvalidArgumentException),
+		);
+	}
+
+	/**
+	 * @dataProvider  provide_format_attribute
+	 */
+	public function test_format_attribute($from, $argument, $expected)
+	{
+		$this->set_expected_exception_from_argument($expected);
+		$actual = $this->object->format_attribute($from, $argument);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function provide_format_attribute()
+	{
+		return array(
+			array('array values', 'name', 'array_values'),
+			array('math\sigma function', 'class-name', 'Math\Sigma_Function'),
+			array('method name', 'nonexistentformat', new \InvalidArgumentException),
+			array($this->get_sample_factory()->get_sample('method1'), 'name', new \InvalidArgumentException),
+			array($this->get_sample_factory()->get_sample('class')->get('methods'), 'name', new \InvalidArgumentException),
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_find_in_parents
 	 */
 	public function test_find_in_parents($token, $type, $expected)

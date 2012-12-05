@@ -73,7 +73,7 @@ class TokenTree extends \CodeGenerator\Singleton
 	 * @param   Token\Token  $from
 	 * @return  Token\Token
 	 */
-	protected function get_self($from)
+	public function get_self($from)
 	{
 		if ($from instanceof Token\Token)
 		{
@@ -83,13 +83,13 @@ class TokenTree extends \CodeGenerator\Singleton
 	}
 
 	/**
-	 * Returns the parent token of the argument.
-	 * This method can't be used to find Block tokens.
+	 * Returns the parent token of the argument, but skips Block tokens.
+	 * Therefore, this method can't be used to find Block tokens.
 	 * 
 	 * @param   Token\Token  $from
 	 * @return  Token\Token
 	 */
-	protected function get_parent($from)
+	public function get_parent($from)
 	{
 		if ($from instanceof Token\Token)
 		{
@@ -110,7 +110,7 @@ class TokenTree extends \CodeGenerator\Singleton
 	 * @param   string       $type
 	 * @return  array
 	 */
-	protected function get_by_type($from, $type)
+	public function get_by_type($from, $type)
 	{
 		if ($from instanceof Token\Token)
 		{
@@ -135,7 +135,7 @@ class TokenTree extends \CodeGenerator\Singleton
 	 * @param   string       $attribute
 	 * @return  Token\Token
 	 */
-	protected function get_by_attribute($from, $attribute)
+	public function get_by_attribute($from, $attribute)
 	{
 		if ($from instanceof Token\Token)
 		{
@@ -156,13 +156,13 @@ class TokenTree extends \CodeGenerator\Singleton
 	 * @param   integer  $number
 	 * @return  Token\Token
 	 */
-	protected function get_ord($from, $number)
+	public function get_ord($from, $number)
 	{
+		$number = intval(trim($number, '[]'));
 		if ( ! is_array($from))
 		{
 			throw new \InvalidArgumentException('Path element "['.$number.']" cannot be used on token items.');
 		}
-		$number = intval(trim($number, '[]'));
 		if ($number >= count($from))
 		{
 			throw new \OutOfRangeException('Elements count is less than "'.$number.'".');
@@ -177,7 +177,7 @@ class TokenTree extends \CodeGenerator\Singleton
 	 * @param   string       $attribute
 	 * @return  mixed
 	 */
-	protected function get_attribute($from, $attribute)
+	public function get_attribute($from, $attribute)
 	{
 		if ($from instanceof Token\Token)
 		{
@@ -193,7 +193,7 @@ class TokenTree extends \CodeGenerator\Singleton
 	 * @param   string  $format
 	 * @return  mixed
 	 */
-	protected function format_attribute($from, $format)
+	public function format_attribute($from, $format)
 	{
 		if ($from instanceof Token\Token OR (is_array($from) AND reset($from) instanceof Token\Token))
 		{

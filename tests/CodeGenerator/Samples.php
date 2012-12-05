@@ -17,13 +17,17 @@ class Samples extends Object
 	private $tokens = array();
 
 	/**
-	 * @return  array
+	 * @return  mixed
 	 */
-	public function get_sample()
+	public function get_sample($id = NULL)
 	{
 		if (empty($this->tokens))
 		{
 			$this->setup();
+		}
+		if ($id !== NULL)
+		{
+			return $this->tokens[$id];
 		}
 		return $this->tokens;
 	}

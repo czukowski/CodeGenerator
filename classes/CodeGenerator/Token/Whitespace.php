@@ -26,6 +26,7 @@ class Whitespace extends Token
 
 	public function render()
 	{
+		parent::render();
 		return str_repeat($this->get('char'), $this->get('width'));
 	}
 }

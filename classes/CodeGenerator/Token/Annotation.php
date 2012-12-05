@@ -28,6 +28,7 @@ class Annotation extends Columns
 
 	public function render()
 	{
+		parent::render();
 		if ( ! $this->get('name'))
 		{
 			return '';

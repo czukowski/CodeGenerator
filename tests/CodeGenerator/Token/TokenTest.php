@@ -176,7 +176,7 @@ class TokenTest extends Testcase
 	protected function setup_with_validator_methods($attributes, $validation_methods = array())
 	{
 		$this->setup_mock(array(
-			'methods' => array_merge($this->get_class_abstract_methods($this->get_class_name()), $this->get_validation_methods($validation_methods)),
+			'methods' => array_merge(array('none'), $this->get_validation_methods($validation_methods)),
 		));
 		$this->setup_validator($this->object, $validation_methods);
 		$this->setup_properties($attributes, $validation_methods);
@@ -184,7 +184,7 @@ class TokenTest extends Testcase
 
 	protected function setup_with_validator_helper($attributes, $validation_methods = array())
 	{
-		$this->setup_mock();
+		$this->setup_mock(array('methods' => array('none')));
 		if ($validation_methods)
 		{
 			$validator = $this->get_mock(array(
@@ -231,7 +231,7 @@ class TokenTest extends Testcase
 	 */
 	public function test_set_parent_self()
 	{
-		$this->setup_mock();
+		$this->setup_mock(array('methods' => array('none')));
 		$this->object->set('parent', $this->object);
 	}
 
@@ -240,7 +240,7 @@ class TokenTest extends Testcase
 	 */
 	public function test_set_parent($parent)
 	{
-		$this->setup_mock();
+		$this->setup_mock(array('methods' => array('none')));
 		$this->set_expected_exception_from_argument($parent);
 		$this->object->set('parent', $parent);
 		$this->assertEquals($parent, $this->object->get('parent'));
@@ -316,6 +316,7 @@ class TokenTest extends Testcase
 	{
 		$this->setup_mock(array(
 			'mock_classname' => $mock_classname,
+			'methods' => array('none'),
 		));
 		$this->assertEquals($expected, $this->object->get_type());
 	}
@@ -330,10 +331,27 @@ class TokenTest extends Testcase
 
 	public function test_render()
 	{
-		$this->setup_mock();
+		$this->setup_mock(array('methods' => array('none')));
+		$this->assertSame('', $this->object->render());
+	}
+
+	/**
+	 * @dataProvider  provide_to_string
+	 */
+	public function test_to_string($stub, $expected)
+	{
+		$this->setup_mock(array('methods' => array('render')));
 		$this->object->expects($this->any())
 			->method('render')
-			->will($this->returnValue($this->get_class_name()));
-		$this->assertEquals($this->get_class_name(), (string) $this->object);
+			->will($stub);
+		$this->assertEquals(sprintf($expected, get_class($this->object)), (string) $this->object);
+	}
+
+	public function provide_to_string()
+	{
+		return array(
+			array($this->returnValue('Test'), 'Test'),
+			array($this->throwException(new \Exception('Test')), 'ERROR: Failed to render %s (Test)'),
+		);
 	}
 }

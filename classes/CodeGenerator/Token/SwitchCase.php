@@ -39,6 +39,7 @@ class SwitchCase extends Token
 
 	public function render()
 	{
+		parent::render();
 		if ( ! $this->get('match') AND ! $this->get('default'))
 		{
 			return '';

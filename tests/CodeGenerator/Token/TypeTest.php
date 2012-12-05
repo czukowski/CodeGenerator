@@ -18,7 +18,7 @@ class TypeTest extends Testcase
 	public function test_render($attributes, $expected)
 	{
 		$this->setup_with_attributes($attributes);
-		$this->assertEquals($expected, (string) $this->object);
+		$this->assertEquals($expected, $this->object->render());
 	}
 
 	public function provide_render()

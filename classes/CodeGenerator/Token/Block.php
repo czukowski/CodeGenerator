@@ -33,6 +33,7 @@ class Block extends Token implements \ArrayAccess, \Iterator
 
 	public function render()
 	{
+		parent::render();
 		if (($items = $this->get('items')))
 		{
 			$this->assert_items_array();

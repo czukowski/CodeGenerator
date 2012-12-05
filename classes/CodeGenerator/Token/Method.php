@@ -43,6 +43,7 @@ class Method extends Token
 
 	public function render()
 	{
+		parent::render();
 		$body_render = $this->render_body();
 		$lines = array(
 			$this->render_heading(),

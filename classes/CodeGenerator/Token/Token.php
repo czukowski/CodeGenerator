@@ -236,11 +236,15 @@ abstract class Token extends \CodeGenerator\Object
 	}
 
 	/**
-	 * Token render method. Used by `__toString()`, therefore must not throw exceptions.
+	 * Token render method. Used by `__toString()`, which catches all exceptions.
 	 * 
 	 * @return  string
 	 */
-	abstract public function render();
+	public function render()
+	{
+		$this->before_render();
+		return '';
+	}
 
 	/**
 	 * Called before rendering, used to finalize attribute transformations where necessary.
@@ -322,7 +326,13 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	public function __toString()
 	{
-		$this->before_render();
-		return $this->render();
+		try
+		{
+			return $this->render();
+		}
+		catch (\Exception $e)
+		{
+			return 'ERROR: Failed to render '.$this->get_type(). ' ('.$e->getMessage().')';
+		}
 	}
 }

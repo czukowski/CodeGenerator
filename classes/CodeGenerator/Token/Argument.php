@@ -29,6 +29,7 @@ class Argument extends Token
 
 	public function render()
 	{
+		parent::render();
 		if ( ! $this->get('name'))
 		{
 			return '';

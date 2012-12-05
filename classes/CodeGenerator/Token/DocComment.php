@@ -25,6 +25,7 @@ class DocComment extends Token
 
 	public function render()
 	{
+		parent::render();
 		if ( ! $this->get('annotations') AND ! $this->get('text'))
 		{
 			return '';

@@ -37,6 +37,7 @@ class Construct extends Token
 
 	public function render()
 	{
+		parent::render();
 		if ( ! $this->get('type'))
 		{
 			return '';

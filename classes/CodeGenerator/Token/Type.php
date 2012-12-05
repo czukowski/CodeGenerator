@@ -52,6 +52,7 @@ class Type extends Token
 
 	public function render()
 	{
+		parent::render();
 		if ( ! $this->get('name') OR ! $this->get('type'))
 		{
 			return '';

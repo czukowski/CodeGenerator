@@ -61,8 +61,8 @@ class Argument extends Token
 	 */
 	private function render_name()
 	{
-		return '$'.$this->config->helper('tokenPartsRenderer')
-			->render_name($this->get('name'));
+		return $this->config->helper('tokenPartsRenderer')
+			->render_variable_name($this->get('name'));
 	}
 
 	/**

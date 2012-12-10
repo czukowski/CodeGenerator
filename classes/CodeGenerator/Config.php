@@ -33,6 +33,7 @@ class Config
 			'names' => array(
 				'classname' => 'camelcase',
 				'default' => 'underscore',
+				'variable' => 'underscore',
 			),
 			'word_wrap' => TRUE,
 			'factory' => array(

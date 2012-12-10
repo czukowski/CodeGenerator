@@ -33,8 +33,12 @@ class SwitchCase extends Token
 
 	protected function before_render()
 	{
-		$this->get('body')
-			->set('indentation', 1);
+		$body = $this->get('body');
+		$body->set('indentation', 1);
+		if ($this->get('break') AND $body[count($body) - 1] !== 'break;')
+		{
+			$body->add('items', 'break;');
+		}
 	}
 
 	public function render()
@@ -67,10 +71,6 @@ class SwitchCase extends Token
 	{
 		if (($body = $this->get('body')) AND count($body))
 		{
-			if ($this->get('break'))
-			{
-				$body->add('items', 'break;');
-			}
 			return (string) $body;
 		}
 	}

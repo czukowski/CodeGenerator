@@ -71,7 +71,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 							'name' => 'array values',
 						)),
 					),
-					'body' => '$this->values = ${{../arguments[0]name|name}};'
+					'body' => '$this->values = {{../arguments[0]name|variable-name}};'
 				)),
 			),
 		));
@@ -119,7 +119,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 					'options' => array(
 						'line_width' => 40,
 						'names' => array(
-							'default' => 'camelcase',
+							'variable' => 'camelcase',
 						),
 					),
 				),

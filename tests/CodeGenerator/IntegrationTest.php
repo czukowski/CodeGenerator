@@ -71,7 +71,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 							'name' => 'array values',
 						)),
 					),
-					'body' => '$this->values = {{../arguments[0]name|variable-name}};'
+					'body' => '$this->values = {{../arguments[0].name|variable-name}};'
 				)),
 			),
 		));

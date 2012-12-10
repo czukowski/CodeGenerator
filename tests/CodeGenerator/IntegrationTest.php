@@ -45,7 +45,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 			)),
 			'namespace' => 'CodeGenerator',
 			'use' => array('code generator\math\simple optimizer'),
-			'name' => 'TestClass',
+			'name' => 'test class',
 			'properties' => array(
 				$factory->create('Property', array(
 					'access' => 'private',

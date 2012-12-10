@@ -90,6 +90,10 @@ class Block extends Token implements \ArrayAccess, \Iterator
 
 	private function replace_parameters($item)
 	{
+		if ( ! is_string($item))
+		{
+			return $item;
+		}
 		return $this->config->helper('templateParser')
 			->parse($this, $item);
 	}

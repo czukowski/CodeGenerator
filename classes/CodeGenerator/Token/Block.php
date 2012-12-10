@@ -85,7 +85,13 @@ class Block extends Token implements \ArrayAccess, \Iterator
 	{
 		$line_end = $this->config->get_format('line_end');
 		$indentation = str_repeat($this->config->get_format('indent'), $this->get('indentation'));
-		return $indentation.str_replace($line_end, $line_end.$indentation, $item);
+		return $indentation.str_replace($line_end, $line_end.$indentation, $this->replace_parameters($item));
+	}
+
+	private function replace_parameters($item)
+	{
+		return $this->config->helper('templateParser')
+			->parse($this, $item);
 	}
 
 	public function current()

@@ -71,7 +71,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 							'name' => 'array values',
 						)),
 					),
-					'body' => '$this->values = $array_values;'
+					'body' => '$this->values = ${{../arguments[0]name|name}};'
 				)),
 			),
 		));
@@ -145,7 +145,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				"     * Class constructor\n".
 				"     */\n".
 				"    public function __construct(array \$arrayValues) {\n".
-				"        \$this->values = \$array_values;\n".
+				"        \$this->values = \$arrayValues;\n".
 				"    }\n".
 				"}",
 			),

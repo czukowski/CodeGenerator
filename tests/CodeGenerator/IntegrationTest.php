@@ -64,7 +64,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				$factory->create('Method', array(
 					'access' => 'public',
 					'name' => '__construct',
-					'comment' => 'Class constructor',
+					'comment' => 'Class constructor - somewhat longer description',
 					'arguments' => array(
 						$factory->create('Argument', array(
 							'constraint' => 'array',
@@ -101,7 +101,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				"\tprivate \$values;\n".
 				"\n".
 				"\t/**\n".
-				"\t * Class constructor\n".
+				"\t * Class constructor - somewhat longer description\n".
 				"\t */\n".
 				"\tpublic function __construct(array \$array_values)\n".
 				"\t{\n".
@@ -142,7 +142,8 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 				"    private \$values;\n".
 				"\n".
 				"    /**\n".
-				"     * Class constructor\n".
+				"     * Class constructor - somewhat\n".
+				"     * longer description\n".
 				"     */\n".
 				"    public function __construct(array \$arrayValues) {\n".
 				"        \$this->values = \$arrayValues;\n".

@@ -36,6 +36,10 @@ class TokenTree extends \CodeGenerator\Singleton
 	{
 		$current_path = $path;
 		$current_object = $from;
+		if ( ! $path)
+		{
+			throw new \InvalidArgumentException('Empty path');
+		}
 		while (($parameters = $this->parse_next_path_token($current_path))) {
 			list ($method, $argument) = $parameters;
 			$current_object = call_user_func(array($this, $method), $current_object, $argument);

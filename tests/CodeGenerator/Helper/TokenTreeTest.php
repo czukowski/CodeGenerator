@@ -27,6 +27,7 @@ class TokenTreeTest extends Testcase
 		// [source_token, find_path, expected]
 		return array(
 			// Invalid path
+			array($samples->get_sample('method1'), '', new \InvalidArgumentException),
 			array($samples->get_sample('method1'), '/', new \InvalidArgumentException),
 			array($samples->get_sample('method1'), '\\', new \InvalidArgumentException),
 			array($samples->get_sample('class'), '123', new \InvalidArgumentException),

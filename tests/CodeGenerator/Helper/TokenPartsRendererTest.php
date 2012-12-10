@@ -52,6 +52,41 @@ class TokenPartsRendererTest extends Testcase
 	}
 
 	/**
+	 * @dataProvider  provide_render_variable_name
+	 */
+	public function test_render_variable_name($format, $name, $option, $expected)
+	{
+		$this->setup_object(array(
+			'arguments' => array($this->create_config('variable', $format)),
+		));
+		$this->set_expected_exception_from_argument($expected);
+		$actual = $this->object->render_variable_name($name, $option);
+		$this->assertSame($expected, $actual);
+	}
+
+	public function provide_render_variable_name()
+	{
+		// [options_format, string, format_argument, expected]
+		return array(
+			// Phrase names
+			array('camelcase', 'some variable name', NULL, '$someVariableName'),
+			array('camelcase', 'Some Variable Name', NULL, '$someVariableName'),
+			array('underscore', 'some variable name', NULL, '$some_variable_name'),
+			array('underscore', 'Some Variable Name', NULL, '$Some_Variable_Name'),
+			// Explicit format option
+			array('camelcase', 'some variable name', 'underscore', '$some_variable_name'),
+			array('camelcase', 'Some Variable Name', 'underscore', '$Some_Variable_Name'),
+			array('underscore', 'some variable name', 'camelcase', '$someVariableName'),
+			array('underscore', 'Some Variable Name', 'camelcase', '$someVariableName'),
+			// Already formatted names will not be changed
+			array('camelcase', 'Some_Class_Name', NULL, '$Some_Class_Name'),
+			array('underscore', 'SomeClassName', NULL, '$SomeClassName'),
+			// Invalid config option
+			array('anything else', 'Some Variable Name', NULL, new \LogicException),
+		);
+	}
+
+	/**
 	 * @dataProvider  provide_render_name
 	 */
 	public function test_render_name($format, $name, $option, $expected)

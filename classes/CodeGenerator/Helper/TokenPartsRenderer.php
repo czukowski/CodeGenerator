@@ -34,6 +34,23 @@ class TokenPartsRenderer extends \CodeGenerator\Singleton
 	}
 
 	/**
+	 * Renders a variable name in either camel case or underscore form, depending on
+	 * the config options. Prepends name with `$`.
+	 * 
+	 * @param   string  $str     phrase to format
+	 * @param   string  $option  camelcalse or underscore
+	 * @return  string
+	 */
+	public function render_variable_name($str, $option = NULL)
+	{
+		if ($option === NULL)
+		{
+			$option = $this->config->get_options('names.variable');
+		}
+		return '$'.$this->render_name($str, $option);
+	}
+
+	/**
 	 * Renders a phrase in either camel case or underscore form, depending on
 	 * the config options.
 	 * 

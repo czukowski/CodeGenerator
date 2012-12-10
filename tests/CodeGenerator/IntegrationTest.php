@@ -43,7 +43,7 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 					)),
 				),
 			)),
-			'namespace' => 'CodeGenerator',
+			'namespace' => 'code generator',
 			'use' => array('code generator\math\simple optimizer'),
 			'name' => 'test class',
 			'properties' => array(

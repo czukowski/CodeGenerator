@@ -26,6 +26,7 @@ class TokenPartsRendererTest extends Testcase
 
 	public function provide_render_class_name()
 	{
+		// [options_format, string, format_argument, expected]
 		return array(
 			// Phrase names
 			array('camelcase', 'some class name', NULL, 'SomeClassName'),
@@ -65,6 +66,7 @@ class TokenPartsRendererTest extends Testcase
 
 	public function provide_render_name()
 	{
+		// [options_format, string, format_argument, expected]
 		return array(
 			// Phrase names
 			array('camelcase', 'some variable name', NULL, 'someVariableName'),

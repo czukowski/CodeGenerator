@@ -15,18 +15,6 @@ class TokenMeta
 	private $attributes;
 
 	/**
-	 * Class constructor.
-	 * 
-	 * @param   string  $token_name
-	 * @param   array   $attributes
-	 */
-	public function __construct($token_name, array $attributes)
-	{
-		$this->name = $token_name;
-		$this->attributes = $attributes;
-	}
-
-	/**
 	 * @return  array
 	 */
 	public function get_attributes()
@@ -40,5 +28,21 @@ class TokenMeta
 	public function get_name()
 	{
 		return $this->name;
+	}
+
+	/**
+	 * @param  array  $attributes
+	 */
+	public function set_attributes($attributes)
+	{
+		$this->attributes = $attributes;
+	}
+
+	/**
+	 * @param  string  $name
+	 */
+	public function set_name($name)
+	{
+		$this->name = $name;
 	}
 }

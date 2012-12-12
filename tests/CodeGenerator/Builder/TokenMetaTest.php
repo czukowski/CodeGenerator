@@ -16,7 +16,9 @@ class TokenMetaTest extends \CodeGenerator\Framework\Testcase
 	 */
 	public function test_class($name, $attributes)
 	{
-		$this->setup_object(array('arguments' => array($name, $attributes)));
+		$this->setup_object();
+		$this->object->set_name($name);
+		$this->object->set_attributes($attributes);
 		$this->assertSame($name, $this->object->get_name());
 		$this->assertSame($attributes, $this->object->get_attributes());
 	}
@@ -39,7 +41,7 @@ class TokenMetaTest extends \CodeGenerator\Framework\Testcase
 			// Meta info with Token instance
 			array('Class', array(
 				'properties' => array(
-					new TokenMeta('Property', array(
+					$this->create_token_meta('Property', array(
 						'access' => 'private',
 						'name' => 'values',
 					)),
@@ -48,4 +50,8 @@ class TokenMetaTest extends \CodeGenerator\Framework\Testcase
 		);
 	}
 
+	private function create_token_meta($name, $attributes)
+	{
+		return new TokenMeta($name, $attributes);
+	}
 }

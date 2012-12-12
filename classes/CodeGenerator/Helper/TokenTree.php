@@ -264,7 +264,7 @@ class TokenTree extends \CodeGenerator\Singleton
 	 */
 	private function get_type($alias)
 	{
-		return 'CodeGenerator\Token\\'.$this->config->helper('tokenFactory')
+		return $this->config->helper('tokenFactory')
 			->get_type_by_alias($alias);
 	}
 

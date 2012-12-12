@@ -232,7 +232,8 @@ abstract class Token extends \CodeGenerator\Object
 	 */
 	public function get_type()
 	{
-		return preg_replace('#^([a-z0-9]\\\\)+#i', '', get_class($this));
+		preg_match('#[a-z0-9_]+$#i', get_class($this), $matches);
+		return $matches[0];
 	}
 
 	/**

@@ -8,7 +8,6 @@
  * @license    MIT License
  */
 namespace CodeGenerator\Builder;
-use \CodeGenerator\Framework\Testcase;
 
 class ArraySourceTest extends Testcase
 {
@@ -68,19 +67,7 @@ class ArraySourceTest extends Testcase
 	public function test_build($source, $expected)
 	{
 		$this->setup_object(array('arguments' => array($source)));
-		$token = $this->get_config()
-			->helper('tokenBuilder')
-			->build($this->object);
-		$this->assertInstanceOf('\CodeGenerator\Token\Token', $token);
-		foreach ($expected as $path => $expected_type)
-		{
-			// Token tree search is used for convenience only, it's not required for token builder to work.
-			$actual = $this->get_config()
-				->helper('tokenTree')
-				->find_path($token, $path);
-			$this->assertInstanceOf('\CodeGenerator\Token\Token', $actual);
-			$this->assertEquals($expected_type, $actual->get_type());
-		}
+		$this->assert_token_tree($this->build_token(), $expected);
 	}
 
 	public function provide_build()

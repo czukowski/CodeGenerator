@@ -8,9 +8,8 @@
  * @license    MIT License
  */
 namespace CodeGenerator\Builder;
-use \CodeGenerator\Framework\Testcase;
 
-class TokenMetaTest extends Testcase
+class TokenMetaTest extends \CodeGenerator\Framework\Testcase
 {
 	/**
 	 * @dataProvider  provide_class

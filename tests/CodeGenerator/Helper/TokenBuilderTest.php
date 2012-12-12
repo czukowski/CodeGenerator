@@ -8,7 +8,6 @@
  * @license    MIT License
  */
 namespace CodeGenerator\Helper;
-use CodeGenerator\Builder\TokenMeta;
 
 class TokenBuilderTest extends Testcase
 {
@@ -57,6 +56,15 @@ class TokenBuilderTest extends Testcase
 
 	private function create_meta_object($name, $attributes)
 	{
-		return new TokenMeta($name, $attributes);
+		$object = $this->get_mock(array(
+			'classname' => 'CodeGenerator\Builder\TokenMeta',
+			'methods' => array('none'),
+			'arguments' => array(),
+		));
+		$this->get_object_method($object, 'set_name')
+			->invoke($object, $name);
+		$this->get_object_method($object, 'set_attributes')
+			->invoke($object, $attributes);
+		return $object;
 	}
 }

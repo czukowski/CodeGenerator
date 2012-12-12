@@ -17,9 +17,7 @@ class TokenMetaTest extends Testcase
 	 */
 	public function test_class($name, $attributes)
 	{
-		$this->setup_object();
-		$this->object->set_name($name);
-		$this->object->set_attributes($attributes);
+		$this->object = $this->create_token_meta($name, $attributes);
 		$this->assertSame($name, $this->object->get_name());
 		$this->assertSame($attributes, $this->object->get_attributes());
 	}
@@ -53,6 +51,11 @@ class TokenMetaTest extends Testcase
 
 	private function create_token_meta($name, $attributes)
 	{
-		return new TokenMeta($name, $attributes);
+		$object = $this->get_mock(array('methods' => array('none')));
+		$this->get_object_method($object, 'set_name')
+			->invoke($object, $name);
+		$this->get_object_method($object, 'set_attributes')
+			->invoke($object, $attributes);
+		return $object;
 	}
 }

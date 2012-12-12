@@ -9,7 +9,7 @@
  */
 namespace CodeGenerator\Builder;
 
-class TokenMeta
+abstract class TokenMeta
 {
 	private $name;
 	private $attributes;
@@ -33,7 +33,7 @@ class TokenMeta
 	/**
 	 * @param  array  $attributes
 	 */
-	public function set_attributes($attributes)
+	protected function set_attributes($attributes)
 	{
 		$this->attributes = $attributes;
 	}
@@ -41,7 +41,7 @@ class TokenMeta
 	/**
 	 * @param  string  $name
 	 */
-	public function set_name($name)
+	protected function set_name($name)
 	{
 		$this->name = $name;
 	}

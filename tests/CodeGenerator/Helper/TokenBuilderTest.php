@@ -9,25 +9,17 @@
  */
 namespace CodeGenerator\Helper;
 
-class TokenBuilderTest extends Testcase
+class TokenBuilderTest extends \CodeGenerator\Builder\Testcase
 {
 	/**
 	 * @dataProvider  provide_build
 	 */
 	public function test_build($object, $expected)
 	{
+		$this->setup_object(array('arguments' => array($this->get_config())));
 		$this->set_expected_exception_from_argument($expected);
 		$token = $this->object->build($object);
-		$this->assertInstanceOf('\CodeGenerator\Token\Token', $token);
-		foreach ($expected as $path => $expected_type)
-		{
-			// Token tree search is used for convenience only, it's not required for token builder to work.
-			$actual = $this->get_config()
-				->helper('tokenTree')
-				->find_path($token, $path);
-			$this->assertInstanceOf('\CodeGenerator\Token\Token', $actual);
-			$this->assertEquals($expected_type, $actual->get_type());
-		}
+		$this->assert_token_tree($token, $expected);
 	}
 
 	public function provide_build()

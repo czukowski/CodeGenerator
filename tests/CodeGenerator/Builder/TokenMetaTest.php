@@ -9,7 +9,7 @@
  */
 namespace CodeGenerator\Builder;
 
-class TokenMetaTest extends \CodeGenerator\Framework\Testcase
+class TokenMetaTest extends Testcase
 {
 	/**
 	 * @dataProvider  provide_class

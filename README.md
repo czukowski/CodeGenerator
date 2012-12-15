@@ -64,7 +64,7 @@ Something like this may work:
 	));
 
 	$generator = \CodeGenerator\Helper\TokenBuilder(new \CodeGenerator\Config);
-	echo $generator->generate($my_class);
+	echo $generator->generate(new \CodeGenerator\Builder\ArraySource($my_class));
 
 Will print the following:
 

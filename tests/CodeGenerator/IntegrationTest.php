@@ -8,6 +8,7 @@
  * @license    MIT License
  */
 namespace CodeGenerator;
+use \CodeGenerator\Builder\ArraySource;
 
 class IntegrationTest extends \CodeGenerator\Framework\Testcase
 {
@@ -24,57 +25,59 @@ class IntegrationTest extends \CodeGenerator\Framework\Testcase
 
 	protected function setup_class_render()
 	{
-		$factory = $this->config->helper('tokenFactory');
-		$this->object = $factory->create('Class', array(
-			'comment' => $factory->create('DocComment', array(
-				'text' => 'This is a generated test class to check the render integration across most of the tokens',
-				'annotations' => array(
-					$factory->create('Annotation', array(
-						'name' => 'author',
-						'columns' => array('Korney Czukowski'),
-					)),
-					$factory->create('Annotation', array(
-						'name' => 'copyright',
-						'columns' => array('(c) 2012 Korney Czukowski'),
-					)),
-					$factory->create('Annotation', array(
-						'name' => 'license',
-						'columns' => array('MIT License'),
-					)),
-				),
-			)),
-			'namespace' => 'code generator',
-			'use' => array('code generator\math\simple optimizer'),
-			'name' => 'test class',
-			'properties' => array(
-				$factory->create('Property', array(
-					'access' => 'private',
-					'name' => 'values',
-					'comment' => $factory->create('DocComment', array(
+		$this->object = $this->config->helper('tokenBuilder')
+			->build(new ArraySource(array(
+				'Class', array(
+					'comment' => array('DocComment', array(
+						'text' => 'This is a generated test class to check the render integration across most of the tokens',
 						'annotations' => array(
-							$factory->create('Annotation', array(
-								'name' => 'var',
-								'columns' => array('array', 'Values array'),
+							array('Annotation', array(
+								'name' => 'author',
+								'columns' => array('Korney Czukowski'),
+							)),
+							array('Annotation', array(
+								'name' => 'copyright',
+								'columns' => array('(c) 2012 Korney Czukowski'),
+							)),
+							array('Annotation', array(
+								'name' => 'license',
+								'columns' => array('MIT License'),
 							)),
 						),
 					)),
-				)),
-			),
-			'methods' => array(
-				$factory->create('Method', array(
-					'access' => 'public',
-					'name' => '__construct',
-					'comment' => 'Class constructor - somewhat longer description',
-					'arguments' => array(
-						$factory->create('Argument', array(
-							'constraint' => 'array',
-							'name' => 'array values',
+					'namespace' => 'code generator',
+					'use' => array('code generator\math\simple optimizer'),
+					'name' => 'test class',
+					'properties' => array(
+						array('Property', array(
+							'access' => 'private',
+							'name' => 'values',
+							'comment' => array('DocComment', array(
+								'annotations' => array(
+									array('Annotation', array(
+										'name' => 'var',
+										'columns' => array('array', 'Values array'),
+									)),
+								),
+							)),
 						)),
 					),
-					'body' => '$this->values = {{../arguments[0].name|variable-name}};'
-				)),
-			),
-		));
+					'methods' => array(
+						array('Method', array(
+							'access' => 'public',
+							'name' => '__construct',
+							'comment' => 'Class constructor - somewhat longer description',
+							'arguments' => array(
+								array('Argument', array(
+									'constraint' => 'array',
+									'name' => 'array values',
+								)),
+							),
+							'body' => '$this->values = {{../arguments[0].name|variable-name}};'
+						)),
+					),
+				),
+			)));
 	}
 
 	public function provide_config()
